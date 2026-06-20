@@ -52,20 +52,20 @@ Mode:    Enterprise Mode (單節點)
 
 ## 二、前置準備
 
-### 2.1 建立 dbadmin 使用者
+### 2.1 dbadmin 使用者
 
-Vertica 需要一個專用的管理帳號（通常為 `dbadmin`）來執行安裝與管理：
+Vertica 使用專用的管理帳號 `dbadmin` 來管理資料庫。**此帳號不需預先手動建立**，它會在執行 `install_vertica` 時自動建立。
+
+你只需要先確認 `dbadmin` 這個名稱未被其他系統帳號佔用即可：
 
 ```bash
-# 建立 dbadmin 使用者
-$ sudo useradd -m -d /home/dbadmin -s /bin/bash dbadmin
-
-# 設定密碼
-$ sudo passwd dbadmin
-
-# 授予 sudo 權限 (安裝時需要)
-$ sudo usermod -aG sudo dbadmin
+$ id dbadmin
+id: 'dbadmin': no such user
 ```
+
+若已存在（例如從舊版殘留），請先移除或選擇其他名稱。
+
+> **注意**：安裝完成後 Vertica 也會自動為 `dbadmin` 設定適當的權限與資源限制。
 
 ### 2.2 系統核心參數調校
 
@@ -160,14 +160,7 @@ Filesystem  Size  Used Avail Use%
 /dev/sda2   880G  79G  756G  10%
 ```
 
-### 3.3 確認 dbadmin 使用者
-
-```bash
-$ getent passwd dbadmin
-dbadmin:x:1001:1001:,,,:/home/dbadmin:/bin/bash
-```
-
-### 3.4 確認安裝套件完整性
+### 3.3 確認安裝套件完整性
 
 ```bash
 $ dpkg-deb --info vertica_25.4.0-0_amd64.deb | grep -E 'Package|Version|Architecture'
@@ -182,13 +175,9 @@ $ dpkg-deb --info vertica_25.4.0-0_amd64.deb | grep -E 'Package|Version|Architec
 
 ### 4.1 安裝 Vertica 軟體
 
-使用 `dbadmin` 使用者執行：
+使用 root 或有 sudo 權限的使用者執行：
 
 ```bash
-# 切換到 dbadmin
-$ sudo -i -u dbadmin
-$ cd ~
-
 # 安裝 Vertica .deb 套件
 $ sudo dpkg -i /path/to/vertica_25.4.0-0_amd64.deb
 ```
