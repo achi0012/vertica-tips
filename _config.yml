@@ -1,0 +1,51 @@
+# Vertica Tips — Jekyll 配置
+title: Vertica Tips
+tagline: Vertica 資料庫技術筆記與最佳實踐
+description: >-
+  Vertica 資料庫的深入技術文章 — 涵蓋資料載入、調優、監控、SQL 技巧與實戰經驗。
+  以 Vertica 25.x 為基礎，結合理論與實測，提供可直接使用的最佳實踐。
+url: "https://achi0012.github.io"
+baseurl: "/vertica-tips"
+repository: achi0012/vertica-tips
+
+# 主題設定 (GitHub Pages 支援)
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# 作者資訊
+author:
+  name: "Achi"
+  email: achi0012@users.noreply.github.com
+
+# 社交連結
+social:
+  github: achi0012
+
+# 文章設定
+permalink: /:year/:month/:title/
+show_excerpts: true
+
+# 導航
+header_pages:
+  - about.md
+
+# Minima 主題自訂
+minima:
+  skin: dark
+  date_format: "%Y-%m-%d"
+
+# 語言
+lang: zh-TW
+
+# Google Analytics (optional)
+# google_analytics: UA-XXXXXXXX-X
+
+# Build settings
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
