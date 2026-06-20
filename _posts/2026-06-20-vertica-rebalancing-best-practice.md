@@ -96,7 +96,9 @@ Phase 4: 傳輸 (Transfer)
 
 ### 2.4 節點插入位置
 
-Vertica 會自動選擇**最小化資料搬運**的新節點位置。
+資料搬運量會影響 rebalance 的總時間。Vertica 會自動選擇**最小化資料搬運**的新節點位置。
+
+![Rebalancing 資料搬運示意圖]({{ '/assets/images/rebalancing-data-movement.jpg' | relative_url }}){: loading="lazy" }
 
 ```
 三節點集群加入第四個節點:
@@ -104,6 +106,13 @@ Vertica 會自動選擇**最小化資料搬運**的新節點位置。
               ↓
              [N4]    ← 從 N2 搬資料
 ```
+
+以下圖示顯示從 4 節點擴展到 5 節點時的資料流：
+
+![4→5 節點資料流 1]({{ '/assets/images/rebal-nodes1.png' | relative_url }}){: loading="lazy" }
+![4→5 節點資料流 2]({{ '/assets/images/rebal-nodes2.png' | relative_url }}){: loading="lazy" }
+![4→5 節點資料流 3]({{ '/assets/images/rebal-nodes3.png' | relative_url }}){: loading="lazy" }
+![4→5 節點資料流 4]({{ '/assets/images/rebal-nodes4.png' | relative_url }}){: loading="lazy" }
 
 ---
 

@@ -44,8 +44,14 @@ Phase II (Executor)   →  在所有節點上排序 / 編碼 / merge 寫入 ROS
 Load → Parse → Load Union → Segment → Sort / Merge → DataTarget (ROS write)
 ```
 
+![COPY 兩階段載入架構圖]({{ '/assets/images/copy-loading-architecture.png' | relative_url }}){: loading="lazy" }
+
 - **Pre-join projections**：自動加入 JOIN + SCAN operators
 - **Live aggregate projections**：自動加入 GROUP BY / Top-K operators
+
+![Pre-join Projections 示意圖]({{ '/assets/images/copy-prejoin-projections.png' | relative_url }}){: loading="lazy" }
+
+![Live Aggregate Projections 示意圖]({{ '/assets/images/copy-live-aggregate.png' | relative_url }}){: loading="lazy" }
 
 ### Apportioned Load — 平行載入
 

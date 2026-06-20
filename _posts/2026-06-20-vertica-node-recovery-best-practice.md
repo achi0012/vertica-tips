@@ -37,6 +37,10 @@ DOWN → (重啟) → INITIALIZING → RECOVERING → READY → UP
 - **Tuple Mover 在 Recovery 期間仍可執行**：mergeout 和 moveout 在 recovery 期間繼續運作
 - **可指定恢復順序**：透過 `recover_priority` 控制表的恢復優先級
 
+![Node Recovery 完整流程圖]({{ '/assets/images/noderecovery-process.png' | relative_url }}){: loading="lazy" }
+
+![Node Recovery 兩階段示意圖]({{ '/assets/images/noderecovery-phases.jpg' | relative_url }}){: loading="lazy" }
+
 ---
 
 ## 二、Recovery 兩階段流程
