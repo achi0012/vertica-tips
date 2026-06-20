@@ -1,0 +1,13 @@
+<header class="site-header">
+  <div class="header-inner">
+    <a href="{{ '/' | relative_url }}" class="site-logo">
+      <span class="logo-icon">🐧</span>
+      <span>{{ site.title }}</span>
+    </a>
+    <nav class="main-nav">
+      <a href="{{ '/' | relative_url }}" {% if page.layout == 'home' %}class="active"{% endif %}>首頁</a>
+      <a href="{{ '/about/' | relative_url }}" {% if page.url == '/about/' %}class="active"{% endif %}>關於</a>
+      <a href="{{ '/feed.xml' | relative_url }}" class="nav-rss" title="RSS Feed">📡 RSS</a>
+    </nav>
+  </div>
+</header>

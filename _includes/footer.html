@@ -1,0 +1,13 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-copy">
+      &copy; {{ site.time | date: '%Y' }} {{ site.author.name }}. Powered by Jekyll &amp; GitHub Pages.
+    </div>
+    <div class="footer-links">
+      <a href="{{ '/' | relative_url }}">首頁</a>
+      <a href="{{ '/about/' | relative_url }}">關於</a>
+      <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+      <a href="https://github.com/{{ site.repository }}" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>

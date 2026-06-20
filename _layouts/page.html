@@ -1,0 +1,25 @@
+---
+layout: default
+---
+<article class="page">
+  <header class="post-header">
+    <div class="breadcrumb">
+      <a href="{{ '/' | relative_url }}">首頁</a>
+      <span>/</span>
+      <span>{{ page.title }}</span>
+    </div>
+    <h1 class="post-title">{{ page.title | escape }}</h1>
+  </header>
+
+  <div class="post-content">
+    {{ content }}
+  </div>
+
+  <div class="post-footer">
+    <a href="{{ '/' | relative_url }}" class="back-home">← 回到首頁</a>
+    <div class="post-footer-links">
+      <a href="{{ '/feed.xml' | relative_url }}">📡 RSS</a>
+      <a href="https://github.com/{{ site.repository }}" target="_blank" rel="noopener">⭐ GitHub</a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'zh-TW' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{{ '/assets/style.css' | relative_url }}">
+  {%- seo -%}
+  {%- feed_meta -%}
+  <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ '/feed.xml' | relative_url }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
+</head>
+<body>
+  <!-- 閱讀進度條 (僅文章頁面) -->
+  {% if page.layout == 'post' %}
+  <div class="progress-bar" id="progressBar"></div>
+  {% endif %}
+
+  {% include header.html %}
+
+  <main class="page-content" aria-label="Content">
+    <div class="content-wrapper">
+      {{ content }}
+    </div>
+  </main>
+
+  {% include footer.html %}
+
+  {% if page.layout == 'post' %}
+  <script>
+    // 閱讀進度條
+    window.addEventListener('scroll', function() {
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      var progress = (scrollTop / scrollHeight) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+    });
+  </script>
+  {% endif %}
+</body>
+</html>
