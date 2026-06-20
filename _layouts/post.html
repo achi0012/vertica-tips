@@ -1,36 +1,15 @@
 ---
 layout: default
 ---
-<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+<article class="post-page">
   <header class="post-header">
-    <!-- 麵包屑 -->
     <div class="breadcrumb">
-      <a href="{{ '/' | relative_url }}">首頁</a>
-      <span>/</span>
-      <span>{{ page.title | truncate: 40 }}</span>
+      <a href="{{ '/' | relative_url }}">/home</a>
     </div>
-
-    <h1 class="post-title" itemprop="name headline">{{ page.title | escape }}</h1>
-
-    <div class="post-meta-bar">
-      <span class="post-meta-item">
-        <span class="icon">📅</span>
-        <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-          {{ page.date | date: site.date_format | default: "%Y-%m-%d" }}
-        </time>
-      </span>
-      {% if page.author %}
-      <span class="post-meta-item">
-        <span class="icon">✍️</span>
-        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <span itemprop="name">{{ page.author }}</span>
-        </span>
-      </span>
-      {% endif %}
-      <span class="post-meta-item">
-        <span class="icon">📖</span>
-        <span>{{ content | number_of_words | divided_by: 400 | plus: 1 }} 分鐘閱讀</span>
-      </span>
+    <h1 class="post-title">{{ page.title | escape }}</h1>
+    <div class="post-meta-line">
+      <span>{{ page.date | date: "%b %d, %Y" }}</span>
+      <span>{{ content | number_of_words | divided_by: 250 | plus: 1 }} min read</span>
       {% if page.categories.size > 0 %}
       <span class="post-meta-tags">
         {% for cat in page.categories %}
@@ -46,10 +25,7 @@ layout: default
   </div>
 
   <div class="post-footer">
-    <a href="{{ '/' | relative_url }}" class="back-home">← 回到首頁</a>
-    <div class="post-footer-links">
-      <a href="{{ '/feed.xml' | relative_url }}">📡 RSS</a>
-      <a href="https://github.com/{{ site.repository }}" target="_blank" rel="noopener">⭐ GitHub</a>
-    </div>
+    <a href="{{ '/' | relative_url }}">← back to home</a>
+    <a href="https://github.com/{{ site.repository }}" target="_blank" rel="noopener">GitHub →</a>
   </div>
 </article>

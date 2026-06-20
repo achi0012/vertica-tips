@@ -1,69 +1,41 @@
 ---
 layout: default
 ---
-<div class="home">
-  <!-- Hero 區域 -->
-  <section class="home-hero">
-    <h1>{{ site.tagline }}</h1>
-    <p class="hero-sub">
-      {{ site.description }}
-    </p>
-  </section>
+<section class="home-hero">
+  <h1>{{ site.tagline }}</h1>
+  <p class="hero-sub">{{ site.description }}</p>
+</section>
 
-  <!-- 統計 -->
-  {% assign post_count = site.posts | size %}
-  <div class="stats-bar">
-    <div class="stat-item">
-      <div class="stat-number">{{ post_count }}</div>
-      <div class="stat-label">文章</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-number">{{ site.posts | map: 'content' | join: ' ' | number_of_words | divided_by: 500 | plus: 1 }}</div>
-      <div class="stat-label">閱讀分鐘</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-number">{{ site.posts | map: 'categories' | join: ',' | split: ',' | uniq | size }}</div>
-      <div class="stat-label">主題</div>
-    </div>
-  </div>
+{% assign posts = site.posts %}
 
-  <!-- 文章列表 -->
-  <div class="section-title">最新文章</div>
-
-  {% if post_count > 0 %}
-  <div class="post-list">
-    {% for post in site.posts %}
-    <article class="post-card">
-      <div class="post-card-meta">
-        <span class="post-card-date">
-          <span>{{ post.date | date: site.date_format | default: "%Y-%m-%d" }}</span>
-        </span>
-        {% if post.categories.size > 0 %}
-        <span class="post-card-tags">
-          {% for cat in post.categories limit:2 %}
-          <span class="post-card-tag">{{ cat }}</span>
-          {% endfor %}
-        </span>
-        {% endif %}
-      </div>
-      <h2>
-        <a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
-      </h2>
-      {% if post.description %}
-      <p class="post-card-excerpt">{{ post.description }}</p>
-      {% elsif post.excerpt %}
-      <p class="post-card-excerpt">{{ post.excerpt | strip_html | truncate: 200 }}</p>
+{% if posts.size > 0 %}
+<div class="post-grid">
+  {% for post in posts %}
+  <article class="post-card">
+    <div class="post-card-meta">
+      <span>{{ post.date | date: "%b %d, %Y" }}</span>
+      {% if post.categories.size > 0 %}
+      <span class="post-card-tag">/</span>
+      {% for cat in post.categories limit:1 %}
+      <span>{{ cat }}</span>
+      {% endfor %}
       {% endif %}
-      <a href="{{ post.url | relative_url }}" class="post-card-read-more">
-        閱讀全文 <span class="arrow">→</span>
-      </a>
-    </article>
-    {% endfor %}
-  </div>
-  {% else %}
-  <div class="no-posts">
-    <div class="icon">📝</div>
-    <p>尚無文章，敬請期待。</p>
-  </div>
-  {% endif %}
+    </div>
+    <h2><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h2>
+    {% if post.description %}
+    <p class="post-card-excerpt">{{ post.description }}</p>
+    {% endif %}
+    <div class="post-card-footer">
+      <span class="post-card-read">
+        Read <span class="arrow">→</span>
+      </span>
+    </div>
+  </article>
+  {% endfor %}
 </div>
+{% else %}
+<div class="no-posts">
+  <div class="icon">📝</div>
+  <p>No posts yet.</p>
+</div>
+{% endif %}

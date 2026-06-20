@@ -10,7 +10,6 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
 </head>
 <body>
-  <!-- 閱讀進度條 (僅文章頁面) -->
   {% if page.layout == 'post' %}
   <div class="progress-bar" id="progressBar"></div>
   {% endif %}
@@ -27,12 +26,10 @@
 
   {% if page.layout == 'post' %}
   <script>
-    // 閱讀進度條
-    window.addEventListener('scroll', function() {
-      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      var progress = (scrollTop / scrollHeight) * 100;
-      document.getElementById('progressBar').style.width = progress + '%';
+    window.addEventListener('scroll', function(){
+      var s = document.documentElement.scrollTop || document.body.scrollTop;
+      var h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      document.getElementById('progressBar').style.width = (s/h*100)+'%';
     });
   </script>
   {% endif %}
