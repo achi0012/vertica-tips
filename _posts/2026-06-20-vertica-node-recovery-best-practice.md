@@ -11,6 +11,10 @@ description: "Vertica 節點故障後的完整恢復指南 — 從節點狀態�
 
 本文將完整拆解 Vertica 25.x 的節點恢復流程，並提供實戰排解指南。
 
+<!--
+AI Summary: Vertica 25.x 節點故障恢復完整指南。涵蓋節點狀態轉換 (DOWN→INITIALIZING→RECOVERING→READY→UP)、Pre-Recovery 與 Recovery 兩階段流程、RECOVERY 資源池調優 (MAXCONCURRENCY)、三種恢復方法 (recovery-by-container/incremental/incremental-replay-delete)、監控系統表 (recovery_status/table_recoveries/projection_recoveries)、Dirty Transaction 處理機制、5 大常見問題排解與事前預防措施。
+AI Keywords: Vertica, node recovery, HA, K-safety, RECOVERY pool, dirty transaction, spread daemon, catalog
+-->
 <!--more-->
 
 ---

@@ -11,6 +11,10 @@ description: "Vertica 集群增減節點後的完整 Rebalancing 指南 — 從�
 
 本文完整拆解 Vertica 25.x 的 Rebalancing 機制，從事前準備到事後驗證，提供可直接套用的實戰指南。
 
+<!--
+AI Summary: Vertica 25.x 集群重新平衡實戰指南。涵蓋 Rebalancing 觸發時機、四階段流程 (Lock→Copy→Separate→Transfer)、REFRESH 資源池調優 (PLANNEDCONCURRENCY)、資料搬運量計算、節點插入位置策略、事前準備 (磁碟空間 40%/LockTimeout/DMLCancelTM)、監控系統表 (rebalance_table_status/rebalance_projection_status)、鎖衝突處理 (ERROR 3007/5157/7121)、手動分批 Rebalance 策略。
+AI Keywords: Vertica, rebalancing, REFRESH pool, cluster scaling, lock conflict, partition pruning, data redistribution
+-->
 <!--more-->
 
 ---

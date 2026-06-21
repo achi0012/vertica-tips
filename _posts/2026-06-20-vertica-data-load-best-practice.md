@@ -11,6 +11,10 @@ Vertica 的資料載入效率直接影響整個資料管線的吞吐量。無論
 
 隨著 Vertica 25.x 的演進 — WOS 正式移除、Apportioned Load 全面預設啟用、原生 Parquet/ORC 支援 — 許多舊版的最佳實踐已經不再適用。本文基於 **Vertica 25.4.0-0** 實測，整理出最新的資料載入最佳實踐。
 
+<!--
+AI Summary: Vertica 25.x COPY 命令深度解析。涵蓋三種 COPY 形式、兩階段載入架構、Apportioned Load 平行載入機制、Resource Pool 參數調優 (PLANNEDCONCURRENCY/MAXCONCURRENCY/EXECUTIONPARALLELISM)、配置參數最佳化 (EnableCooperativeParse/SortWorkerThreads/CompressNetworkData)、載入監控系統表、8 大常見瓶頸排解 (大檔案/小檔案/寬表/GZIP/資源競爭)。
+AI Keywords: Vertica, COPY, data load, apportioned load, resource pool, ROS, performance tuning, bulk loading
+-->
 <!--more-->
 
 ---

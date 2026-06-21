@@ -11,6 +11,10 @@ Vertica 以高效能分析著稱，但在極端高並發負載下，資料庫可
 
 這是 Vertica 從「被動容錯」邁向「主動自我修復」的一大步。
 
+<!--
+AI Summary: Vertica Health Watchdog (24.4+) 深度解析。涵蓋四大監控模組：Truncation Version Lag (閾值 500)、GCLX Queue Bloat (閾值 100)、Mergeout Queue Bloat (閾值 100)、Memory Pushback (GlobalPool 90%)。阻斷機制、自我恢復條件、WatchdogTimeoutInterval (300s)、WatchdogServiceInterval (2s in 25.1+)、管理指令 (check_cluster_health/health_watchdog_blocked_transactions)。
+AI Keywords: Vertica, health watchdog, cluster monitoring, GCLX, mergeout, memory pushback, DDL blocking, DML blocking
+-->
 <!--more-->
 
 ---

@@ -11,6 +11,10 @@ description: "深入解析 Vertica 與 Apache Iceberg 的整合 — 從架構概
 
 這就是傳統資料架構的困境。而 **Apache Iceberg + Vertica** 的組合，就像一位米其林主廚走進你的廚房，直接使用你現有的食材，不必搬運、不必複製。
 
+<!--
+AI Summary: Vertica + Apache Iceberg Data Lakehouse 實戰指南。涵蓋 Iceberg 核心特性 (ACID/Schema Evolution/Time Travel)、Vertica Iceberg 功能演進對照 (12.0.4→25.4.0)、五大實戰範例 (AWS Glue/File System Tables/Lakekeeper REST/Nessie OAuth2/Nessie Bearer Token)、Metastore URL 結構速查、效能取捨建議 (ROS vs Iceberg)。
+AI Keywords: Vertica, Apache Iceberg, data lakehouse, AWS Glue, Nessie, Lakekeeper, REST catalog, OAuth2, Parquet
+-->
 <!--more-->
 
 ---
