@@ -256,34 +256,81 @@ WHERE r.pool_name IN ('general', 'tm', 'refresh', 'recovery');
 
 ## 七、自動調優行動
 
-### 7.1 根據預測結果調整資源池
+### 7.1 根據預測結果自動調優
 
-由於 Vertica PL/vSQL 不支援在 DO 或 PROCEDURE 中執行 DDL，調優邏輯改為**外部排程腳本**方式，透過 bash cron 執行條件判斷：
+使用 Vertica 內建的 **Stored Procedure Scheduler**，不需要外部 cron。
 
-```bash
-#!/bin/bash
-# /usr/local/bin/auto_tune.sh
-VSQL="/opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼'"
+#### Step 1：啟用排程器
 
-# 檢查 ROS 預測
-PREDICTED_ROS=$($VSQL -Atc "SELECT PREDICT_LINEAR_REG(
-    NOW() + INTERVAL '2 hours'
-    USING PARAMETERS model_name='ros_model');")
+```sql
+=> SELECT SET_CONFIG_PARAMETER('EnableStoredProcedureScheduler', 1);
+```
 
-if [ "$PREDICTED_ROS" -gt 2000 ]; then
-    $VSQL -c "SELECT DO_TM_TASK('mergeout');"
-    $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'mergeout','triggered','ROS predicted > 2000');"
-fi
+#### Step 2：建立調優用的預存程序
 
-# 檢查記憶體壓力
-MEM_PRESSURE=$($VSQL -Atc "
+> ⚠️ **注意**：Vertica PL/vSQL 中使用 `PERFORM INSERT` 而非直接 `INSERT`。
+
+```sql
+=> CREATE OR REPLACE PROCEDURE auto_tune() LANGUAGE PLvSQL AS $$
+DECLARE
+    predicted_ros INT;
+    mem_pct NUMERIC(8,2);
+BEGIN
+    -- 預測 ROS 是否會超過 2000
+    SELECT PREDICT_LINEAR_REG(NOW() + INTERVAL '2 hours'
+               USING PARAMETERS model_name='ros_model')
+    INTO predicted_ros;
+
+    IF predicted_ros > 2000 THEN
+        PERFORM SELECT DO_TM_TASK('mergeout');
+        PERFORM INSERT INTO tuning_log VALUES(NOW(),'mergeout','triggered',
+                     'ROS predicted > 2000');
+    END IF;
+
+    -- 檢查記憶體壓力
     SELECT memory_inuse_kb * 100.0 / NULLIF(query_budget_kb, 0)
-    FROM v_monitor.resource_pool_status WHERE pool_name = 'general';")
+    INTO mem_pct
+    FROM v_monitor.resource_pool_status WHERE pool_name = 'general';
 
-if [ "${MEM_PRESSURE%.*}" -gt 80 ]; then
-    $VSQL -c "ALTER RESOURCE POOL general PLANNEDCONCURRENCY 2;"
-    $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'pool','adjusted','Memory > 80%, reduced concurrency');"
-fi
+    IF mem_pct > 80 THEN
+        EXECUTE 'ALTER RESOURCE POOL general PLANNEDCONCURRENCY 2';
+        PERFORM INSERT INTO tuning_log VALUES(NOW(),'pool','adjusted',
+                     'Memory > 80%, reduced concurrency');
+    END IF;
+END;
+$$;
+```
+
+#### Step 3：建立排程（使用 cron 表達式）
+
+```sql
+-- 每 30 分鐘執行一次調優
+=> CREATE SCHEDULE optimize_30min USING CRON '*/30 * * * *';
+
+-- 建立 trigger 連結排程與程序
+=> CREATE TRIGGER optimize_trigger
+   ON SCHEDULE optimize_30min
+   EXECUTE PROCEDURE auto_tune() AS DEFINER;
+```
+
+#### Step 4：每天凌晨重新訓練模型
+
+```sql
+=> CREATE OR REPLACE PROCEDURE retrain_models() LANGUAGE PLvSQL AS $$
+BEGIN
+    PERFORM SELECT LINEAR_REG('ros_model', 'monitor_metrics',
+               'ros_count', 'collected_at');
+    PERFORM SELECT SVM_CLASSIFIER('svm_health', 'monitor_metrics',
+               'is_healthy', 'running_q_count, memory_inuse_kb, ros_count, dv_count');
+    PERFORM SELECT IFOREST('health_iforest', 'monitor_metrics',
+               'running_q_count, memory_inuse_kb, ros_count, dv_count, epoch_advance');
+END;
+$$;
+
+=> CREATE SCHEDULE daily_3am USING CRON '0 3 * * *';
+=> CREATE TRIGGER retrain_trigger
+   ON SCHEDULE daily_3am
+   EXECUTE PROCEDURE retrain_models() AS DEFINER;
 ```
 
 ### 7.2 建立調優日誌
@@ -297,48 +344,45 @@ fi
 );
 ```
 
-### 7.3 完整自我優化迴圈
+### 7.3 管理排程
 
-使用 bash 腳本包裝所有步驟，透過 cron 排程：
-
-```bash
-#!/bin/bash
-# /usr/local/bin/self_optimize.sh
-VSQL="/opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼'"
-
-# 1. 收集當前指標
-$VSQL -c "INSERT INTO monitor_metrics (...) SELECT ...;"
-
-# 2. 模型預測
-$VSQL -Atc "SELECT PREDICT_LINEAR_REG(...);"
-$VSQL -Atc "SELECT APPLY_IFOREST(...);"
-
-# 3. 執行調優 (依據預測結果)
-# (檢查邏輯寫在 auto_tune.sh 中)
-source /usr/local/bin/auto_tune.sh
-
-# 4. 記錄
-$VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'self_optimize','completed','ok');"
-```
-
-### 排程
-
-```bash
-# 每 30 分鐘執行一次
-*/30 * * * * /usr/local/bin/self_optimize.sh
-
-# 每天凌晨 3 點重新訓練模型
-0 3 * * * /opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼' -f /path/to/retrain_models.sql
-```
-
-`retrain_models.sql` 內容：
 ```sql
-SELECT LINEAR_REG('ros_model', 'monitor_metrics', 'ros_count', 'collected_at');
-SELECT SVM_CLASSIFIER('svm_health', 'monitor_metrics', 'is_healthy',
-       'running_q_count, memory_inuse_kb, ros_count, dv_count');
-SELECT IFOREST('health_iforest', 'monitor_metrics',
-       'running_q_count, memory_inuse_kb, ros_count, dv_count, epoch_advance');
+-- 查看已排程的任務
+=> SELECT * FROM scheduler_time_table;
+
+-- 查看哪個節點負責排程
+=> SELECT active_scheduler_node();
+
+-- 暫停排程器
+=> SELECT SET_CONFIG_PARAMETER('EnableStoredProcedureScheduler', 0);
+
+-- 重新啟用
+=> SELECT SET_CONFIG_PARAMETER('EnableStoredProcedureScheduler', 1);
+
+-- 手動執行一次 trigger
+=> EXECUTE TRIGGER optimize_trigger;
 ```
+
+### 7.4 完整自我優化迴圈
+
+```sql
+-- 全部啟用後，查看排程狀態
+=> SELECT * FROM scheduler_time_table;
+    schedule_name    |    attached_trigger    |    scheduled_execution_time
+---------------------+-----------------------+-------------------------------
+ optimize_30min      | optimize_trigger      | 2026-06-21 22:30:00
+ daily_3am           | retrain_trigger       | 2026-06-22 03:00:00
+ etl_check           | etl_check_trigger     | 2026-06-21 21:00:00
+ anomaly_check       | anomaly_check_trigger | 2026-06-21 22:35:00
+ pool_switch         | pool_switch_trigger   | 2026-06-21 22:30:00
+```
+
+現在你的叢集擁有完整的自我優化機制：
+- ⏱ **每 30 分鐘**：自動調優資源池 + mergeout
+- 🔍 **每 5 分鐘**：偵測並中斷異常查詢
+- 📊 **每晚 9 點**：預測 ETL 載入時間
+- 🔄 **每 30 分鐘**：KMEANS 負載感知切換
+- 🌙 **每天凌晨 3 點**：重新訓練 ML 模型
 
 ---
 
@@ -370,22 +414,30 @@ SELECT IFOREST('health_iforest', 'monitor_metrics',
    ) / 60000, 2) AS predicted_minutes;
 ```
 
-**自動化腳本** (`/usr/local/bin/check_etl.sh`)：
+**自動調優**：建立程序 + 排程自動執行
 
-```bash
-#!/bin/bash
-VSQL="/opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼'"
-PREDICTED=$($VSQL -Atc "SELECT PREDICT_LINEAR_REG(500000000, 500000
-    USING PARAMETERS model_name='etl_duration_model') / 60000;")
+```sql
+=> CREATE OR REPLACE PROCEDURE check_etl_prediction() LANGUAGE PLvSQL AS $$
+DECLARE
+    predicted_min NUMERIC(8,2);
+BEGIN
+    SELECT PREDICT_LINEAR_REG(500000000, 500000
+               USING PARAMETERS model_name='etl_duration_model') / 60000
+    INTO predicted_min;
 
-if [ "${PREDICTED%.*}" -gt 90 ]; then
-    $VSQL -c "ALTER RESOURCE POOL tm MAXCONCURRENCY 12;"
-    $VSQL -c "ALTER RESOURCE POOL tm PLANNEDCONCURRENCY 4;"
-    $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'etl','adjusted',
-              'Predicted > 90min, TM pool increased');"
-fi
+    IF predicted_min > 90 THEN
+        EXECUTE 'ALTER RESOURCE POOL tm MAXCONCURRENCY 12';
+        EXECUTE 'ALTER RESOURCE POOL tm PLANNEDCONCURRENCY 4';
+        PERFORM INSERT INTO tuning_log VALUES(NOW(),'etl','adjusted',
+                     'Predicted > 90min, TM pool increased');
+    END IF;
+END;
+$$;
 
-**預期效益**：
+=> CREATE SCHEDULE etl_check USING CRON '0 21 * * *';  -- 每晚 9 點檢查
+=> CREATE TRIGGER etl_check_trigger ON SCHEDULE etl_check
+   EXECUTE PROCEDURE check_etl_prediction() AS DEFINER;
+```
 - 在 ETL 開始前就預測載入時間
 - 提前調整資源，避免 ETL 超時
 - 建立基準線，持續監控載入效能趨勢
@@ -437,27 +489,35 @@ fi
      AND LENGTH(s.current_statement) > 0;
 ```
 
-**自動化腳本**（透過 bash 輪詢處理）：
+**自動化腳本**（建立排程定期執行）：
 
-```bash
-#!/bin/bash
-# /usr/local/bin/kill_anomaly.sh
-VSQL="/opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼'"
-$VSQL -Atc "
-    SELECT s.session_id::VARCHAR || ',' || s.transaction_id::VARCHAR
-    FROM v_monitor.sessions s
-    WHERE s.current_statement IS NOT NULL
-      AND APPLY_IFOREST(
-              EXTRACT(EPOCH FROM (NOW() - s.current_statement_start)) * 1000,
-              COALESCE(s.memory_acquired_mb, 0),
-              (SELECT running_query_count FROM v_monitor.resource_pool_status WHERE pool_name = 'general'),
-              (SELECT COUNT(*) FROM v_monitor.locks WHERE grant_timestamp IS NULL)
-              USING PARAMETERS model_name='query_anomaly'
-          ) ILIKE '%is_anomaly\":true%'
-" | while IFS=',' read -r sid tid; do
-    $VSQL -c "SELECT INTERRUPT_STATEMENT('$sid','$tid');"
-    $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'kill_query','anomaly','session $sid');"
-done
+```sql
+=> CREATE OR REPLACE PROCEDURE kill_anomalous_queries() LANGUAGE PLvSQL AS $$
+DECLARE
+    cur CURSOR FOR
+        SELECT s.session_id, s.transaction_id
+        FROM v_monitor.sessions s
+        WHERE s.current_statement IS NOT NULL
+          AND APPLY_IFOREST(
+                  EXTRACT(EPOCH FROM (NOW() - s.current_statement_start)) * 1000,
+                  COALESCE(s.memory_acquired_mb, 0),
+                  (SELECT running_query_count FROM v_monitor.resource_pool_status WHERE pool_name = 'general'),
+                  (SELECT COUNT(*) FROM v_monitor.locks WHERE grant_timestamp IS NULL)
+                  USING PARAMETERS model_name='query_anomaly'
+              ) ILIKE '%is_anomaly\":true%';
+    rec RECORD;
+BEGIN
+    FOR rec IN cur LOOP
+        PERFORM SELECT INTERRUPT_STATEMENT(rec.session_id::VARCHAR, rec.transaction_id::VARCHAR);
+        PERFORM INSERT INTO tuning_log VALUES(NOW(),'kill_query','anomaly',
+                     'Session ' || rec.session_id);
+    END LOOP;
+END;
+$$;
+
+=> CREATE SCHEDULE anomaly_check USING CRON '*/5 * * * *';  -- 每 5 分鐘檢查
+=> CREATE TRIGGER anomaly_check_trigger ON SCHEDULE anomaly_check
+   EXECUTE PROCEDURE kill_anomalous_queries() AS DEFINER;
 ```
 
 **預期效益**：
@@ -491,32 +551,39 @@ done
    ) AS current_cluster;
 ```
 
-**自動化腳本** (`/usr/local/bin/auto_switch_pool.sh`)：
+**自動化腳本**（排程定期切換）：
 
-```bash
-#!/bin/bash
-VSQL="/opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼'"
-CLUSTER=$($VSQL -Atc "
+```sql
+=> CREATE OR REPLACE PROCEDURE auto_switch_pool() LANGUAGE PLvSQL AS $$
+DECLARE
+    cluster INT;
+BEGIN
     SELECT APPLY_KMEANS(
         (SELECT running_q_count FROM v_monitor.resource_pool_status WHERE pool_name = 'general'),
         (SELECT memory_inuse_kb FROM v_monitor.resource_pool_status WHERE pool_name = 'general'),
         (SELECT COUNT(*) FROM v_monitor.projection_storage)
-        USING PARAMETERS model_name='load_clusters');")
+        USING PARAMETERS model_name='load_clusters')
+    INTO cluster;
 
-case $CLUSTER in
-    1)  # 離峰：給 ETL 更多資源
-        $VSQL -c "ALTER RESOURCE POOL general PLANNEDCONCURRENCY 6;"
-        $VSQL -c "ALTER RESOURCE POOL general EXECUTIONPARALLELISM 8;"
-        $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'pool','off-peak','High throughput');" ;;
-    2)  # 一般：平衡配置
-        $VSQL -c "ALTER RESOURCE POOL general PLANNEDCONCURRENCY 4;"
-        $VSQL -c "ALTER RESOURCE POOL general EXECUTIONPARALLELISM AUTO;"
-        $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'pool','normal','Balanced');" ;;
-    *)  # 忙碌：保護查詢效能
-        $VSQL -c "ALTER RESOURCE POOL general PLANNEDCONCURRENCY 2;"
-        $VSQL -c "ALTER RESOURCE POOL general EXECUTIONPARALLELISM 4;"
-        $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'pool','busy','Query protection');" ;;
-esac
+    IF cluster = 1 THEN
+        EXECUTE 'ALTER RESOURCE POOL general PLANNEDCONCURRENCY 6';
+        EXECUTE 'ALTER RESOURCE POOL general EXECUTIONPARALLELISM 8';
+        PERFORM INSERT INTO tuning_log VALUES(NOW(),'pool','off-peak','High throughput');
+    ELSIF cluster = 2 THEN
+        EXECUTE 'ALTER RESOURCE POOL general PLANNEDCONCURRENCY 4';
+        EXECUTE 'ALTER RESOURCE POOL general EXECUTIONPARALLELISM AUTO';
+        PERFORM INSERT INTO tuning_log VALUES(NOW(),'pool','normal','Balanced');
+    ELSE
+        EXECUTE 'ALTER RESOURCE POOL general PLANNEDCONCURRENCY 2';
+        EXECUTE 'ALTER RESOURCE POOL general EXECUTIONPARALLELISM 4';
+        PERFORM INSERT INTO tuning_log VALUES(NOW(),'pool','busy','Query protection');
+    END IF;
+END;
+$$;
+
+=> CREATE SCHEDULE pool_switch USING CRON '*/30 * * * *';  -- 每 30 分鐘
+=> CREATE TRIGGER pool_switch_trigger ON SCHEDULE pool_switch
+   EXECUTE PROCEDURE auto_switch_pool() AS DEFINER;
 ```
 
 **預期效益**：
@@ -680,6 +747,13 @@ esac
 | `RF_CLASSIFIER('model', 'table', 'target', 'predictors')` | ✅ | target 需為 INT |
 | `IFOREST('model', 'table', 'predictors')` | ✅ | 無監督，不需 label |
 | `GET_MODEL_SUMMARY(...)` | ✅ | 檢視模型係數 |
+| `CREATE SCHEDULE ... USING CRON ...` | ✅ | 內建排程器，支援 cron 表達式 |
+| `CREATE TRIGGER ... ON SCHEDULE ... EXECUTE PROCEDURE` | ✅ | 連結排程與程序 |
+| `EnableStoredProcedureScheduler` | ✅ | 排程器開關 |
+| `active_scheduler_node()` | ✅ | 查看排程節點 |
+| `EXECUTE TRIGGER` | ✅ | 手動執行 trigger |
+| `PERFORM INSERT INTO` | ✅ | PL/vSQL 中需用 PERFORM 替代 INSERT |
+| `EXECUTE 'ALTER ...'` | ✅ | PL/vSQL 中用 EXECUTE 執行 DDL |
 | `DO_TM_TASK('mergeout')` | ✅ | 觸發 ROS 合併 |
 | `ALTER RESOURCE POOL ...` | ✅ | 動態調整 |
 
