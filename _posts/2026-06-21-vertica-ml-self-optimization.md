@@ -258,36 +258,32 @@ WHERE r.pool_name IN ('general', 'tm', 'refresh', 'recovery');
 
 ### 7.1 根據預測結果調整資源池
 
-```sql
-=> CREATE OR REPLACE PROCEDURE auto_tune()
-AS BEGIN
-    -- 若 ROS 預測超過 2000，觸發 mergeout
-    IF (SELECT PREDICT_LINEAR_REG(
-               NOW() + INTERVAL '2 hours'
-               USING PARAMETERS model_name='ros_model'
-        )) > 2000
-    THEN
-        SELECT DO_TM_TASK('mergeout');
-        INSERT INTO tuning_log VALUES (
-            NOW(), 'mergeout', 'triggered',
-            'ros_model predicted > 2000'
-        );
-    END IF;
+由於 Vertica PL/vSQL 不支援在 DO 或 PROCEDURE 中執行 DDL，調優邏輯改為**外部排程腳本**方式，透過 bash cron 執行條件判斷：
 
-    -- 若 SVM 預測為不健康，降低並發度
-    IF (SELECT PREDICT_SVM_CLASSIFIER(
-               (SELECT running_q_count FROM v_monitor.resource_pool_status
-                WHERE pool_name = 'general'),
-               (SELECT memory_inuse_kb FROM v_monitor.resource_pool_status
-                WHERE pool_name = 'general'),
-               (SELECT COUNT(*) FROM v_monitor.projection_storage),
-               (SELECT COUNT(*) FROM v_monitor.delete_vectors)
-               USING PARAMETERS model_name='svm_health'
-        )) = 0
-    THEN
-        ALTER RESOURCE POOL general PLANNEDCONCURRENCY 2;
-    END IF;
-END;
+```bash
+#!/bin/bash
+# /usr/local/bin/auto_tune.sh
+VSQL="/opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼'"
+
+# 檢查 ROS 預測
+PREDICTED_ROS=$($VSQL -Atc "SELECT PREDICT_LINEAR_REG(
+    NOW() + INTERVAL '2 hours'
+    USING PARAMETERS model_name='ros_model');")
+
+if [ "$PREDICTED_ROS" -gt 2000 ]; then
+    $VSQL -c "SELECT DO_TM_TASK('mergeout');"
+    $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'mergeout','triggered','ROS predicted > 2000');"
+fi
+
+# 檢查記憶體壓力
+MEM_PRESSURE=$($VSQL -Atc "
+    SELECT memory_inuse_kb * 100.0 / NULLIF(query_budget_kb, 0)
+    FROM v_monitor.resource_pool_status WHERE pool_name = 'general';")
+
+if [ "${MEM_PRESSURE%.*}" -gt 80 ]; then
+    $VSQL -c "ALTER RESOURCE POOL general PLANNEDCONCURRENCY 2;"
+    $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'pool','adjusted','Memory > 80%, reduced concurrency');"
+fi
 ```
 
 ### 7.2 建立調優日誌
@@ -303,37 +299,45 @@ END;
 
 ### 7.3 完整自我優化迴圈
 
-```sql
-=> CREATE OR REPLACE PROCEDURE self_optimize()
-AS BEGIN
-    -- 1. 收集當前指標
-    INSERT INTO monitor_metrics (...) SELECT ...;
-    COMMIT;
+使用 bash 腳本包裝所有步驟，透過 cron 排程：
 
-    -- 2. 異常偵測
-    SELECT APPLY_IFOREST(... USING PARAMETERS model_name='health_iforest');
+```bash
+#!/bin/bash
+# /usr/local/bin/self_optimize.sh
+VSQL="/opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼'"
 
-    -- 3. 執行調優
-    CALL auto_tune();
+# 1. 收集當前指標
+$VSQL -c "INSERT INTO monitor_metrics (...) SELECT ...;"
 
-    COMMIT;
-END;
+# 2. 模型預測
+$VSQL -Atc "SELECT PREDICT_LINEAR_REG(...);"
+$VSQL -Atc "SELECT APPLY_IFOREST(...);"
+
+# 3. 執行調優 (依據預測結果)
+# (檢查邏輯寫在 auto_tune.sh 中)
+source /usr/local/bin/auto_tune.sh
+
+# 4. 記錄
+$VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'self_optimize','completed','ok');"
 ```
 
 ### 排程
 
 ```bash
 # 每 30 分鐘執行一次
-*/30 * * * * /opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼' -c "CALL self_optimize();"
+*/30 * * * * /usr/local/bin/self_optimize.sh
 
 # 每天凌晨 3 點重新訓練模型
-0 3 * * * /opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼' -c "
-    SELECT LINEAR_REG('ros_model', 'monitor_metrics', 'ros_count', 'collected_at');
-    SELECT SVM_CLASSIFIER('svm_health', 'monitor_metrics', 'is_healthy',
-           'running_q_count, memory_inuse_kb, ros_count, dv_count');
-    SELECT IFOREST('health_iforest', 'monitor_metrics',
-           'running_q_count, memory_inuse_kb, ros_count, dv_count, epoch_advance');
-"
+0 3 * * * /opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼' -f /path/to/retrain_models.sql
+```
+
+`retrain_models.sql` 內容：
+```sql
+SELECT LINEAR_REG('ros_model', 'monitor_metrics', 'ros_count', 'collected_at');
+SELECT SVM_CLASSIFIER('svm_health', 'monitor_metrics', 'is_healthy',
+       'running_q_count, memory_inuse_kb, ros_count, dv_count');
+SELECT IFOREST('health_iforest', 'monitor_metrics',
+       'running_q_count, memory_inuse_kb, ros_count, dv_count, epoch_advance');
 ```
 
 ---
@@ -350,9 +354,7 @@ END;
 -- Step 1: 建立載入歷史表
 => CREATE TABLE load_history AS
    SELECT load_start, load_duration_ms,
-          input_file_size_bytes, accepted_row_count,
-          (EXTRACT(HOUR FROM load_start) >= 22
-           AND EXTRACT(HOUR FROM load_start) < 6) AS is_nightly_etl
+          input_file_size_bytes, accepted_row_count
    FROM v_monitor.load_streams
    WHERE load_start >= NOW() - INTERVAL '30 days';
 
@@ -366,25 +368,22 @@ END;
        500000000, 500000
        USING PARAMETERS model_name='etl_duration_model'
    ) / 60000, 2) AS predicted_minutes;
-
--- Step 4: 若預測超過 90 分鐘，自動調高 TM 資源池
-=> DO $$
-BEGIN
-    IF (SELECT PREDICT_LINEAR_REG(
-               500000000, 500000
-               USING PARAMETERS model_name='etl_duration_model'
-        ) / 60000) > 90
-    THEN
-        ALTER RESOURCE POOL tm MAXCONCURRENCY 12;
-        ALTER RESOURCE POOL tm PLANNEDCONCURRENCY 4;
-        INSERT INTO tuning_log VALUES (
-            NOW(), 'etl_tuning', 'adjusted',
-            'Predicted ETL > 90min, increased TM pool'
-        );
-    END IF;
-END;
-$$;
 ```
+
+**自動化腳本** (`/usr/local/bin/check_etl.sh`)：
+
+```bash
+#!/bin/bash
+VSQL="/opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼'"
+PREDICTED=$($VSQL -Atc "SELECT PREDICT_LINEAR_REG(500000000, 500000
+    USING PARAMETERS model_name='etl_duration_model') / 60000;")
+
+if [ "${PREDICTED%.*}" -gt 90 ]; then
+    $VSQL -c "ALTER RESOURCE POOL tm MAXCONCURRENCY 12;"
+    $VSQL -c "ALTER RESOURCE POOL tm PLANNEDCONCURRENCY 4;"
+    $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'etl','adjusted',
+              'Predicted > 90min, TM pool increased');"
+fi
 
 **預期效益**：
 - 在 ETL 開始前就預測載入時間
@@ -438,27 +437,27 @@ $$;
      AND LENGTH(s.current_statement) > 0;
 ```
 
-**觸發自動行動**：
+**自動化腳本**（透過 bash 輪詢處理）：
 
-```sql
--- 若有異常查詢且執行超過 60 秒，自動中斷
-=> DO $$
-DECLARE
-    result ROW(anomaly_check VARCHAR);
-BEGIN
-    FOR result IN
-        SELECT APPLY_IFOREST( ... USING PARAMETERS model_name='query_anomaly') AS anomaly_check
-        FROM v_monitor.sessions
-        WHERE current_statement IS NOT NULL
-    LOOP
-        IF result.anomaly_check ILIKE '%"is_anomaly":true%' THEN
-            -- 中斷異常查詢
-            SELECT INTERRUPT_STATEMENT(session_id, transaction_id);
-            INSERT INTO tuning_log VALUES (NOW(), 'kill_query', 'anomaly', result.anomaly_check);
-        END IF;
-    END LOOP;
-END;
-$$;
+```bash
+#!/bin/bash
+# /usr/local/bin/kill_anomaly.sh
+VSQL="/opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼'"
+$VSQL -Atc "
+    SELECT s.session_id::VARCHAR || ',' || s.transaction_id::VARCHAR
+    FROM v_monitor.sessions s
+    WHERE s.current_statement IS NOT NULL
+      AND APPLY_IFOREST(
+              EXTRACT(EPOCH FROM (NOW() - s.current_statement_start)) * 1000,
+              COALESCE(s.memory_acquired_mb, 0),
+              (SELECT running_query_count FROM v_monitor.resource_pool_status WHERE pool_name = 'general'),
+              (SELECT COUNT(*) FROM v_monitor.locks WHERE grant_timestamp IS NULL)
+              USING PARAMETERS model_name='query_anomaly'
+          ) ILIKE '%is_anomaly\":true%'
+" | while IFS=',' read -r sid tid; do
+    $VSQL -c "SELECT INTERRUPT_STATEMENT('$sid','$tid');"
+    $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'kill_query','anomaly','session $sid');"
+done
 ```
 
 **預期效益**：
@@ -490,36 +489,34 @@ $$;
        (SELECT COUNT(*) FROM v_monitor.projection_storage)
        USING PARAMETERS model_name='load_clusters'
    ) AS current_cluster;
+```
 
--- Step 3: 根據叢集切換配置（在 auto_tune 中執行）
-=> DO $$
-DECLARE
-    cluster INT;
-BEGIN
-    SELECT APPLY_KMEANS(... USING PARAMETERS model_name='load_clusters')
-    INTO cluster;
+**自動化腳本** (`/usr/local/bin/auto_switch_pool.sh`)：
 
-    IF cluster = 1 THEN
-        -- 離峰：給 ETL 更多資源
-        ALTER RESOURCE POOL general PLANNEDCONCURRENCY 6;
-        ALTER RESOURCE POOL general EXECUTIONPARALLELISM 8;
-        INSERT INTO tuning_log VALUES (NOW(), 'pool_config', 'off-peak',
-                                       'High throughput mode');
-    ELSIF cluster = 2 THEN
-        -- 一般：平衡配置
-        ALTER RESOURCE POOL general PLANNEDCONCURRENCY 4;
-        ALTER RESOURCE POOL general EXECUTIONPARALLELISM AUTO;
-        INSERT INTO tuning_log VALUES (NOW(), 'pool_config', 'normal',
-                                       'Balanced mode');
-    ELSE
-        -- 忙碌：保護查詢效能
-        ALTER RESOURCE POOL general PLANNEDCONCURRENCY 2;
-        ALTER RESOURCE POOL general EXECUTIONPARALLELISM 4;
-        INSERT INTO tuning_log VALUES (NOW(), 'pool_config', 'busy',
-                                       'Query protection mode');
-    END IF;
-END;
-$$;
+```bash
+#!/bin/bash
+VSQL="/opt/vertica/bin/vsql -U dbadmin -d testdb -w '密碼'"
+CLUSTER=$($VSQL -Atc "
+    SELECT APPLY_KMEANS(
+        (SELECT running_q_count FROM v_monitor.resource_pool_status WHERE pool_name = 'general'),
+        (SELECT memory_inuse_kb FROM v_monitor.resource_pool_status WHERE pool_name = 'general'),
+        (SELECT COUNT(*) FROM v_monitor.projection_storage)
+        USING PARAMETERS model_name='load_clusters');")
+
+case $CLUSTER in
+    1)  # 離峰：給 ETL 更多資源
+        $VSQL -c "ALTER RESOURCE POOL general PLANNEDCONCURRENCY 6;"
+        $VSQL -c "ALTER RESOURCE POOL general EXECUTIONPARALLELISM 8;"
+        $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'pool','off-peak','High throughput');" ;;
+    2)  # 一般：平衡配置
+        $VSQL -c "ALTER RESOURCE POOL general PLANNEDCONCURRENCY 4;"
+        $VSQL -c "ALTER RESOURCE POOL general EXECUTIONPARALLELISM AUTO;"
+        $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'pool','normal','Balanced');" ;;
+    *)  # 忙碌：保護查詢效能
+        $VSQL -c "ALTER RESOURCE POOL general PLANNEDCONCURRENCY 2;"
+        $VSQL -c "ALTER RESOURCE POOL general EXECUTIONPARALLELISM 4;"
+        $VSQL -c "INSERT INTO tuning_log VALUES(NOW(),'pool','busy','Query protection');" ;;
+esac
 ```
 
 **預期效益**：
