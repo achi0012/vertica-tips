@@ -489,29 +489,32 @@ $$;
      AND LENGTH(s.current_statement) > 0;
 ```
 
-**自動化腳本**（建立排程定期執行）：
+**自動化腳本**（排程定期執行，逐個處理異常查詢）：
 
 ```sql
 => CREATE OR REPLACE PROCEDURE kill_anomalous_queries() LANGUAGE PLvSQL AS $$
 DECLARE
-    cur CURSOR FOR
-        SELECT s.session_id, s.transaction_id
-        FROM v_monitor.sessions s
-        WHERE s.current_statement IS NOT NULL
-          AND APPLY_IFOREST(
-                  EXTRACT(EPOCH FROM (NOW() - s.current_statement_start)) * 1000,
-                  COALESCE(s.memory_acquired_mb, 0),
-                  (SELECT running_query_count FROM v_monitor.resource_pool_status WHERE pool_name = 'general'),
-                  (SELECT COUNT(*) FROM v_monitor.locks WHERE grant_timestamp IS NULL)
-                  USING PARAMETERS model_name='query_anomaly'
-              ) ILIKE '%is_anomaly\":true%';
-    rec RECORD;
+    sid VARCHAR;
+    tid VARCHAR;
 BEGIN
-    FOR rec IN cur LOOP
-        PERFORM SELECT INTERRUPT_STATEMENT(rec.session_id::VARCHAR, rec.transaction_id::VARCHAR);
-        PERFORM INSERT INTO tuning_log VALUES(NOW(),'kill_query','anomaly',
-                     'Session ' || rec.session_id);
-    END LOOP;
+    -- 每次只處理一個異常查詢，避免程序複雜度
+    SELECT s.session_id::VARCHAR, s.transaction_id::VARCHAR
+    INTO sid, tid
+    FROM v_monitor.sessions s
+    WHERE s.current_statement IS NOT NULL
+      AND APPLY_IFOREST(
+              EXTRACT(EPOCH FROM (NOW() - s.current_statement_start)) * 1000,
+              COALESCE(s.memory_acquired_mb, 0),
+              (SELECT running_query_count FROM v_monitor.resource_pool_status WHERE pool_name = 'general'),
+              (SELECT COUNT(*) FROM v_monitor.locks WHERE grant_timestamp IS NULL)
+              USING PARAMETERS model_name='query_anomaly'
+          ) ILIKE '%is_anomaly\":true%'
+    LIMIT 1;
+
+    IF sid IS NOT NULL THEN
+        PERFORM SELECT INTERRUPT_STATEMENT(sid, tid);
+        PERFORM INSERT INTO tuning_log VALUES(NOW(),'kill_query','anomaly','Session ' || sid);
+    END IF;
 END;
 $$;
 
