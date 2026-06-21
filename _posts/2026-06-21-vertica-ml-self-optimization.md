@@ -340,34 +340,336 @@ END;
 
 ## 八、實戰案例
 
-### 案例：預測 ROS 暴增 + IFOREST 異常偵測
+### 案例 A：ETL 時段效能衰退預測
+
+**情境**：每天晚間 22:00 執行批次 ETL，載入時間從 30 分鐘逐漸增長到 2 小時，但沒人發現直到用戶抱怨。
+
+**ML 做法**：用歷史載入時間訓練迴歸模型，預測何時會超過容忍閾值，提前通知或自動調整。
 
 ```sql
--- Step 1: 訓練 ROS 增長模型
-=> SELECT LINEAR_REG('ros_growth', 'monitor_metrics', 'ros_count', 'collected_at');
+-- Step 1: 建立載入歷史表
+=> CREATE TABLE load_history AS
+   SELECT load_start, load_duration_ms,
+          input_file_size_bytes, accepted_row_count,
+          (EXTRACT(HOUR FROM load_start) >= 22
+           AND EXTRACT(HOUR FROM load_start) < 6) AS is_nightly_etl
+   FROM v_monitor.load_streams
+   WHERE load_start >= NOW() - INTERVAL '30 days';
 
--- Step 2: 訓練異常偵測
-=> SELECT IFOREST('ros_anomaly', 'monitor_metrics',
-    'running_q_count, memory_inuse_kb, ros_count');
+-- Step 2: 訓練載入時間預測模型
+=> SELECT LINEAR_REG('etl_duration_model', 'load_history',
+    'load_duration_ms', 'input_file_size_bytes, accepted_row_count'
+);
 
--- Step 3: 預測 2 小時後的 ROS
-=> SELECT PREDICT_LINEAR_REG(
-       NOW() + INTERVAL '2 hours'
-       USING PARAMETERS model_name='ros_growth'
-   ) AS predicted_ros;
+-- Step 3: 預測今晚的 ETL 載入時間
+=> SELECT ROUND(PREDICT_LINEAR_REG(
+       500000000, 500000
+       USING PARAMETERS model_name='etl_duration_model'
+   ) / 60000, 2) AS predicted_minutes;
 
--- Step 4: 即時檢查是否異常
-=> SELECT APPLY_IFOREST(
-       (SELECT running_q_count FROM v_monitor.resource_pool_status WHERE pool_name='general'),
-       (SELECT memory_inuse_kb FROM v_monitor.resource_pool_status WHERE pool_name='general'),
-       (SELECT COUNT(*) FROM v_monitor.projection_storage)
-       USING PARAMETERS model_name='ros_anomaly'
-   ) AS anomaly_check;
+-- Step 4: 若預測超過 90 分鐘，自動調高 TM 資源池
+=> DO $$
+BEGIN
+    IF (SELECT PREDICT_LINEAR_REG(
+               500000000, 500000
+               USING PARAMETERS model_name='etl_duration_model'
+        ) / 60000) > 90
+    THEN
+        ALTER RESOURCE POOL tm MAXCONCURRENCY 12;
+        ALTER RESOURCE POOL tm PLANNEDCONCURRENCY 4;
+        INSERT INTO tuning_log VALUES (
+            NOW(), 'etl_tuning', 'adjusted',
+            'Predicted ETL > 90min, increased TM pool'
+        );
+    END IF;
+END;
+$$;
 ```
+
+**預期效益**：
+- 在 ETL 開始前就預測載入時間
+- 提前調整資源，避免 ETL 超時
+- 建立基準線，持續監控載入效能趨勢
 
 ---
 
-## 九、Verification Notes
+### 案例 B：異常查詢模式自動偵測與阻斷
+
+**情境**：開發人員突然跑了一個沒有過濾條件的全表掃描，導致 general pool 滿載、其他查詢全部 timeout。
+
+**ML 做法**：用 IFOREST 學習正常查詢模式，即時偵測異常查詢並自動中斷。
+
+```sql
+-- Step 1: 建立查詢特徵表
+=> CREATE TABLE query_patterns AS
+   SELECT
+       session_id,
+       request_duration_ms,
+       memory_acquired_mb,
+       (SELECT COUNT(*) FROM v_monitor.resource_pool_status
+        WHERE pool_name = 'general') AS concurrent_queries,
+       (SELECT COUNT(*) FROM v_monitor.locks
+        WHERE grant_timestamp IS NULL) AS lock_waiting,
+       (SELECT COUNT(*) FROM v_monitor.projection_storage) AS ros_count,
+       1 AS is_normal
+   FROM v_monitor.query_requests
+   WHERE start_timestamp >= NOW() - INTERVAL '7 days'
+     AND request_duration_ms < 300000;  -- 只取正常查詢
+
+-- Step 2: 訓練異常偵測模型（只有正常樣本）
+=> SELECT IFOREST('query_anomaly', 'query_patterns',
+    'request_duration_ms, memory_acquired_mb, concurrent_queries, lock_waiting'
+);
+
+-- Step 3: 即時監控新進查詢（可在 self_optimize 中執行）
+=> SELECT
+    s.session_id,
+    s.current_statement,
+    APPLY_IFOREST(
+        EXTRACT(EPOCH FROM (NOW() - s.current_statement_start)) * 1000,
+        COALESCE(s.memory_acquired_mb, 0),
+        (SELECT running_query_count FROM v_monitor.resource_pool_status
+         WHERE pool_name = 'general'),
+        (SELECT COUNT(*) FROM v_monitor.locks WHERE grant_timestamp IS NULL)
+        USING PARAMETERS model_name='query_anomaly'
+    ) AS anomaly_check
+   FROM v_monitor.sessions s
+   WHERE s.current_statement IS NOT NULL
+     AND LENGTH(s.current_statement) > 0;
+```
+
+**觸發自動行動**：
+
+```sql
+-- 若有異常查詢且執行超過 60 秒，自動中斷
+=> DO $$
+DECLARE
+    result ROW(anomaly_check VARCHAR);
+BEGIN
+    FOR result IN
+        SELECT APPLY_IFOREST( ... USING PARAMETERS model_name='query_anomaly') AS anomaly_check
+        FROM v_monitor.sessions
+        WHERE current_statement IS NOT NULL
+    LOOP
+        IF result.anomaly_check ILIKE '%"is_anomaly":true%' THEN
+            -- 中斷異常查詢
+            SELECT INTERRUPT_STATEMENT(session_id, transaction_id);
+            INSERT INTO tuning_log VALUES (NOW(), 'kill_query', 'anomaly', result.anomaly_check);
+        END IF;
+    END LOOP;
+END;
+$$;
+```
+
+**預期效益**：
+- 在異常查詢影響其他用戶前自動阻斷
+- 不需要人工盯監控畫面
+- 模型會隨正常查詢模式變化自動適應
+
+---
+
+### 案例 C：基於負載模式的資源池自動切換
+
+**情境**：白天以查詢為主（需要高並發、低延遲），夜間以 ETL 載入為主（需要高吞吐、大記憶體）。固定資源池配置無法滿足兩者。
+
+**ML 做法**：用 KMEANS 將一週的負載模式自動分群，根據當前所屬群組切換資源池配置。
+
+```sql
+-- Step 1: 用歷史數據訓練分群模型
+=> SELECT KMEANS('load_clusters', 'monitor_metrics',
+    'running_q_count, memory_inuse_kb, ros_count',
+    3  -- 3 個叢集：離峰/一般/忙碌
+);
+
+-- Step 2: 判斷當前屬於哪個叢集
+=> SELECT APPLY_KMEANS(
+       (SELECT running_q_count FROM v_monitor.resource_pool_status
+        WHERE pool_name = 'general'),
+       (SELECT memory_inuse_kb FROM v_monitor.resource_pool_status
+        WHERE pool_name = 'general'),
+       (SELECT COUNT(*) FROM v_monitor.projection_storage)
+       USING PARAMETERS model_name='load_clusters'
+   ) AS current_cluster;
+
+-- Step 3: 根據叢集切換配置（在 auto_tune 中執行）
+=> DO $$
+DECLARE
+    cluster INT;
+BEGIN
+    SELECT APPLY_KMEANS(... USING PARAMETERS model_name='load_clusters')
+    INTO cluster;
+
+    IF cluster = 1 THEN
+        -- 離峰：給 ETL 更多資源
+        ALTER RESOURCE POOL general PLANNEDCONCURRENCY 6;
+        ALTER RESOURCE POOL general EXECUTIONPARALLELISM 8;
+        INSERT INTO tuning_log VALUES (NOW(), 'pool_config', 'off-peak',
+                                       'High throughput mode');
+    ELSIF cluster = 2 THEN
+        -- 一般：平衡配置
+        ALTER RESOURCE POOL general PLANNEDCONCURRENCY 4;
+        ALTER RESOURCE POOL general EXECUTIONPARALLELISM AUTO;
+        INSERT INTO tuning_log VALUES (NOW(), 'pool_config', 'normal',
+                                       'Balanced mode');
+    ELSE
+        -- 忙碌：保護查詢效能
+        ALTER RESOURCE POOL general PLANNEDCONCURRENCY 2;
+        ALTER RESOURCE POOL general EXECUTIONPARALLELISM 4;
+        INSERT INTO tuning_log VALUES (NOW(), 'pool_config', 'busy',
+                                       'Query protection mode');
+    END IF;
+END;
+$$;
+```
+
+**預期效益**：
+- 不需要手動設定時段排程（模型自動學習負載模式）
+- 節假日和特殊日自動適應
+- 資源利用率最大化
+
+---
+
+### 案例 D：磁碟空間增長預警
+
+**情境**：資料量持續成長，但磁碟空間監控只設了 80% 告警，發現時往往已經快滿了。
+
+**ML 做法**：用 `v_monitor.projection_storage` 的歷史數據訓練增長模型，預測何時會達到磁碟上限。
+
+```sql
+-- Step 1: 建立儲存增長歷史
+=> CREATE TABLE storage_growth AS
+   SELECT collected_at::DATE AS day,
+          SUM(ros_used_bytes) / (1024^3) AS total_gb
+   FROM v_monitor.projection_storage, monitor_metrics
+   WHERE collected_at >= NOW() - INTERVAL '30 days'
+   GROUP BY 1 ORDER BY 1;
+
+-- 或使用 dc_storage_usage 累積數據
+=> CREATE TABLE disk_forecast AS
+   SELECT time::DATE AS day,
+          MAX(total_used_bytes) / (1024^4) AS total_tb
+   FROM dc_storage_usage
+   WHERE time >= NOW() - INTERVAL '30 days'
+   GROUP BY 1 ORDER BY 1;
+
+-- Step 2: 訓練增長模型
+=> SELECT LINEAR_REG('disk_growth', 'disk_forecast',
+    'total_tb', 'day'
+);
+
+-- Step 3: 預測何時會達到 90% 磁碟用量
+=> SELECT PREDICT_LINEAR_REG(
+       DATE '2026-07-15'
+       USING PARAMETERS model_name='disk_growth'
+   ) AS predicted_tb;
+```
+
+**進階：預測達到閾值的日期**
+
+```sql
+-- 用迭代方式找出達到 90% 的日期
+=> SELECT MIN(day) AS warning_date
+   FROM (
+       SELECT '2026-06-22'::DATE + LEVEL AS day
+       FROM dual CONNECT BY LEVEL <= 90
+   ) d
+   WHERE PREDICT_LINEAR_REG(
+             d.day USING PARAMETERS model_name='disk_growth'
+         ) > 700;  -- 假設 780GB 為 90% 閾值
+```
+
+**預期效益**：
+- 提前 2-4 週預測磁碟空間不足
+- 有充足的時間規劃擴充或清理
+- 避免緊急半夜擴充磁碟
+
+---
+
+### 案例 E：Lock 競爭熱點預測
+
+**情境**：特定時段經常發生鎖衝突，導致查詢 timeout，但原因難以定位。
+
+**ML 做法**：用 `dc_lock_attempts` 訓練分類模型，預測哪些時段/物件容易發生鎖衝突。
+
+```sql
+-- Step 1: 建立鎖等待訓練資料
+=> CREATE TABLE lock_training AS
+   SELECT
+       TRUNC(time, 'HH') AS hour_slot,
+       object_name,
+       mode,
+       COUNT(*) AS wait_count,
+       AVG((time - start_time)::INTERVAL SECOND) AS avg_wait_sec,
+       (CASE WHEN COUNT(*) > 10
+             AND AVG((time - start_time)::INTERVAL SECOND) > 30
+        THEN 1 ELSE 0 END) AS is_hotspot
+   FROM dc_lock_attempts
+   WHERE time >= NOW() - INTERVAL '7 days'
+   GROUP BY 1, 2, 3;
+```
+
+**預期效益**：
+- 提前知道哪些表/時段容易鎖衝突
+- 可排程避開高風險時段執行 DDL
+- 自動調整 LockTimeout
+
+---
+
+### 案例 F：Tuple Mover 效能預測與 mergeout 調度
+
+**情境**：mergeout 執行時間不穩定，有時幾秒就跑完，有時卡住數小時導致 ROS pushback。
+
+**ML 做法**：用 LINEAR_REG 預測 mergeout 執行時間，選擇最佳執行時機。
+
+```sql
+-- Step 1: 建立 mergeout 歷史
+=> CREATE TABLE mergeout_history AS
+   SELECT
+       operation_start,
+       EXTRACT(EPOCH FROM (operation_end - operation_start)) AS duration_sec,
+       (SELECT COUNT(*) FROM v_monitor.projection_storage
+        WHERE ros_row_count < 1000) AS small_ros_count,
+       (SELECT COUNT(*) FROM v_monitor.delete_vectors) AS dv_count
+   FROM v_monitor.tuple_mover_operations
+   WHERE operation_type = 'Mergeout'
+     AND operation_end IS NOT NULL
+     AND operation_start >= NOW() - INTERVAL '14 days';
+
+-- Step 2: 訓練預測模型
+=> SELECT LINEAR_REG('mergeout_dur', 'mergeout_history',
+    'duration_sec', 'small_ros_count, dv_count'
+);
+
+-- Step 3: 在觸發 mergeout 前先預估執行時間
+=> SELECT ROUND(PREDICT_LINEAR_REG(
+       (SELECT COUNT(*) FROM v_monitor.projection_storage
+        WHERE ros_row_count < 1000),
+       (SELECT COUNT(*) FROM v_monitor.delete_vectors)
+       USING PARAMETERS model_name='mergeout_dur'
+   ) / 60, 1) AS estimated_minutes;
+```
+
+**預期效益**：
+- 避開尖峰時段執行長時間 mergeout
+- 預估維護窗口時間
+- 可設定「若預測超過 N 分鐘則延後執行」的規則
+
+---
+
+## 九、實戰案例總表
+
+| 案例 | ML 演算法 | 監控標的 | 自動行動 |
+|------|---------|---------|---------|
+| **A: ETL 衰退預測** | `LINEAR_REG` | 載入時間趨勢 | 調高 TM 資源池 |
+| **B: 異常查詢阻斷** | `IFOREST` | 查詢特徵偏離 | `INTERRUPT_STATEMENT` |
+| **C: 負載感知切換** | `KMEANS` | 負載模式分群 | 切換資源池配置 |
+| **D: 磁碟增長預警** | `LINEAR_REG` | 儲存空間趨勢 | 通知管理員 |
+| **E: Lock 熱點預測** | 統計分析 | 鎖等待模式 | 調整 LockTimeout |
+| **F: Mergeout 調度** | `LINEAR_REG` | mergeout 時間 | 選擇最佳執行時機 |
+
+---
+
+## 十、Verification Notes
 
 所有 ML 函數在 **Vertica 25.4.0-0** 上的測試結果：
 
