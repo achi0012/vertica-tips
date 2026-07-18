@@ -2,8 +2,13 @@
   <div class="footer-inner">
     <div class="footer-copy">&copy; {{ site.time | date: '%Y' }} {{ site.author.name }}</div>
     <div class="footer-links">
-      <a href="{{ '/' | relative_url }}">Home</a>
-      <a href="{{ '/about/' | relative_url }}">About</a>
+      {% if page.lang == 'en' or page.layout == 'home_en' or page.layout == 'post_en' %}
+      <a href="{{ '/en/' | relative_url }}">Home</a>
+      <a href="{{ '/en/about/' | relative_url }}">About</a>
+      {% else %}
+      <a href="{{ '/' | relative_url }}">首頁</a>
+      <a href="{{ '/about/' | relative_url }}">關於</a>
+      {% endif %}
       <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
       <a href="https://github.com/{{ site.repository }}" target="_blank" rel="noopener">GitHub</a>
     </div>

@@ -1,9 +1,20 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: 'zh-TW' }}">
+<html lang="{{ page.lang | default: site.default_lang }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{ '/assets/style.css' | relative_url }}">
+
+  {%- assign page_url_clean = page.url | replace: '/en/', '/' | replace: '/en', '' %}
+  {%- if page.lang == 'en' or page.layout == 'home_en' or page.layout == 'post_en' %}
+  <link rel="alternate" hreflang="zh" href="{{ page_url_clean | absolute_url }}">
+  <link rel="alternate" hreflang="en" href="{{ page.url | absolute_url }}">
+  {%- else %}
+  <link rel="alternate" hreflang="zh" href="{{ page.url | absolute_url }}">
+  <link rel="alternate" hreflang="en" href="{{ '/en' | append: page.url | absolute_url }}">
+  {%- endif %}
+  <link rel="alternate" hreflang="x-default" href="{{ '/' | absolute_url }}">
+
   {%- seo -%}
   {%- feed_meta -%}
   <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ '/feed.xml' | relative_url }}">
@@ -11,36 +22,42 @@
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBVZ4Z607E"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-NBVZ4Z607E');
-  </script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-NBVZ4Z607E');</script>
 </head>
 <body>
-  {% if page.layout == 'post' %}
+  {% if page.layout == 'post' or page.layout == 'post_en' %}
   <div class="progress-bar" id="progressBar"></div>
   {% endif %}
 
   {% include header.html %}
 
   <main class="page-content" aria-label="Content">
-    <div class="content-wrapper">
-      {{ content }}
-    </div>
+    <div class="content-wrapper">{{ content }}</div>
   </main>
 
   {% include footer.html %}
 
-  {% if page.layout == 'post' %}
+  {% if page.layout == 'post' or page.layout == 'post_en' %}
   <script>
-    window.addEventListener('scroll', function(){
-      var s = document.documentElement.scrollTop || document.body.scrollTop;
-      var h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      document.getElementById('progressBar').style.width = (s/h*100)+'%';
+    window.addEventListener('scroll',function(){
+      var s=document.documentElement.scrollTop||document.body.scrollTop;
+      var h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+      document.getElementById('progressBar').style.width=(s/h*100)+'%';
     });
   </script>
   {% endif %}
+
+  <!-- Browser language detection (root only) -->
+  <script>
+    (function(){
+      var lang = navigator.language || navigator.browserLanguage;
+      if (lang && lang.indexOf('en') === 0) {
+        var path = window.location.pathname.replace(/^\/vertica-tips/, '') || '/';
+        if (path === '/' || path === '') {
+          window.location.replace('/vertica-tips/en/');
+        }
+      }
+    })();
+  </script>
 </body>
 </html>

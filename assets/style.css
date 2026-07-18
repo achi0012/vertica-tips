@@ -643,3 +643,31 @@ img {
     font-size: 12px;
   }
 }
+
+/* ── 語言切換 ── */
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.lang-switch a {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--text-tertiary);
+  border: 1px solid transparent;
+}
+.lang-switch a:hover {
+  color: var(--text);
+  border-color: var(--border);
+}
+.lang-switch a.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-subtle);
+}
+.lang-switch .sep {
+  color: var(--text-tertiary);
+  font-size: 10px;
+}

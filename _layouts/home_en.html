@@ -1,0 +1,31 @@
+---
+layout: default
+---
+<section class="home-hero">
+  <h1>{{ site.tagline_en }}</h1>
+  <p class="hero-sub">{{ site.description_en }}</p>
+</section>
+
+{% assign posts = site.en | sort: 'date' | reverse %}
+{% if posts.size > 0 %}
+<div class="post-grid">
+  {% for post in posts %}
+  <article class="post-card">
+    <div class="post-card-meta">
+      <span>{{ post.date | date: "%b %d, %Y" }}</span>
+      {% if post.categories.size > 0 %}
+      <span class="post-card-tag">/</span>
+      {% for cat in post.categories limit:1 %}<span>{{ cat }}</span>{% endfor %}
+      {% endif %}
+    </div>
+    <h2><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h2>
+    {% if post.description %}<p class="post-card-excerpt">{{ post.description }}</p>{% endif %}
+    <div class="post-card-footer">
+      <span class="post-card-read">Read <span class="arrow">→</span></span>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<div class="no-posts"><div class="icon">🌍</div><p>English articles coming soon.</p></div>
+{% endif %}

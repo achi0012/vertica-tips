@@ -1,25 +1,33 @@
-# Vertica Tips — Jekyll 配置
+---
+# Vertica Tips — Jekyll 配置 (多語言)
 title: Vertica Tips
-tagline: Vertica 資料庫技術筆記與最佳實踐
-description: >-
+tagline_zh: Vertica 資料庫技術筆記與最佳實踐
+tagline_en: Vertica Database Technical Notes & Best Practices
+description_zh: >-
   Vertica 資料庫的深入技術文章 — 涵蓋資料載入、調優、監控、SQL 技巧與實戰經驗。
   以 Vertica 25.x 為基礎，結合理論與實測，提供可直接使用的最佳實踐。
+description_en: >-
+  In-depth Vertica technical articles — data loading, performance tuning, monitoring, SQL tips,
+  and hands-on best practices based on Vertica 25.x.
 url: "https://achi0012.github.io"
 baseurl: "/vertica-tips"
 repository: achi0012/vertica-tips
 
-# 主題設定 (不使用主題，完全自訂)
+# 多語言設定
+languages: ["zh", "en"]
+default_lang: "zh"
+
+# Plugins
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
 
-# 作者資訊
+# 作者
 author:
   name: "Achi"
   email: achi0012@users.noreply.github.com
 
-# 社交連結
 social:
   github: achi0012
 
@@ -27,17 +35,29 @@ social:
 permalink: /:year/:month/:title/
 show_excerpts: true
 
-# 導航
-header_pages:
-  - about.md
+# 英文 collection
+collections:
+  en:
+    output: true
+    permalink: /en/:year/:month/:title/
+
+# 預設值
+defaults:
+  - scope:
+      path: "_posts"
+    values:
+      lang: "zh"
+      layout: "post"
+  - scope:
+      path: "_en"
+    values:
+      lang: "en"
+      layout: "post_en"
 
 # 語言
-lang: zh-TW
-
-# 日期格式
 date_format: "%Y-%m-%d"
 
-# Build settings
+# Build
 exclude:
   - Gemfile
   - Gemfile.lock

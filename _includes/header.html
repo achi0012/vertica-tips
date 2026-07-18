@@ -1,13 +1,29 @@
 <header class="site-header">
   <div class="header-inner">
-    <a href="{{ '/' | relative_url }}" class="site-logo">
+    <a href="{% if page.lang == 'en' or page.layout == 'home_en' or page.layout == 'post_en' %}{{ '/en/' | relative_url }}{% else %}{{ '/' | relative_url }}{% endif %}" class="site-logo">
       <span class="logo-icon">🐧</span>
       <span>{{ site.title }}</span>
     </a>
     <nav class="main-nav">
-      <a href="{{ '/' | relative_url }}" {% if page.layout == 'home' %}class="active"{% endif %}>Home</a>
-      <a href="{{ '/about/' | relative_url }}" {% if page.url == '/about/' %}class="active"{% endif %}>About</a>
+      {% if page.lang == 'en' or page.layout == 'home_en' or page.layout == 'post_en' %}
+      <a href="{{ '/en/' | relative_url }}" {% if page.url == '/en/' or page.url == '/en' %}class="active"{% endif %}>Home</a>
+      <a href="{{ '/en/about/' | relative_url }}" {% if page.url == '/en/about/' %}class="active"{% endif %}>About</a>
       <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+      <span class="lang-switch">
+        <a href="{{ page.url | replace:'/en/','/' | replace:'/en','' | relative_url }}">中文</a>
+        <span class="sep">|</span>
+        <a href="{{ page.url | relative_url }}" class="active">EN</a>
+      </span>
+      {% else %}
+      <a href="{{ '/' | relative_url }}" {% if page.layout == 'home' %}class="active"{% endif %}>首頁</a>
+      <a href="{{ '/about/' | relative_url }}" {% if page.url == '/about/' %}class="active"{% endif %}>關於</a>
+      <a href="{{ '/feed.xml' | relative_url }}" class="nav-rss">📡 RSS</a>
+      <span class="lang-switch">
+        <a href="{{ page.url | relative_url }}" class="active">中文</a>
+        <span class="sep">|</span>
+        <a href="{{ '/en' | append: page.url | relative_url }}">EN</a>
+      </span>
+      {% endif %}
     </nav>
   </div>
 </header>
