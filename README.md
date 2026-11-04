@@ -9,7 +9,55 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
+目前共 15 篇中文文章，均有對應英文版。
+
+### 資料載入與外部表
+
 - [Vertica Data Load 最佳實踐 — COPY 命令深度解析 (25.x)](/_posts/2026-06-20-vertica-data-load-best-practice.md)
+- [Vertica Smart Scanning 加速外部表查詢 — ObjectStoreGlobStrategy 深度解析](/_posts/2026-06-20-vertica-smart-scanning-external-tables.md)
+- [Vertica + Apache Iceberg 實戰指南 — 打造高效 Data Lakehouse](/_posts/2026-06-20-vertica-iceberg-lakehouse.md)
+
+### 效能調優與資源池
+
+- [Vertica 資料庫效能變慢怎麼辦？— 13 步驟診斷檢查清單 (25.x 更新版)](/_posts/2026-06-20-vertica-slow-performance-checklist.md)
+- [Vertica 資源池管理最佳實踐 — 從分類到串聯的完整調校指南](/_posts/2026-06-21-vertica-resource-pool-best-practice.md)
+- [Vertica Tuple Mover 最佳實踐 — Moveout、Mergeout 與 STRATA 演算法完整指南](/_posts/2026-06-21-vertica-tuple-mover-best-practice.md)
+- [Vertica v26.2 NUMA Aware 效能架構 — 單伺服器跑出 3 倍吞吐量](/_posts/2026-06-21-vertica-v26.2-numa-performance.md)
+
+### 叢集、高可用與災難復原
+
+- [Vertica 節點故障恢復實戰指南 — Node Down Recovery (25.x)](/_posts/2026-06-20-vertica-node-recovery-best-practice.md)
+- [Vertica 集群重新平衡實戰指南 — Cluster Rebalancing (25.x)](/_posts/2026-06-20-vertica-rebalancing-best-practice.md)
+- [Vertica 資料庫崩潰後啟動失敗 — ASR 日期異常的完整復原指南](/_posts/2026-06-21-vertica-asr-recovery.md)
+
+### 監控、日誌與自動化
+
+- [Vertica Health Watchdog 深度解析 — 叢集健康監控的自動守護神](/_posts/2026-06-20-vertica-health-watchdog.md)
+- [Vertica Log Analysis 實戰 — 從系統表到日誌檔的根因分析指南](/_posts/2026-06-21-vertica-log-analysis-rca.md)
+- [Vertica ML 實戰：自我監控與智慧調優 — 25.4.0-0 完全驗證](/_posts/2026-06-21-vertica-ml-self-optimization.md)
+
+### 資料管理與記憶體
+
+- [Vertica 刪除資料最佳實踐 — DELETE、TRUNCATE、Partition 完整指南](/_posts/2026-06-21-vertica-delete-data-best-practice.md)
+- [理解 Linux OOM Kill 在 Vertica 叢集中的成因與預防 — 完整指南](/_posts/2026-06-21-vertica-oom-prevention.md)
+
+### English Versions
+
+- [Vertica Data Load Best Practices — COPY Command Deep Dive (25.x)](/_en/2026-06-20-vertica-data-load-best-practice.md)
+- [Vertica Health Watchdog Deep Dive — Automatic Cluster Monitoring (24.4+)](/_en/2026-06-20-vertica-health-watchdog.md)
+- [Vertica + Apache Iceberg: Building a High-Performance Data Lakehouse](/_en/2026-06-20-vertica-iceberg-lakehouse.md)
+- [Vertica Node Down Recovery Field Guide — Practical Guide (25.x)](/_en/2026-06-20-vertica-node-recovery-best-practice.md)
+- [Vertica Cluster Rebalancing Field Guide (25.x)](/_en/2026-06-20-vertica-rebalancing-best-practice.md)
+- [Vertica Performance Slow? — 13-Step Diagnostic Checklist (25.x Updated)](/_en/2026-06-20-vertica-slow-performance-checklist.md)
+- [Vertica Smart Scanning — Faster External Table Queries with ObjectStoreGlobStrategy](/_en/2026-06-20-vertica-smart-scanning-external-tables.md)
+- [Vertica Database Fails to Start After Crash — ASR Invalid Date Recovery Guide](/_en/2026-06-21-vertica-asr-recovery.md)
+- [Best Practices for Deleting Data in Vertica — DELETE, TRUNCATE, Partition Guide (25.x)](/_en/2026-06-21-vertica-delete-data-best-practice.md)
+- [Vertica Log Analysis for Root Cause Investigation — A Practical Guide](/_en/2026-06-21-vertica-log-analysis-rca.md)
+- [Vertica ML for Self-Monitoring and Smart Tuning (25.4 Verified)](/_en/2026-06-21-vertica-ml-self-optimization.md)
+- [Understanding Linux OOM Kills in Vertica Clusters — Prevention Guide](/_en/2026-06-21-vertica-oom-prevention.md)
+- [Vertica Resource Pool Best Practices — From Custom Pools to Cascading (25.x)](/_en/2026-06-21-vertica-resource-pool-best-practice.md)
+- [Vertica Tuple Mover Best Practices — Mergeout, STRATA & TM Pool Tuning (25.x)](/_en/2026-06-21-vertica-tuple-mover-best-practice.md)
+- [Vertica v26.2 NUMA-Aware Performance — 3x Throughput on a Single Server](/_en/2026-06-21-vertica-v26.2-numa-performance.md)
 
 ## 本機開發
 
