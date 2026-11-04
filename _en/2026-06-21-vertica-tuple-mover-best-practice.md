@@ -4,7 +4,7 @@ title: "Vertica Tuple Mover Best Practices — Mergeout, STRATA & TM Pool Tuning
 date: 2026-06-21 09:00:00 +0800
 categories: vertica tuple-mover mergeout performance
 tags: [vertica, tuple-mover, moveout, mergeout, STRATA, ROS, TM, resource-pool, ROS-pushback, partition]
-description: "Complete Vertica Tuple Mover best practices combining KB Part 1 (≤9.1) and Part 2 (9.2+). Covers Mergeout mechanics, STRATA algorithm, TM resource pool tuning, ROS pushback prevention, and version differences up to 25.x."
+description: "Vertica Tuple Mover best practices — Mergeout mechanics, STRATA algorithm, TM pool tuning, ROS pushback, changes through 25.x."
 ---
 
 The Tuple Mover is Vertica's background service that manages ROS container consolidation and deleted data purging. While defaults work for most cases, specific workloads require tuning for optimal performance.

@@ -4,7 +4,7 @@ title: "Vertica Smart Scanning — Faster External Table Queries with ObjectStor
 date: 2026-06-20 16:00:00 +0800
 categories: vertica smart-scanning external-tables
 tags: [vertica, smart-scanning, ObjectStoreGlobStrategy, external-tables, S3, partition-pruning, performance]
-description: "How Vertica 23.4+ ObjectStoreGlobStrategy accelerates external table queries by 88.5% using hierarchical scanning. Deep dive into Flat vs Hierarchical strategies with benchmark comparisons."
+description: "How Vertica 23.4+ ObjectStoreGlobStrategy speeds up external table queries by 88.5% — Flat vs Hierarchical scanning, benchmarked."
 ---
 
 As data lakes grow on object stores like S3 and GCS, external table query performance becomes critical. Vertica 23.4+ introduced a powerful yet often overlooked parameter — `ObjectStoreGlobStrategy` — that can improve query speed by **up to 9x** through smarter partition-aware scanning.

@@ -1,5 +1,6 @@
 ---
 layout: page_en
+lang: en
 title: About Vertica Tips
 permalink: /en/about/
 ---

@@ -4,7 +4,7 @@ title: "Vertica Node Down Recovery Field Guide — Practical Guide (25.x)"
 date: 2026-06-20 12:00:00 +0800
 categories: vertica node-recovery HA
 tags: [vertica, node-recovery, high-availability, K-safety, troubleshooting, recovery]
-description: "Complete guide to recovering from Vertica node failures — from node state transitions, two-phase recovery process, RECOVERY pool tuning, dirty transaction handling, to 5 common troubleshooting scenarios."
+description: "Recovering a failed Vertica node — state transitions, two-phase recovery, RECOVERY pool tuning, dirty transactions, 5 scenarios."
 ---
 
 One of the worst scenarios in any database cluster is a node going **DOWN**. When a Vertica cluster node goes offline, it stops participating in any transactions committed after that point. After restart, it must recover missed data from **buddy nodes** before coming back online.

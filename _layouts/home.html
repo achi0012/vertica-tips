@@ -2,8 +2,8 @@
 layout: default
 ---
 <section class="home-hero">
-  <h1>{{ site.tagline }}</h1>
-  <p class="hero-sub">{{ site.description }}</p>
+  <h1>{{ site.tagline | default: site.tagline_zh }}</h1>
+  <p class="hero-sub">{{ site.description | default: site.description_zh }}</p>
 </section>
 
 {% assign posts = site.posts %}

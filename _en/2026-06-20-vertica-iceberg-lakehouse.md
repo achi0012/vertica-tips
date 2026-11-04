@@ -4,7 +4,7 @@ title: "Vertica + Apache Iceberg: Building a High-Performance Data Lakehouse"
 date: 2026-06-20 22:00:00 +0800
 categories: vertica iceberg lakehouse
 tags: [vertica, iceberg, lakehouse, S3, Glue, Nessie, OAuth2, external-tables, Parquet]
-description: "Complete guide to Vertica + Apache Iceberg integration — architecture, feature evolution matrix (12.0.4→25.4.0), five hands-on examples (AWS Glue, File System Tables, Lakekeeper, Nessie OAuth2, Bearer Token)."
+description: "Vertica + Apache Iceberg integration — architecture, feature matrix 12.0.4→25.4.0, and five hands-on examples (Glue, Lakekeeper, Nessie)."
 ---
 
 Imagine a kitchen with a massive walk-in refrigerator (Data Lake) and a gleaming prep station (Data Warehouse), connected by an expensive ETL conveyor belt. **Apache Iceberg + Vertica** eliminates that conveyor belt entirely.

@@ -4,7 +4,7 @@ title: "Vertica Resource Pool Best Practices — From Custom Pools to Cascading 
 date: 2026-06-21 10:00:00 +0800
 categories: vertica resource-pool performance
 tags: [vertica, resource-pool, workload-management, cascading-pool, MEMORYSIZE, PLANNEDCONCURRENCY, query-budget, PRIORITY]
-description: "Complete Vertica resource pool management guide — five core parameters, workload classification, fastAnalytics 6-phase evolution, cascading pools, runtime routing, and the tuning checklist."
+description: "Vertica resource pool management — five core parameters, workload classification, fastAnalytics evolution, and a tuning checklist."
 ---
 
 Resource pools are Vertica's core resource management mechanism. Every query runs in some pool — whether it's an ETL load, a BI dashboard query, or a batch analytics job. Proper pool management ensures workloads coexist without resource starvation.

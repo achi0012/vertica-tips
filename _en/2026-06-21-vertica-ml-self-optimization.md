@@ -4,7 +4,7 @@ title: "Vertica ML for Self-Monitoring and Smart Tuning (25.4 Verified)"
 date: 2026-06-21 02:00:00 +0800
 categories: vertica machine-learning auto-tuning
 tags: [vertica, ML, LINEAR_REG, SVM, KMEANS, IFOREST, self-optimization, auto-tuning, anomaly-detection]
-description: "Using Vertica 25.4.0-0 built-in ML functions (LINEAR_REG, SVM_CLASSIFIER, KMEANS, IFOREST, RF_CLASSIFIER) for self-monitoring and auto-tuning. All SQL verified against a live instance."
+description: "Using Vertica 25.4.0-0 built-in ML functions (LINEAR_REG, KMEANS, IFOREST, RF_CLASSIFIER) for self-monitoring and auto-tuning."
 ---
 
 Vertica 25.4.0-0 includes a complete Machine Learning engine supporting regression, classification, clustering, and anomaly detection. This article demonstrates how to use these ML functions to **monitor and optimize Vertica itself** — all SQL verified on a live 25.4.0-0 instance.
