@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 15 篇中文文章，均有對應英文版。
+目前共 16 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -40,6 +40,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 - [Vertica 刪除資料最佳實踐 — DELETE、TRUNCATE、Partition 完整指南](/_posts/2026-06-21-vertica-delete-data-best-practice.md)
 - [理解 Linux OOM Kill 在 Vertica 叢集中的成因與預防 — 完整指南](/_posts/2026-06-21-vertica-oom-prevention.md)
+- [Vertica 空間審計實戰 — 別數 ROS 容器，算位元組（25.4 實測）](/_posts/2026-11-04-vertica-space-audit.md)
 
 ### English Versions
 
@@ -58,6 +59,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Vertica Resource Pool Best Practices — From Custom Pools to Cascading (25.x)](/_en/2026-06-21-vertica-resource-pool-best-practice.md)
 - [Vertica Tuple Mover Best Practices — Mergeout, STRATA & TM Pool Tuning (25.x)](/_en/2026-06-21-vertica-tuple-mover-best-practice.md)
 - [Vertica v26.2 NUMA-Aware Performance — 3x Throughput on a Single Server](/_en/2026-06-21-vertica-v26.2-numa-performance.md)
+- [Auditing Vertica Disk Space: Don't Count ROS Containers, Count Bytes (25.4 Measured)](/_en/2026-11-04-vertica-space-audit.md)
 
 ## 本機開發
 
