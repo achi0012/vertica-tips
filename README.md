@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 16 篇中文文章，均有對應英文版。
+目前共 17 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -42,6 +42,10 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [理解 Linux OOM Kill 在 Vertica 叢集中的成因與預防 — 完整指南](/_posts/2026-06-21-vertica-oom-prevention.md)
 - [Vertica 空間審計實戰 — 別數 ROS 容器，算位元組（25.4 實測）](/_posts/2026-11-04-vertica-space-audit.md)
 
+### 最新文章
+
+- [Vertica 25.4 VectorOps 實戰：用 ARRAY 做向量相似度搜尋](/_posts/2026-11-05-vertica-vectorops-array-similarity-search.md)
+
 ### English Versions
 
 - [Vertica Data Load Best Practices — COPY Command Deep Dive (25.x)](/_en/2026-06-20-vertica-data-load-best-practice.md)
@@ -60,6 +64,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Vertica Tuple Mover Best Practices — Mergeout, STRATA & TM Pool Tuning (25.x)](/_en/2026-06-21-vertica-tuple-mover-best-practice.md)
 - [Vertica v26.2 NUMA-Aware Performance — 3x Throughput on a Single Server](/_en/2026-06-21-vertica-v26.2-numa-performance.md)
 - [Auditing Vertica Disk Space: Don't Count ROS Containers, Count Bytes (25.4 Measured)](/_en/2026-11-04-vertica-space-audit.md)
+- [Vertica 25.4 VectorOps in Practice: Vector Similarity Search with ARRAY](/_en/2026-11-05-vertica-vectorops-array-similarity-search.md)
 
 ## 本機開發
 
