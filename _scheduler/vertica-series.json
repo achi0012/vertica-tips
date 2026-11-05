@@ -1,0 +1,112 @@
+{
+  "series": "vertica-tips-8-articles",
+  "timezone": "Asia/Taipei",
+  "created": "2026-11-05",
+  "topics": [
+    {
+      "n": 1,
+      "id": "vectorops",
+      "slug": "vertica-vectorops-array-similarity-search",
+      "zh_title": "Vertica 25.4 VectorOps 實戰：用 ARRAY 做向量相似度搜尋",
+      "en_title": "Vertica 25.4 VectorOps in Practice: Vector Similarity Search with ARRAY",
+      "categories": "vertica vector ai",
+      "tags": ["vertica", "vectorops", "cosine-similarity", "dot-product", "array", "ai", "similarity-search", "25.4"],
+      "description_zh": "在 Vertica 25.4 用 ARRAY[FLOAT] 儲存 embedding，實測 COSINE_SIMILARITY、DOT_PRODUCT、VECTOR_L2、VECTOR_MAGNITUDE，打造 Top-K 向量相似度搜尋，並解析沒有向量索引時的效能取捨。",
+      "description_en": "Store embeddings as ARRAY[FLOAT] in Vertica 25.4, benchmark COSINE_SIMILARITY, DOT_PRODUCT, VECTOR_L2, and VECTOR_MAGNITUDE, and build a Top-K vector similarity search while understanding the performance trade-offs without a vector index.",
+      "brief": "說明 VectorOps 四個函數、embedding 表設計、Top-K SQL、正規化、pre-filter、投影與 full scan 成本；用 10 萬筆合成向量實測，EXPLAIN 顯示 STORAGE ACCESS + TopK。",
+      "verify": "建立 article_lab_vectorops schema；用 ARRAY[FLOAT] 建表；產生 100,000 筆 8 維向量；跑 Top-K cosine similarity；EXPLAIN；比較有/無 pre-filter；記錄時間；DROP SCHEMA。"
+    },
+    {
+      "n": 2,
+      "id": "statistics",
+      "slug": "vertica-statistics-query-plan",
+      "zh_title": "Vertica 統計資訊管理：ANALYZE_STATISTICS 與查詢計畫為什麼選錯",
+      "en_title": "Vertica Statistics Management: Why the Optimizer Chooses the Wrong Plan",
+      "categories": "vertica statistics performance",
+      "tags": ["vertica", "statistics", "analyze-statistics", "query-plan", "explain", "optimizer", "performance"],
+      "description_zh": "從 stale statistics 的角度解釋 Vertica 查詢計畫為什麼選錯，實測 ANALYZE_STATISTICS 前後的 EXPLAIN、資料列估算與 join order 變化，並整理統計資訊的維護策略。",
+      "description_en": "Explain why the Vertica optimizer chooses the wrong plan when statistics are stale, benchmark EXPLAIN before and after ANALYZE_STATISTICS, compare row estimates and join order, and build a practical statistics maintenance strategy.",
+      "brief": "統計資訊何時失效、ANALYZE_STATISTICS/ANALYZE_HISTOGRAM、v_monitor.table_statistics、stale stats 造成 join order/投影選擇錯誤；用兩張表 before/after EXPLAIN 對比。",
+      "verify": "建立 article_lab_stats schema；建兩張有傾斜資料的表；先不收集統計跑 EXPLAIN；收集後再跑 EXPLAIN；比較 rows/cost/join order；查 table_statistics；DROP SCHEMA。"
+    },
+    {
+      "n": 3,
+      "id": "projection",
+      "slug": "vertica-projection-design-best-practice",
+      "zh_title": "Vertica 投影設計實戰：Segmentation、Sort Order、Encoding 與 ROS Pushback",
+      "en_title": "Vertica Projection Design in Practice: Segmentation, Sort Order, Encoding, and ROS Pushback",
+      "categories": "vertica projection performance",
+      "tags": ["vertica", "projection", "segmentation", "sort-order", "encoding", "ros-pushback", "performance"],
+      "description_zh": "從 segmentation、sort order、encoding 到投影數量控管，實測 Vertica 投影設計如何影響 EXPLAIN、資料傾斜與 ROS pushback，並整理可操作的設計檢查表。",
+      "description_en": "From segmentation and sort order to encoding and projection count, benchmark how Vertica projection design affects EXPLAIN plans, data skew, and ROS pushback, with a practical design checklist.",
+      "brief": "高基數 segmentation、sort order 前綴、encoding 選擇、投影數量成本、projection_storage 傾斜；用多組投影與 EXPLAIN 比較。",
+      "verify": "建立 article_lab_proj schema；建表與 2-3 個投影；比較 EXPLAIN 選中的投影；查 projection_storage；示範 segmentation 傾斜；DROP SCHEMA。"
+    },
+    {
+      "n": 4,
+      "id": "partition",
+      "slug": "vertica-partition-design-pruning",
+      "zh_title": "Vertica 分區表設計與 Partition Pruning 實戰",
+      "en_title": "Vertica Partition Table Design and Partition Pruning in Practice",
+      "categories": "vertica partition data-management",
+      "tags": ["vertica", "partition", "pruning", "drop-partition", "ahm", "purge", "ros"],
+      "description_zh": "實測 Vertica 分區表的 PARTITION BY / GROUP BY 設計、partition pruning、v_monitor.partitions、DROP PARTITION 與 DELETE 的差異，以及 AHM 與 purge 對資料生命週期的影響。",
+      "description_en": "Benchmark Vertica partitioned table design with PARTITION BY and GROUP BY, partition pruning, v_monitor.partitions, DROP PARTITION versus DELETE, and how AHM and purge affect the data lifecycle.",
+      "brief": "PARTITION BY/GROUP BY、partition pruning、v_monitor.partitions、drop partition vs delete、AHM/purge、分區數量與 ROS。",
+      "verify": "建立 article_lab_part schema；建分區表；插入跨月資料；EXPLAIN 查單月；查 partitions；DROP PARTITION；比較 DELETE；DROP SCHEMA。"
+    },
+    {
+      "n": 5,
+      "id": "timeseries",
+      "slug": "vertica-timeseries-analysis",
+      "zh_title": "Vertica 時序分析實戰：TIMESERIES 插值、補洞與事件視窗",
+      "en_title": "Vertica Time Series Analysis: TIMESERIES Interpolation, Gap Filling, and Event Windows",
+      "categories": "vertica timeseries analytics",
+      "tags": ["vertica", "timeseries", "interpolation", "gap-filling", "window-functions", "analytics"],
+      "description_zh": "用實際資料驗證 Vertica TIMESERIES 子句、TS_FIRST_VALUE / TS_LAST_VALUE、INTERPOLATE 與補洞技巧，並比較時序聚合與一般 window function 的差異。",
+      "description_en": "Validate the Vertica TIMESERIES clause, TS_FIRST_VALUE and TS_LAST_VALUE, INTERPOLATE, and gap-filling techniques on real data, and compare time series aggregation with regular window functions.",
+      "brief": "TIMESERIES slice_time、TS_FIRST_VALUE/TS_LAST_VALUE、INTERPOLATE、補洞、與 window function 差異。",
+      "verify": "建立 article_lab_ts schema；建 timestamp 表；插入有缺口的資料；跑 TIMESERIES + TS_FIRST_VALUE + INTERPOLATE；對比 window function；DROP SCHEMA。"
+    },
+    {
+      "n": 6,
+      "id": "geospatial",
+      "slug": "vertica-geospatial-analysis",
+      "zh_title": "Vertica 空間分析實戰：Geospatial 函數與空間索引",
+      "en_title": "Vertica Geospatial Analysis: Functions and Spatial Indexes in Practice",
+      "categories": "vertica geospatial analytics",
+      "tags": ["vertica", "geospatial", "st-contains", "st-distance", "spatial-index", "wkt", "geojson"],
+      "description_zh": "實測 Vertica 的 Geospatial 函數與空間索引：從 WKT/GeoJSON 建構幾何、ST_Contains、ST_Distance、ST_Intersects，到 STV_Create_Index 的建立與查詢。",
+      "description_en": "Benchmark Vertica geospatial functions and spatial indexes: build geometries from WKT and GeoJSON, use ST_Contains, ST_Distance, and ST_Intersects, and create and query an STV_Create_Index index.",
+      "brief": "ST_GeomFromText、ST_Contains、ST_Distance、ST_Intersects、WKT/GeoJSON、STV_Create_Index。",
+      "verify": "建立 article_lab_geo schema；建點/多邊形表；跑 ST_Contains/ST_Distance；建立空間索引；查詢；DROP SCHEMA。"
+    },
+    {
+      "n": 7,
+      "id": "types",
+      "slug": "vertica-complex-data-types",
+      "zh_title": "Vertica 複雜型別實戰：ARRAY、SET、ROW 與 JSON 半結構化資料",
+      "en_title": "Vertica Complex Data Types: ARRAY, SET, ROW, and JSON",
+      "categories": "vertica data-types sql",
+      "tags": ["vertica", "array", "set", "row", "json", "semi-structured", "sql"],
+      "description_zh": "實測 Vertica 的 ARRAY、SET、ROW 複雜型別與 JSON 半結構化資料處理，包含建表、查詢、陣列函數、JSON 函數，以及與正規化設計的取捨。",
+      "description_en": "Benchmark Vertica complex types ARRAY, SET, and ROW plus JSON semi-structured data, including table design, queries, array functions, JSON functions, and trade-offs versus normalization.",
+      "brief": "ARRAY/SET/ROW 建表與查詢、陣列展開、JSON 函數、儲存與效能、與正規化取捨；MAP 在 25.4 表格 DDL 不支援，明確說明。",
+      "verify": "建立 article_lab_types schema；建 ARRAY/SET/ROW 表；插入/查詢；用 array_upper 等函數；JSON 函數；DROP SCHEMA。"
+    },
+    {
+      "n": 8,
+      "id": "backup",
+      "slug": "vertica-vbr-backup-restore",
+      "zh_title": "Vertica 備份還原實戰：vbr 完整備份、增量備份與還原檢查",
+      "en_title": "Vertica Backup and Restore: vbr Full Backup, Incremental Backup, and Restore Validation",
+      "categories": "vertica backup restore",
+      "tags": ["vertica", "vbr", "backup", "restore", "disaster-recovery", "incremental"],
+      "description_zh": "實測 Vertica vbr 的 init、完整備份、增量備份與 listbackup，整理備份路徑、權限、常見錯誤與還原前的檢查清單；還原步驟若無法安全演練會明確標示。",
+      "description_en": "Benchmark Vertica vbr init, full backup, incremental backup, and listbackup; cover backup paths, permissions, common errors, and a pre-restore checklist, clearly marking any restore step not safely exercised.",
+      "brief": "vbr init、full backup、incremental、listbackup、restore 檢查、備份路徑與權限、常見錯誤。",
+      "verify": "只用 /tmp/opencode/vbr_lab 做 vbr init + full backup + listbackup；不得 restore 覆蓋 testdb；若無法安全 restore，文章明確標示備份已實測、還原步驟未在生產驗證。",
+      "notes": "高風險主題。禁止對 testdb 執行 restore、copycluster 或任何會覆蓋現有資料的操作。"
+    }
+  ]
+}
