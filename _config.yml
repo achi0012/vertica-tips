@@ -64,3 +64,4 @@ exclude:
   - node_modules
   - vendor
   - AGENTS.md
+  - IDEA.md
