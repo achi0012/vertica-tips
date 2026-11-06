@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="660" viewBox="0 0 820 660" role="img" aria-label="Vertica 統計資訊生命週期：載入、ANALYZE、DELETE、TRUNCATE 對 row_count 與估算的影響">
+  <style>
+    .bg { fill: #ffffff; }
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .sub { font: 400 11.5px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .box-title { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .body { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #3d4753; }
+    .mono { font: 400 11.5px "SFMono-Regular", Menlo, Consolas, monospace; fill: #3d4753; }
+    .arrow-label { font: 600 11.5px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #2f6fed; }
+    .num-hi { font: 700 12px "SFMono-Regular", Menlo, Consolas, monospace; fill: #b45309; }
+    .num-ok { font: 700 12px "SFMono-Regular", Menlo, Consolas, monospace; fill: #2f7d4f; }
+    .num-mut { font: 400 11px "SFMono-Regular", Menlo, Consolas, monospace; fill: #6b7684; }
+    .edge { stroke: #2f6fed; stroke-width: 1.8; fill: none; }
+    .edge-soft { stroke: #9aa4b2; stroke-width: 1.4; fill: none; stroke-dasharray: 4 3; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="820" height="660"/>
+
+  <text class="title" x="30" y="34">Vertica 統計資訊的生命週期（實測 25.4.0-0）</text>
+  <text class="sub" x="30" y="52">左：狀態與觸發動作　右：EXPLAIN 估算 vs 實際列數</text>
+
+  <!-- ① 載入後 -->
+  <rect x="30" y="66" width="520" height="76" rx="8" fill="#fdf1e3" stroke="#e0b077"/>
+  <text class="box-title" x="46" y="90">① 載入完成：沒有統計</text>
+  <text class="body" x="46" y="112">CTAS 與 COPY 都不會產生 table_statistics 資料列</text>
+  <text class="body" x="46" y="130">EXPLAIN 一律以 10,000 列估算，並標記 NO STATISTICS</text>
+  <text class="num-hi" x="566" y="100">估算 10,000 列</text>
+  <text class="num-mut" x="566" y="120">實際 1,000,000 列</text>
+
+  <!-- 箭頭 1→2 -->
+  <line class="edge" x1="290" y1="142" x2="290" y2="196"/>
+  <path d="M285 190 L290 197 L295 190" fill="none" stroke="#2f6fed" stroke-width="1.8"/>
+  <text class="arrow-label" x="306" y="167">ANALYZE_STATISTICS</text>
+  <text class="mono" x="306" y="184">67–122 ms</text>
+
+  <!-- ② ANALYZE 後 -->
+  <rect x="30" y="202" width="520" height="76" rx="8" fill="#e8f5ec" stroke="#8fc7a4"/>
+  <text class="box-title" x="46" y="226">② ANALYZE_STATISTICS 之後</text>
+  <text class="body" x="46" y="248">row_count = 1,000,000，stat_collection_time 更新</text>
+  <text class="body" x="46" y="266">三表 join 的計畫形狀改變，執行時間 215 → 192 ms</text>
+  <text class="num-ok" x="566" y="236">估算 905K</text>
+  <text class="num-mut" x="566" y="256">實際 700K（CLOSED）</text>
+
+  <!-- 箭頭 2→3 -->
+  <line class="edge" x1="290" y1="278" x2="290" y2="332"/>
+  <path d="M285 326 L290 333 L295 326" fill="none" stroke="#2f6fed" stroke-width="1.8"/>
+  <text class="arrow-label" x="306" y="303">DELETE 950,000 列 + COMMIT</text>
+  <text class="mono" x="306" y="320">row_count 不會跟著變</text>
+
+  <!-- ③ DELETE 後 -->
+  <rect x="30" y="338" width="520" height="76" rx="8" fill="#fdf1e3" stroke="#e0b077"/>
+  <text class="box-title" x="46" y="362">③ DELETE 95% 之後（未重收統計）</text>
+  <text class="body" x="46" y="384">row_count 仍為 1,000,000，is_row_count_valid 仍為 t</text>
+  <text class="body" x="46" y="402">約 6 分鐘後再查，時間戳與列數都沒動</text>
+  <text class="num-hi" x="566" y="372">估算 905K</text>
+  <text class="num-mut" x="566" y="392">實際 50,000 列</text>
+
+  <!-- 箭頭 3→4 -->
+  <line class="edge" x1="290" y1="414" x2="290" y2="468"/>
+  <path d="M285 462 L290 469 L295 462" fill="none" stroke="#2f6fed" stroke-width="1.8"/>
+  <text class="arrow-label" x="306" y="439">ANALYZE_STATISTICS</text>
+  <text class="mono" x="306" y="456">221 ms</text>
+
+  <!-- ④ 再 ANALYZE -->
+  <rect x="30" y="474" width="520" height="76" rx="8" fill="#e8f5ec" stroke="#8fc7a4"/>
+  <text class="box-title" x="46" y="498">④ 再 ANALYZE_STATISTICS</text>
+  <text class="body" x="46" y="520">row_count = 50,000；JOIN HASH 的 Cost 由 8K 降為 6K</text>
+  <text class="body" x="46" y="538">估算 45K，CLOSED 實際 35,000（仍高估 29%）</text>
+  <text class="num-ok" x="566" y="508">估算 45K</text>
+  <text class="num-mut" x="566" y="528">實際 35K（CLOSED）</text>
+
+  <!-- 兩個陷阱 -->
+  <rect x="30" y="572" width="370" height="58" rx="8" fill="#ffffff" stroke="#c9ced6" stroke-dasharray="5 4"/>
+  <text class="box-title" x="44" y="594">TRUNCATE 之後</text>
+  <text class="body" x="44" y="614">row_count 顯示 1（實際 0），時間戳不變</text>
+
+  <rect x="414" y="572" width="376" height="58" rx="8" fill="#ffffff" stroke="#c9ced6" stroke-dasharray="5 4"/>
+  <text class="box-title" x="428" y="594">ALTER TABLE … ADD COLUMN</text>
+  <text class="body" x="428" y="614">時間戳會刷新，row_count 與有效旗標保留</text>
+
+  <text class="sub" x="30" y="650">來源：v_monitor.table_statistics 與 EXPLAIN 實測；狀態顏色綠 = 統計新鮮、橘 = 統計過期或不存在。</text>
+</svg>
