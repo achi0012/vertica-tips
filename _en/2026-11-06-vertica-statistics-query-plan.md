@@ -101,6 +101,10 @@ With no statistics the optimizer does not stop. It substitutes a **default of 10
 
 That table is the heart of this article. It says statistics are not something the database maintains for you; they are **a one-off snapshot that you have to trigger**. The documentation supports this: `ANALYZE_STATISTICS` is an alias of `ANALYZE_HISTOGRAM`, which is no longer documented separately, and both are meta-functions that must be called from a `SELECT`.
 
+![Statistics lifecycle: how load, ANALYZE, DELETE, and TRUNCATE affect row_count and EXPLAIN estimates]({{ '/assets/images/stats-lifecycle.svg' | relative_url }}){: loading="lazy" }
+
+The left side shows the state and the action that leads to it; the right side shows what `EXPLAIN` estimates for that same table in that state. Green means fresh statistics, amber means stale or missing.
+
 ---
 
 ## 4. Step by Step
@@ -237,6 +241,10 @@ After `ANALYZE_STATISTICS`:
 ```
 
 The shape changed. Without statistics the optimizer believed the fact table held only 10K rows, so it made `dim_customer` (5K) the outer side. With statistics it knows the fact table has 905K rows and flips it to the outer side with the dimensions as build inputs — and pushes both runtime filters (`SIP1` / `SIP2`) into the scan.
+
+![The same three-table join before and after statistics: the fact table moves from the inner side to the outer side]({{ '/assets/images/stats-plan-shape.svg' | relative_url }}){: loading="lazy" }
+
+The left plan has no statistics; the right plan follows `ANALYZE_STATISTICS`. Blue nodes are the outer side, grey nodes are the inner (build) side.
 
 Runtime for the same statement, three runs each:
 

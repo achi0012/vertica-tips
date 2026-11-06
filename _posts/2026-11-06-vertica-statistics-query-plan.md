@@ -105,6 +105,10 @@ ORDER BY 2;
 
 這張表就是本文的核心。它說明「統計」不是資料庫自動幫你維護的東西，而是**需要你主動觸發的一次性快照**。文件也間接證實了這一點：`ANALYZE_STATISTICS` 是 `ANALYZE_HISTOGRAM` 的 alias，而 `ANALYZE_HISTOGRAM` 已經不再獨立列在文件裡；兩者都是 meta-function，必須用 `SELECT` 呼叫。
 
+![統計資訊生命週期：載入、ANALYZE、DELETE、TRUNCATE 對 row_count 與 EXPLAIN 估算的影響]({{ '/assets/images/stats-lifecycle.svg' | relative_url }}){: loading="lazy" }
+
+圖中左側是狀態與觸發動作，右側是同一張表在該狀態下 `EXPLAIN` 的估算值；綠色代表統計新鮮、橘色代表統計過期或不存在。
+
 ---
 
 ## 四、Step-by-step 實測
@@ -241,6 +245,10 @@ SELECT ANALYZE_STATISTICS('article_lab_stats.fact_join', 'status', 100);
 ```
 
 計畫形狀變了：沒有統計時，最佳化器以為事實表只有 10K 列，於是拿 `dim_customer`（5K）當外側；有統計後知道事實表有 905K 列，改成事實表當外側、維度表當 build side，並且把兩個 runtime filter（`SIP1`／`SIP2`）都推到掃描層。
+
+![同一個三表 join 在統計前後的計畫形狀：事實表從內側改為外側]({{ '/assets/images/stats-plan-shape.svg' | relative_url }}){: loading="lazy" }
+
+左邊是沒有統計的計畫，右邊是 `ANALYZE_STATISTICS` 之後的計畫；藍色節點是外側（outer），灰色是內側（build side）。
 
 執行時間（同一條 SQL，各跑三次）：
 

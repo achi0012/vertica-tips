@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420" role="img" aria-label="同一個三表 join 在統計前後的計畫形狀比較：事實表由內側改為外側">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .panel-title { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .panel-sub { font: 400 11px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .node { font: 400 10px "SFMono-Regular", Menlo, Consolas, monospace; fill: #1f2328; }
+    .legend { font: 400 11px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #3d4753; }
+    .foot { font: 600 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #2f6fed; }
+    .conn { stroke: #8a94a3; stroke-width: 1.3; fill: none; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="420" fill="#ffffff"/>
+
+  <text class="title" x="20" y="32">同一個三表 join：統計前後的計畫形狀</text>
+
+  <!-- 左面板 -->
+  <rect x="20" y="48" width="390" height="322" rx="10" fill="#fbfcfd" stroke="#d8dde3"/>
+  <text class="panel-title" x="38" y="72">沒有統計（NO STATISTICS）</text>
+  <text class="panel-sub" x="38" y="90">事實表一律以 10,000 列估算</text>
+
+  <rect x="110" y="110" width="210" height="26" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="node" x="215" y="127" text-anchor="middle">GROUPBY HASH · Cost 2K</text>
+
+  <rect x="110" y="158" width="210" height="26" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="node" x="215" y="175" text-anchor="middle">JOIN HASH · Rows 201</text>
+
+  <rect x="48" y="212" width="120" height="26" rx="5" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="node" x="108" y="229" text-anchor="middle">dim_customer 5K</text>
+
+  <rect x="200" y="212" width="170" height="26" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="node" x="285" y="229" text-anchor="middle">JOIN HASH · Rows 200</text>
+
+  <rect x="180" y="264" width="105" height="26" rx="5" fill="#f3f4f6" stroke="#c9ced6"/>
+  <text class="node" x="232" y="281" text-anchor="middle">dim_region 20</text>
+
+  <rect x="295" y="264" width="105" height="26" rx="5" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="node" x="347" y="281" text-anchor="middle">fact_join 10K*</text>
+
+  <!-- 左連接線 -->
+  <path class="conn" d="M215 136 V158"/>
+  <path class="conn" d="M215 184 V198 H108 V212"/>
+  <path class="conn" d="M215 198 H285 V212"/>
+  <path class="conn" d="M285 238 V251 H232 V264"/>
+  <path class="conn" d="M285 251 H347 V264"/>
+
+  <text class="panel-sub" x="38" y="316">外側是 dim_customer（5K）：</text>
+  <text class="panel-sub" x="38" y="334">事實表被當成小表放進內側</text>
+  <text class="panel-sub" x="38" y="356">執行時間 215 ms（第 2、3 次）</text>
+
+  <!-- 右面板 -->
+  <rect x="420" y="48" width="380" height="322" rx="10" fill="#fbfcfd" stroke="#d8dde3"/>
+  <text class="panel-title" x="438" y="72">ANALYZE 之後</text>
+  <text class="panel-sub" x="438" y="90">事實表估 905K 列，改當外側</text>
+
+  <rect x="515" y="110" width="210" height="26" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="node" x="620" y="127" text-anchor="middle">GROUPBY HASH · Cost 9K</text>
+
+  <rect x="515" y="158" width="210" height="26" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="node" x="620" y="175" text-anchor="middle">JOIN HASH · Rows 905K</text>
+
+  <rect x="470" y="212" width="170" height="26" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="node" x="555" y="229" text-anchor="middle">JOIN HASH · Cost 4K</text>
+
+  <rect x="690" y="212" width="100" height="26" rx="5" fill="#f3f4f6" stroke="#c9ced6"/>
+  <text class="node" x="740" y="229" text-anchor="middle">dim_region 20</text>
+
+  <rect x="445" y="264" width="105" height="26" rx="5" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="node" x="497" y="281" text-anchor="middle">fact_join 905K</text>
+
+  <rect x="560" y="264" width="115" height="26" rx="5" fill="#f3f4f6" stroke="#c9ced6"/>
+  <text class="node" x="617" y="281" text-anchor="middle">dim_customer 5K</text>
+
+  <!-- 右連接線 -->
+  <path class="conn" d="M620 136 V158"/>
+  <path class="conn" d="M620 184 V198 H555 V212"/>
+  <path class="conn" d="M620 198 H740 V212"/>
+  <path class="conn" d="M555 238 V251 H497 V264"/>
+  <path class="conn" d="M555 251 H617 V264"/>
+
+  <text class="panel-sub" x="438" y="316">外側是事實表（905K）：</text>
+  <text class="panel-sub" x="438" y="334">維度表當 build side，SIP1/SIP2 推入掃描</text>
+  <text class="panel-sub" x="438" y="356">執行時間 192 ms（第 2、3 次）</text>
+
+  <!-- 圖例與註解 -->
+  <rect x="20" y="386" width="12" height="12" rx="3" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="legend" x="38" y="396">外側（outer）</text>
+  <rect x="126" y="386" width="12" height="12" rx="3" fill="#f3f4f6" stroke="#c9ced6"/>
+  <text class="legend" x="144" y="396">內側（inner／build side）</text>
+  <text class="legend" x="330" y="396">* 沒有統計：一律以 10,000 列估算</text>
+  <text class="foot" x="560" y="396">215 ms → 192 ms</text>
+</svg>
