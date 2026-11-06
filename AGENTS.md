@@ -43,6 +43,20 @@ AI Keywords: keyword1, keyword2, keyword3
 
 When adding a post to `README.md`, link to it as `/_posts/filename.md`.
 
+## Images
+
+Optional, 1–2 per post, only when a diagram carries a relationship better than prose (lifecycle, architecture, plan shape before/after). Never screenshot SQL, `EXPLAIN` output, or error messages — use code blocks.
+
+- Hand-written SVG in `assets/images/`, kebab-case with a topic prefix (`stats-lifecycle.svg`).
+- Canvas width ≤ 820px (post column is 720px); body text ≥ 12px.
+- Reference with `relative_url` because `baseurl` is `/vertica-tips`:
+  ```markdown
+  ![alt text]({{ '/assets/images/name.svg' | relative_url }}){: loading="lazy" }
+  ```
+- Chinese and English posts share the same file; localize the `alt` text.
+- Every number in a diagram must come from a real measurement.
+- Verify before committing: SVG parses as XML, no text overflows the canvas or overlaps another label (check `getBBox()` in a browser), and the rendered `<img>` resolves to `/vertica-tips/assets/images/...`.
+
 ## Site structure
 
 - `_config.yml` — site config, plugins (jekyll-feed, jekyll-seo-tag, jekyll-sitemap)
