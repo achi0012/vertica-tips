@@ -31,6 +31,12 @@ description: "One-line description for SEO."
 ---
 ```
 
+When you materially update an existing post, add `last_modified_at` so search engines and AI answer engines see a fresh `dateModified`:
+
+```yaml
+last_modified_at: 2026-06-21 10:00:00 +0800
+```
+
 After front matter, include an AI metadata block before `<!--more-->`:
 
 ```
@@ -42,6 +48,8 @@ AI Keywords: keyword1, keyword2, keyword3
 ```
 
 When adding a post to `README.md`, link to it as `/_posts/filename.md`.
+
+Every post needs an `image:` field pointing to its 1200×630 OG card, for example `image: /assets/images/og/<slug>-zh.png`. The scheduled article job generates the Chinese and English cards with `tools/og_image.py`.
 
 ## Images
 

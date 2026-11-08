@@ -2,6 +2,8 @@
 layout: page
 title: 關於 Vertica Tips
 permalink: /about/
+locale: zh_TW
+image: /assets/images/og/home-zh.png
 ---
 
 ## 關於這個 Blog
