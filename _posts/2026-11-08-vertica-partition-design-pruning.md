@@ -6,6 +6,13 @@ categories: vertica partition data-management
 tags: [vertica, partition, pruning, drop-partition, ahm, purge, ros]
 description: "實測 Vertica 分區表的 PARTITION BY / GROUP BY 設計、partition pruning、v_monitor.partitions、DROP PARTITION 與 DELETE 的差異，以及 AHM 與 purge 對資料生命週期的影響。"
 image: /assets/images/og/vertica-partition-design-pruning-zh.png
+faq:
+  - q: "分區會讓資料多存一份嗎？"
+    a: "不會。600 萬列、24 個月分區佔 91,065,421 bytes，未分區表佔 91,088,745 bytes，差 −0.03%；載入時間也幾乎相同。"
+  - q: "為什麼 partition pruning 只快約 9%？"
+    a: "Pruning 讓單月查詢只掃 250,000 列（未分區 6,000,000 列），但在 6M 列規模下聚合運算才是瓶頸；wall clock 24.9–37.9 ms 對 28.1–38.5 ms。"
+  - q: "刪除歷史資料該用 DELETE 還是 DROP PARTITION？"
+    a: "用 DROP PARTITION。實測 13.1 ms 完成並立刻釋放 3,795,575 bytes；DELETE 當下釋放 0 bytes，要等 mergeout（1,604.8 ms）才還回空間。"
 ---
 
 <!--

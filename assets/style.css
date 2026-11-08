@@ -467,6 +467,107 @@ img {
   margin: 2.4em 0;
 }
 
+/* ── AEO blocks ── */
+.post-tldr {
+  margin: 0 0 32px;
+  padding: 18px 20px;
+  background: var(--accent-subtle);
+  border: 1px solid rgba(0, 112, 243, 0.25);
+  border-radius: var(--radius-md);
+}
+
+.post-tldr-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.post-tldr p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+
+.post-faq,
+.post-related {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.post-faq h2,
+.post-related h2 {
+  font-size: 1.3em;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.post-faq details {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  background: var(--bg-soft);
+}
+
+.post-faq summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.post-faq details p {
+  margin: 10px 0 0;
+  color: var(--text-secondary);
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+
+.post-related ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-related li {
+  margin-bottom: 8px;
+}
+
+.post-related a {
+  color: var(--accent);
+  font-size: 14px;
+}
+
+.post-author {
+  margin-top: 40px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-soft);
+}
+
+.post-author-name {
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.post-author p {
+  margin: 0 0 10px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.post-author a {
+  font-size: 13px;
+  color: var(--accent);
+}
+
 /* ── Post footer ── */
 .post-footer {
   margin-top: 56px;

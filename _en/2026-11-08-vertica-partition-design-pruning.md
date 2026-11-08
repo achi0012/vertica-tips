@@ -6,6 +6,13 @@ categories: vertica partition data-management
 tags: [vertica, partition, pruning, drop-partition, ahm, purge, ros]
 description: "Benchmark Vertica partitioned table design with PARTITION BY and GROUP BY, partition pruning, v_monitor.partitions, DROP PARTITION versus DELETE, and how AHM and purge affect the data lifecycle."
 image: /assets/images/og/vertica-partition-design-pruning-en.png
+faq:
+  - q: "Does partitioning store a second copy of the data?"
+    a: "No. The 24-month partitioned table used 91,065,421 bytes versus 91,088,745 bytes unpartitioned (-0.03%), and load time was essentially the same."
+  - q: "Why is partition pruning only about 9% faster?"
+    a: "Pruning cut the single-month scan from 6,000,000 to 250,000 rows, but aggregation dominates at this scale: 24.9-37.9 ms versus 28.1-38.5 ms wall clock."
+  - q: "Should I use DELETE or DROP PARTITION for old data?"
+    a: "Use DROP PARTITION. It completed in 13.1 ms and immediately freed 3,795,575 bytes; DELETE freed 0 bytes until mergeout (1,604.8 ms)."
 ---
 
 <!--more-->

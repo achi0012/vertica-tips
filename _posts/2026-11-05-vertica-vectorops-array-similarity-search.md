@@ -6,6 +6,13 @@ categories: vertica vector ai
 tags: [vertica, vectorops, cosine-similarity, dot-product, array, ai, similarity-search, 25.4]
 description: "在 Vertica 25.4 用 ARRAY[FLOAT] 儲存 embedding，實測 COSINE_SIMILARITY、DOT_PRODUCT、VECTOR_L2、VECTOR_MAGNITUDE，打造 Top-K 向量相似度搜尋，並解析沒有向量索引時的效能取捨。"
 image: /assets/images/og/vertica-vectorops-array-similarity-search-zh.png
+faq:
+  - q: "Vertica 25.4 支援向量索引嗎？"
+    a: "不支援。本機實測 CREATE INDEX 直接回 ERROR 6200: Command CREATE INDEX is not supported；每一次 Top-K 都是完整掃描加 TopK heap。"
+  - q: "ARRAY[FLOAT] 最多可以存幾維？"
+    a: "單一向量上限是 65,000 bytes，float8 每維 8 bytes，所以最多 8,125 維；1,536 維與 3,072 維的 embedding 都在範圍內。"
+  - q: "NULL embedding 為什麼會排第一？"
+    a: "COSINE_SIMILARITY 對 NULL 回 NULL，而 ORDER BY ... DESC 預設把 NULL 當最大值。查詢加 WHERE emb IS NOT NULL 或 NULLS LAST 即可。"
 ---
 
 <!--

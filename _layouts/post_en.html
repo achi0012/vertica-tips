@@ -13,7 +13,47 @@ layout: default
       {% endif %}
     </div>
   </header>
+  {% if page.description %}
+  <aside class="post-tldr" aria-label="Quick answer">
+    <div class="post-tldr-label">Quick answer</div>
+    <p>{{ page.description }}</p>
+  </aside>
+  {% endif %}
+
   <div class="post-content" itemprop="articleBody">{{ content }}</div>
+
+  {% if page.faq and page.faq.size > 0 %}
+  <section class="post-faq" aria-label="Frequently asked questions">
+    <h2>FAQ</h2>
+    {% for item in page.faq %}
+    <details>
+      <summary>{{ item.q }}</summary>
+      <p>{{ item.a }}</p>
+    </details>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  {% assign related_cat = page.categories[1] %}
+  {% capture related_filter %}p.categories contains '{{ related_cat }}'{% endcapture %}
+  {% assign related = site.en | where_exp: "p", related_filter | where_exp: "p", "p.url != page.url" | slice: 0, 3 %}
+  {% if related.size > 0 %}
+  <section class="post-related" aria-label="Related articles">
+    <h2>Related articles</h2>
+    <ul>
+      {% for p in related %}
+      <li><a href="{{ p.url | relative_url }}">{{ p.title | escape }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <aside class="post-author">
+    <div class="post-author-name">Achi</div>
+    <p>Data engineer specializing in Vertica administration and performance. Every article is verified on Vertica 25.4.0-0.</p>
+    <a href="https://github.com/achi0012" target="_blank" rel="noopener">GitHub →</a>
+  </aside>
+
   <div class="post-footer">
     <a href="{{ '/en/' | relative_url }}">← back to home</a>
     <a href="https://github.com/{{ site.repository }}" target="_blank" rel="noopener">GitHub →</a>

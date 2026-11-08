@@ -51,6 +51,14 @@ When adding a post to `README.md`, link to it as `/_posts/filename.md`.
 
 Every post needs an `image:` field pointing to its 1200×630 OG card, for example `image: /assets/images/og/<slug>-zh.png`. The scheduled article job generates the Chinese and English cards with `tools/og_image.py`.
 
+Every post should also include at least 3 FAQ entries; the layout renders them and emits `FAQPage` structured data:
+
+```yaml
+faq:
+  - q: "Question?"
+    a: "Specific answer with a measured number."
+```
+
 ## Images
 
 Optional, 1–2 per post, only when a diagram carries a relationship better than prose (lifecycle, architecture, plan shape before/after). Never screenshot SQL, `EXPLAIN` output, or error messages — use code blocks.

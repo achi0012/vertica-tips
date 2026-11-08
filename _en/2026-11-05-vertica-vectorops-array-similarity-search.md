@@ -6,6 +6,13 @@ categories: vertica vector ai
 tags: [vertica, vectorops, cosine-similarity, dot-product, array, ai, similarity-search, 25.4]
 description: "Store embeddings as ARRAY[FLOAT] in Vertica 25.4, benchmark COSINE_SIMILARITY, DOT_PRODUCT, VECTOR_L2, and VECTOR_MAGNITUDE, and build a Top-K vector similarity search while understanding the performance trade-offs without a vector index."
 image: /assets/images/og/vertica-vectorops-array-similarity-search-en.png
+faq:
+  - q: "Does Vertica 25.4 support vector indexes?"
+    a: "No. CREATE INDEX returns ERROR 6200: Command CREATE INDEX is not supported. Every Top-K query is a full scan plus a TopK heap."
+  - q: "What is the maximum vector dimension for ARRAY[FLOAT]?"
+    a: "The limit is 65,000 bytes per value. With float8 at 8 bytes per dimension, that is 8,125 dimensions; 1,536 and 3,072-dimension embeddings fit."
+  - q: "Why does a NULL embedding rank first?"
+    a: "COSINE_SIMILARITY returns NULL for a NULL input, and ORDER BY ... DESC treats NULL as the largest value. Add WHERE emb IS NOT NULL or NULLS LAST."
 ---
 
 <!--more-->
