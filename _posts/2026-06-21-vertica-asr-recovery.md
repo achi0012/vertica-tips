@@ -5,6 +5,7 @@ date: 2026-06-21 07:00:00 +0800
 categories: vertica disaster-recovery ASR troubleshooting
 tags: [vertica, ASR, database-recovery, crash, epoch, AHM, abortrecovery, disaster-recovery]
 description: "Vertica 資料庫因斷電或檔案系統問題崩潰後啟動失敗，ASR 顯示無效日期（2001 年或更早）時的完整復原步驟 — 從 Unsafe Mode 啟動、epoch 分析、abortrecovery 到資料搶救。"
+image: /assets/images/og/vertica-asr-recovery-zh.png
 ---
 
 當資料中心斷電或檔案系統出問題時，Vertica catalog 可能參照到遺失或損壞的資料檔案。在這種情況下，節點的 computed recovery epoch 可能落在 ancient history mark (AHM) 之後。當兩個 buddy nodes 都遇到這問題時，資料庫的 expected recovery epoch 會小於 AHM epoch，導致 ASR (Auto Synchronous Recovery) 建議的 recovery epoch 為 **0**，recovery timestamp 落在 **1999 年**。

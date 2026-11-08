@@ -5,6 +5,7 @@ date: 2026-06-20 12:00:00 +0800
 categories: vertica node-recovery HA
 tags: [vertica, node-recovery, high-availability, K-safety, troubleshooting]
 description: "Vertica 節點故障後的完整恢復指南 — 從節點狀態轉換、Recovery 兩階段流程、資源池調優，到 Dirty Transaction 處理與 5 大常見問題排解。基於 Vertica 25.4.0-0 實測經驗。"
+image: /assets/images/og/vertica-node-recovery-best-practice-zh.png
 ---
 
 資料庫叢集中最不想遇到的場景之一，就是節點突然 **DOWN** 了。當 Vertica 集群中一個節點離線，它不參與任何從 down 機時間點之後提交的 transaction。重新啟動後，必須從 **buddy nodes** 恢復遺失的資料，才能重新上線服務。

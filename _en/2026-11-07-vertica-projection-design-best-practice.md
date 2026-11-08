@@ -5,6 +5,7 @@ date: 2026-11-07 05:00:00 +0800
 categories: vertica projection performance
 tags: [vertica, projection, segmentation, sort-order, encoding, ros-pushback, performance]
 description: "From segmentation and sort order to encoding and projection count, benchmark how Vertica projection design affects EXPLAIN plans, data skew, and ROS pushback, with a practical design checklist."
+image: /assets/images/og/vertica-projection-design-best-practice-en.png
 ---
 
 <!--more-->

@@ -5,6 +5,7 @@ date: 2026-06-21 09:00:00 +0800
 categories: vertica tuple-mover mergeout performance
 tags: [vertica, tuple-mover, moveout, mergeout, ROS, STRATA, WOS, delete-vectors, resource-pool, TM]
 description: "Vertica Tuple Mover 的完整最佳實踐指南 — 從 Moveout/Mergeout 運作原理、STRATA 演算法、TM 資源池調優、Part 1 (9.1-) 與 Part 2 (9.2+) 的版本差異，到 ROS Pushback 預防與實戰監控。"
+image: /assets/images/og/vertica-tuple-mover-best-practice-zh.png
 ---
 
 Tuple Mover 是 Vertica 的背景服務，負責管理資料從記憶體到磁碟的移動、ROS containers 的合併，以及已刪除資料的清除。雖然多數情況下預設配置就足夠，但特定工作負載需要調校才能達到最佳效能。

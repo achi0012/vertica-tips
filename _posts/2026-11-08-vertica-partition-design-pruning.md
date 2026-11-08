@@ -5,6 +5,7 @@ date: 2026-11-08 05:00:00 +0800
 categories: vertica partition data-management
 tags: [vertica, partition, pruning, drop-partition, ahm, purge, ros]
 description: "實測 Vertica 分區表的 PARTITION BY / GROUP BY 設計、partition pruning、v_monitor.partitions、DROP PARTITION 與 DELETE 的差異，以及 AHM 與 purge 對資料生命週期的影響。"
+image: /assets/images/og/vertica-partition-design-pruning-zh.png
 ---
 
 <!--

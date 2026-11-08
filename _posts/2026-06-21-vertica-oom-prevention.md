@@ -5,6 +5,7 @@ date: 2026-06-21 06:00:00 +0800
 categories: vertica OOM memory troubleshooting
 tags: [vertica, OOM, memory, catalog, resource-pool, Health Watchdog, glibc, troubleshooting]
 description: "深入解析 Vertica 叢集中 Linux OOM Killer 的成因與預防 — 從 MAXMEMORYSIZE 調校、Catalog 記憶體計算、MemoryReport.log 診斷、glibc 版本問題，到 ROS/Delete Vectors 管理。"
+image: /assets/images/og/vertica-oom-prevention-zh.png
 ---
 
 Out-of-Memory (OOM) 條件在 Vertica 環境中雖然已比過去少見，但在大型 catalog、同一主機上的競爭負載、或特定查詢模式下仍可能發生。當 Linux 核心的 **OOM Killer** 終止 Vertica 程序時，需要系統化的方法來找出根本原因。

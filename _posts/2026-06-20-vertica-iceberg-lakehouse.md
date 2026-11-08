@@ -5,6 +5,7 @@ date: 2026-06-20 22:00:00 +0800
 categories: vertica iceberg lakehouse
 tags: [vertica, iceberg, lakehouse, S3, Glue, Nessie, OAuth2, external-tables]
 description: "深入解析 Vertica 與 Apache Iceberg 的整合 — 從架構概念、功能演進對照表，到五大實戰範例：AWS Glue、檔案系統表、Lakekeeper REST Catalog、Nessie OAuth2 與 Bearer Token 認證。"
+image: /assets/images/og/vertica-iceberg-lakehouse-zh.png
 ---
 
 想像一個廚房：左邊是巨大的冷藏庫（Data Lake），塞滿食材但雜亂無章；右邊是精緻的備餐檯（Data Warehouse），井然有序但成本高昂。中間的 ETL 輸送帶全年無休地搬運食材，耗費大量成本。

@@ -5,6 +5,7 @@ date: 2026-11-05 05:00:00 +0800
 categories: vertica vector ai
 tags: [vertica, vectorops, cosine-similarity, dot-product, array, ai, similarity-search, 25.4]
 description: "在 Vertica 25.4 用 ARRAY[FLOAT] 儲存 embedding，實測 COSINE_SIMILARITY、DOT_PRODUCT、VECTOR_L2、VECTOR_MAGNITUDE，打造 Top-K 向量相似度搜尋，並解析沒有向量索引時的效能取捨。"
+image: /assets/images/og/vertica-vectorops-array-similarity-search-zh.png
 ---
 
 <!--

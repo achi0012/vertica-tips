@@ -5,6 +5,7 @@ date: 2026-11-07 05:00:00 +0800
 categories: vertica projection performance
 tags: [vertica, projection, segmentation, sort-order, encoding, ros-pushback, performance]
 description: "從 segmentation、sort order、encoding 到投影數量控管，實測 Vertica 投影設計如何影響 EXPLAIN、資料傾斜與 ROS pushback，並整理可操作的設計檢查表。"
+image: /assets/images/og/vertica-projection-design-best-practice-zh.png
 ---
 
 <!--

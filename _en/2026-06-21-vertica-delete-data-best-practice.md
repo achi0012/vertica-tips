@@ -5,6 +5,7 @@ date: 2026-06-21 08:00:00 +0800
 categories: vertica delete data-management best-practice
 tags: [vertica, delete, TRUNCATE, partition, delete-vectors, mergeout, purge, AHM, data-management]
 description: "Deleting data in Vertica — how DELETE works, five methods compared, delete vectors, PurgeMergeoutPercent, and DELETE alternatives."
+image: /assets/images/og/vertica-delete-data-best-practice-en.png
 ---
 
 Vertica differs from traditional databases in two key ways when it comes to deleting data:

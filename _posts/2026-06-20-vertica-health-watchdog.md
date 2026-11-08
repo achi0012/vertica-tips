@@ -5,6 +5,7 @@ date: 2026-06-20 20:00:00 +0800
 categories: vertica health-watchdog monitoring
 tags: [vertica, health-watchdog, cluster-monitoring, DDL, DML, performance, troubleshooting]
 description: "Vertica 24.4+ 引入的 Health Watchdog 功能深度解析 — 揭露四大監控模組（Truncation Version Lag、GCLX Queue、Mergeout Queue、Memory Pushback）的運作原理、閾值配置，以及 24 個常見 QA 總整理。"
+image: /assets/images/og/vertica-health-watchdog-zh.png
 ---
 
 Vertica 以高效能分析著稱，但在極端高並發負載下，資料庫可能進入降級狀態，導致查詢延長、鎖 timeout、ROS pushback，甚至崩潰。為了主動應對這些問題，Vertica 從 **24.4** 版開始引入了一個強大的新功能 — **Health Watchdog**（健康守護程序）。

@@ -5,6 +5,7 @@ date: 2026-06-20 23:00:00 +0800
 categories: vertica performance troubleshooting
 tags: [vertica, performance, troubleshooting, slow-query, checklist, monitoring]
 description: "Vertica 資料庫效能變慢時的 13 步驟系統化診斷檢查清單 — 從節點狀態、Delete Vectors、Epoch 推進、資源佇列、鎖衝突、到 Catalog 記憶體用量，附 25.x 版本差異對照。"
+image: /assets/images/og/vertica-slow-performance-checklist-zh.png
 ---
 
 當 Vertica 資料庫效能變慢時，系統化的診斷流程可以幫助你快速定位問題。這份 13 步驟的檢查清單最初由 OpenText 在 2018 年發布，本文將其**更新至 Vertica 25.x**，並標註各版本的系統表差異。

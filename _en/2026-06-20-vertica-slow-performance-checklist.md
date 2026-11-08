@@ -5,6 +5,7 @@ date: 2026-06-20 23:00:00 +0800
 categories: vertica performance troubleshooting
 tags: [vertica, performance, slow-database, troubleshooting, delete-vectors, epoch, AHM, locks, resource-pool]
 description: "A 13-step diagnostic checklist for Vertica slowdowns — updated to 25.x with the correct system table locations for each step."
+image: /assets/images/og/vertica-slow-performance-checklist-en.png
 ---
 
 When Vertica performance slows down, a systematic diagnostic approach helps pinpoint the root cause. This 13-step checklist was originally published in 2018 — this version is **updated to Vertica 25.x** with all system table locations verified.

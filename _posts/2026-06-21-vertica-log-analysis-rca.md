@@ -5,6 +5,7 @@ date: 2026-06-21 04:00:00 +0800
 categories: vertica log-analysis troubleshooting
 tags: [vertica, log-analysis, data-collector, query-events, vertica-log, performance, RCA]
 description: "系統化的 Vertica 日誌分析流程 — 從 Data Collector 歷史保留、監控查詢最佳化、QUERY_EVENTS 健康/異常期比對，到 vertica.log 的嚴重程度分析與精準時段定位。"
+image: /assets/images/og/vertica-log-analysis-rca-zh.png
 ---
 
 當 Vertica 效能問題發生在特定時段但原因不明時，系統化的日誌分析是找到根因的關鍵。Moshe Goldberg 在 LinkedIn 上發表了一篇深入的 Vertica Log Analysis 文章，本文將其核心方法整理為可操作的指南，並更新至 **Vertica 25.x** 系統表結構。

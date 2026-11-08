@@ -5,6 +5,7 @@ date: 2026-06-20 16:00:00 +0800
 categories: vertica smart-scanning external-tables
 tags: [vertica, smart-scanning, external-tables, object-store, S3, performance, partition-pruning]
 description: "Vertica 23.4+ 引入的 ObjectStoreGlobStrategy 如何透過分層掃描（Hierarchical Strategy）將外部表查詢加速 88%？本文深入解析 Flat 與 Hierarchical 兩種策略的運作原理、實測對比與最佳實踐。"
+image: /assets/images/og/vertica-smart-scanning-external-tables-zh.png
 ---
 
 隨著資料湖規模不斷增長，尤其在 Amazon S3、Google Cloud Storage 這類物件儲存上，**外部表 (External Table)** 的查詢效率成為效能瓶頸的關鍵。Vertica 從 23.4 版開始引入了一個容易被忽略但威力強大的配置參數 — `ObjectStoreGlobStrategy`，它能大幅改變 Vertica 掃描分割區檔案的方式，讓查詢速度提升近 **9 倍**。

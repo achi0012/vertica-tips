@@ -5,6 +5,7 @@ date: 2026-06-20 10:00:00 +0800
 categories: vertica data-load best-practice
 tags: [vertica, COPY, data-load, performance, tuning]
 description: "深入解析 Vertica 25.x 的 COPY 命令架構、資源池調優、配置參數最佳化，以及 8 大常見瓶頸情境的實戰排解方案。基於 Vertica 25.4.0-0 實測經驗。"
+image: /assets/images/og/vertica-data-load-best-practice-zh.png
 ---
 
 Vertica 的資料載入效率直接影響整個資料管線的吞吐量。無論是每日批次 ETL、即時串流接入，還是大量歷史資料遷移，**COPY 命令**都是最核心的工具。

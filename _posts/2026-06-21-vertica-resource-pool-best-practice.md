@@ -5,6 +5,7 @@ date: 2026-06-21 10:00:00 +0800
 categories: vertica resource-pool performance
 tags: [vertica, resource-pool, workload-management, PRIORITY, cascading-pool, MEMORYSIZE, PLANNEDCONCURRENCY, query-budget]
 description: "Vertica 資源池 (Resource Pool) 的完整管理指南 — 從五個核心參數、工作量分類方法、兩家企業的實戰演進（6 階段調校）、串聯資源池、執行時間路由、優先級排程，到監控與調校檢查清單。"
+image: /assets/images/og/vertica-resource-pool-best-practice-zh.png
 ---
 
 資源池是 Vertica 資源管理的核心機制。無論是 ETL 載入、BI 查詢還是批次分析，每個查詢都在某個資源池中執行。妥善管理資源池，能確保不同工作負載和平共存，避免資源飢餓。

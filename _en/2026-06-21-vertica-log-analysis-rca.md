@@ -5,6 +5,7 @@ date: 2026-06-21 04:00:00 +0800
 categories: vertica log-analysis troubleshooting
 tags: [vertica, log-analysis, Data-Collector, query-events, vertica-log, RCA, troubleshooting, performance]
 description: "Vertica log analysis workflow — Data Collector retention, monitoring query tuning, QUERY_EVENTS comparison, vertica.log severity analysis."
+image: /assets/images/og/vertica-log-analysis-rca-en.png
 ---
 
 When Vertica performance issues occur during specific time windows with unknown causes, systematic log analysis is key to finding the root cause. Based on Moshe Goldberg's LinkedIn article on Vertica Log Analysis, this guide provides actionable steps updated for **Vertica 25.x**.

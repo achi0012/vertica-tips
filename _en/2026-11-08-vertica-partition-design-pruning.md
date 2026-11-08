@@ -5,6 +5,7 @@ date: 2026-11-08 05:00:00 +0800
 categories: vertica partition data-management
 tags: [vertica, partition, pruning, drop-partition, ahm, purge, ros]
 description: "Benchmark Vertica partitioned table design with PARTITION BY and GROUP BY, partition pruning, v_monitor.partitions, DROP PARTITION versus DELETE, and how AHM and purge affect the data lifecycle."
+image: /assets/images/og/vertica-partition-design-pruning-en.png
 ---
 
 <!--more-->

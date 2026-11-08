@@ -5,6 +5,7 @@ date: 2026-06-21 08:00:00 +0800
 categories: vertica delete data-management best-practice
 tags: [vertica, delete, TRUNCATE, partition, delete-vectors, mergeout, purge, AHM, data-management]
 description: "Vertica 刪除資料的完整最佳實踐 — DELETE 運作原理、五種刪除方式對比 (Single Row / Bulk / Drop Partition / Truncate)、Delete Vectors 管理、PurgeMergeoutPercent 調校、以及替代 DELETE 的實戰技巧。"
+image: /assets/images/og/vertica-delete-data-best-practice-zh.png
 ---
 
 Vertica 作為高效能欄位式分析資料庫，在刪除資料上與傳統資料庫有兩個關鍵差異：

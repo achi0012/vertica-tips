@@ -5,6 +5,7 @@ date: 2026-06-20 14:00:00 +0800
 categories: vertica rebalancing cluster
 tags: [vertica, rebalancing, cluster-management, scalability, performance]
 description: "Vertica 集群增減節點後的完整 Rebalancing 指南 — 從架構流程、資源池調優、四階段搬運機制，到鎖衝突處理與分批排程策略。基於 Vertica 25.4.0-0 實測經驗。"
+image: /assets/images/og/vertica-rebalancing-best-practice-zh.png
 ---
 
 當 Vertica 集群需要擴充或縮減時，**Rebalancing** 是確保資料均勻分佈、發揮所有節點效能的關鍵操作。然而，Rebalancing 是 CPU、磁碟、網路密集的操作，若未妥善規劃，可能嚴重影響線上查詢。

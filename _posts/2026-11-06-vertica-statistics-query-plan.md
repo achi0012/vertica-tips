@@ -5,6 +5,7 @@ date: 2026-11-06 05:00:00 +0800
 categories: vertica statistics performance
 tags: [vertica, statistics, analyze-statistics, query-plan, explain, optimizer, performance]
 description: "從 stale statistics 的角度解釋 Vertica 查詢計畫為什麼選錯，實測 ANALYZE_STATISTICS 前後的 EXPLAIN、資料列估算與 join order 變化，並整理統計資訊的維護策略。"
+image: /assets/images/og/vertica-statistics-query-plan-zh.png
 ---
 
 <!--

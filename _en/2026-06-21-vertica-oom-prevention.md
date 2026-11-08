@@ -5,6 +5,7 @@ date: 2026-06-21 06:00:00 +0800
 categories: vertica OOM memory troubleshooting
 tags: [vertica, OOM, memory, Linux, kernel, catalog, resource-pool, glibc, Health-Watchdog, ROS]
 description: "Linux OOM killer in Vertica clusters — MAXMEMORYSIZE, catalog memory sizing, MemoryReport.log, glibc versions, ROS and delete vectors."
+image: /assets/images/og/vertica-oom-prevention-en.png
 ---
 
 Out-of-Memory (OOM) conditions in Vertica are less common on modern, up-to-date systems but can still occur with large catalogs, competing workloads, or specific query patterns. When the Linux **OOM Killer** terminates a Vertica process, a systematic investigation approach is needed.
