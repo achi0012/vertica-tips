@@ -6,6 +6,13 @@ categories: vertica delete data-management best-practice
 tags: [vertica, delete, TRUNCATE, partition, delete-vectors, mergeout, purge, AHM, data-management]
 description: "Deleting data in Vertica — how DELETE works, five methods compared, delete vectors, PurgeMergeoutPercent, and DELETE alternatives."
 image: /assets/images/og/vertica-delete-data-best-practice-en.png
+faq:
+  - q: "Does DELETE free disk space immediately?"
+    a: "No. DELETE creates a delete vector; space is reclaimed later by mergeout/purge."
+  - q: "What should I use for bulk historical deletes?"
+    a: "DROP PARTITION is fastest, followed by TRUNCATE; avoid row-by-row DELETE."
+  - q: "How do I tune purge?"
+    a: "Use HistoryRetentionTime/HistoryRetentionEpochs to control AHM and PurgeMergeoutPercent to control purge timing, based on compliance and space needs."
 ---
 
 Vertica differs from traditional databases in two key ways when it comes to deleting data:

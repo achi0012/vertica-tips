@@ -6,6 +6,13 @@ categories: vertica smart-scanning external-tables
 tags: [vertica, smart-scanning, ObjectStoreGlobStrategy, external-tables, S3, partition-pruning, performance]
 description: "How Vertica 23.4+ ObjectStoreGlobStrategy speeds up external table queries by 88.5% — Flat vs Hierarchical scanning, benchmarked."
 image: /assets/images/og/vertica-smart-scanning-external-tables-en.png
+faq:
+  - q: "What is ObjectStoreGlobStrategy?"
+    a: "It controls how external tables scan S3/GCS objects. Hierarchical scans in layers and works with partition pruning to reduce listing and reads."
+  - q: "How much faster is Hierarchical than Flat?"
+    a: "The article measured Hierarchical at 88.5% faster than Flat."
+  - q: "When should I use Hierarchical?"
+    a: "When the partition directory layout is clear, object counts are high, and queries include partition predicates."
 ---
 
 As data lakes grow on object stores like S3 and GCS, external table query performance becomes critical. Vertica 23.4+ introduced a powerful yet often overlooked parameter — `ObjectStoreGlobStrategy` — that can improve query speed by **up to 9x** through smarter partition-aware scanning.

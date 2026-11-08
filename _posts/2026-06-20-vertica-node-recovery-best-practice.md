@@ -6,6 +6,13 @@ categories: vertica node-recovery HA
 tags: [vertica, node-recovery, high-availability, K-safety, troubleshooting]
 description: "Vertica 節點故障後的完整恢復指南 — 從節點狀態轉換、Recovery 兩階段流程、資源池調優，到 Dirty Transaction 處理與 5 大常見問題排解。基於 Vertica 25.4.0-0 實測經驗。"
 image: /assets/images/og/vertica-node-recovery-best-practice-zh.png
+faq:
+  - q: "節點恢復有哪兩個階段？"
+    a: "Pre-Recovery（準備與檢查）與 Recovery（從 buddy nodes 補回遺失資料）。"
+  - q: "恢復速度受什麼影響？"
+    a: "RECOVERY resource pool 的 MAXCONCURRENCY、網路、磁碟、buddy 負載與資料量。"
+  - q: "Dirty Transaction 怎麼處理？"
+    a: "恢復過程會 replay 或 rollback dirty transactions；用 recovery_status、table_recoveries、projection_recoveries 監控，必要時依 KB 處理。"
 ---
 
 資料庫叢集中最不想遇到的場景之一，就是節點突然 **DOWN** 了。當 Vertica 集群中一個節點離線，它不參與任何從 down 機時間點之後提交的 transaction。重新啟動後，必須從 **buddy nodes** 恢復遺失的資料，才能重新上線服務。

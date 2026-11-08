@@ -6,6 +6,13 @@ categories: vertica tuple-mover mergeout performance
 tags: [vertica, tuple-mover, moveout, mergeout, STRATA, ROS, TM, resource-pool, ROS-pushback, partition]
 description: "Vertica Tuple Mover best practices — Mergeout mechanics, STRATA algorithm, TM pool tuning, ROS pushback, changes through 25.x."
 image: /assets/images/og/vertica-tuple-mover-best-practice-en.png
+faq:
+  - q: "What is the difference between Moveout and Mergeout?"
+    a: "Moveout moves memory/WOS data to ROS; Mergeout consolidates ROS containers and purges deleted data. WOS is gone in 25.x, so Mergeout is the main path."
+  - q: "What is the STRATA algorithm?"
+    a: "It merges ROS containers in size-based strata; ROSPerStratum=32 controls the number of containers per stratum."
+  - q: "How do I judge Mergeout throughput?"
+    a: "Below about 1 GB/min usually needs tuning. Check v_monitor.tuple_mover_operations and mergeout_profiles, then tune TM pool memory and concurrency."
 ---
 
 The Tuple Mover is Vertica's background service that manages ROS container consolidation and deleted data purging. While defaults work for most cases, specific workloads require tuning for optimal performance.

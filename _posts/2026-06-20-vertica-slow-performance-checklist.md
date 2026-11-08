@@ -6,6 +6,13 @@ categories: vertica performance troubleshooting
 tags: [vertica, performance, troubleshooting, slow-query, checklist, monitoring]
 description: "Vertica 資料庫效能變慢時的 13 步驟系統化診斷檢查清單 — 從節點狀態、Delete Vectors、Epoch 推進、資源佇列、鎖衝突、到 Catalog 記憶體用量，附 25.x 版本差異對照。"
 image: /assets/images/og/vertica-slow-performance-checklist-zh.png
+faq:
+  - q: "資料庫變慢時第一步看什麼？"
+    a: "先看節點狀態與 resource rejections，確認不是節點 down、resource pool 排隊或磁碟滿。"
+  - q: "Delete Vectors 會讓查詢變慢嗎？"
+    a: "會。過多 delete vectors 會增加掃描與 mergeout 成本；必要時執行 purge 或 mergeout。"
+  - q: "Epoch/AHM 落後代表什麼？"
+    a: "代表 mergeout 跟不上，ROS 會持續累積；查 v_monitor.system 的 current_epoch/ahm_epoch 與 tuple mover 狀態。"
 ---
 
 當 Vertica 資料庫效能變慢時，系統化的診斷流程可以幫助你快速定位問題。這份 13 步驟的檢查清單最初由 OpenText 在 2018 年發布，本文將其**更新至 Vertica 25.x**，並標註各版本的系統表差異。

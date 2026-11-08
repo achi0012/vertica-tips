@@ -6,6 +6,13 @@ categories: vertica storage audit delete-vectors
 tags: [vertica, storage, ROS, delete-vectors, projection-storage, purge, v_monitor, audit, mergeout]
 description: "Measured on Vertica 25.4: 1,254 of 1,524 ROS containers hold just 0.03 GB. Four audit queries, empty-table detection, and a reclaim-action table."
 image: /assets/images/og/vertica-space-audit-en.png
+faq:
+  - q: "Why not just count ROS containers?"
+    a: "Container count is almost decoupled from bytes: 1,254 containers under 1 MB held 0.03 GB, while 33 large containers held 68 GB."
+  - q: "Which system tables should I use for a space audit?"
+    a: "Reconcile v_monitor.projection_storage, storage_containers, and delete_vectors separately."
+  - q: "How do I find 0-byte tables?"
+    a: "Use projection_storage where used_bytes=0 or aggregate storage_containers; the article provides four ready-to-run queries."
 ---
 
 The disk is filling up, and the reflex is "too many ROS containers, let mergeout clean it up". That instinct held up in older Vertica releases, but after auditing a 68.20 GB instance on 25.4 the picture is different: **container count and disk bytes are almost completely decoupled.** 1,254 of 1,524 containers (82.3%) are under 1 MB, and removing all of them would reclaim 0.03 GB — 0.04% of the database. The bytes actually live in the other 33 containers.

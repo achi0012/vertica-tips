@@ -6,6 +6,13 @@ categories: vertica storage audit delete-vectors
 tags: [vertica, storage, ROS, delete-vectors, projection-storage, purge, v_monitor, audit, mergeout]
 description: "68.20 GB 的 Vertica 25.4 實測空間審計：1,254 個 ROS 容器只佔 0.03 GB、164 張 0 bytes 表、288,920 列未 purge 的刪除。四組系統表 SQL 與回收動作對照。"
 image: /assets/images/og/vertica-space-audit-zh.png
+faq:
+  - q: "為什麼不能只數 ROS 容器？"
+    a: "容器數量與佔用位元組幾乎脫鉤：1,254 個 <1MB 容器只佔 0.03GB，33 個大容器佔 68GB。"
+  - q: "空間審計要看哪些系統表？"
+    a: "v_monitor.projection_storage、storage_containers、delete_vectors 三個帳戶分開對帳。"
+  - q: "0 bytes 表怎麼找？"
+    a: "用 projection_storage 的 used_bytes=0 或 storage_containers 統計；文章提供四組可直接用的 SQL。"
 ---
 
 磁碟快滿了，第一反應通常是「ROS 容器太多了，該 merge 一下」。這個直覺在早期的 Vertica 還算可靠，但在 25.x 上，我對一台 68.20 GB 的實機做完盤點後發現：**容器數量與佔用位元組幾乎完全脫鉤**。1,524 個容器裡有 1,254 個（82.3%）不到 1 MB，把它們全部清掉只會回收 0.03 GB — 佔全庫 0.04%。真正吃掉 68 GB 的是另外 33 個容器。

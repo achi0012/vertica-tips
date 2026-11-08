@@ -6,6 +6,13 @@ categories: vertica node-recovery HA
 tags: [vertica, node-recovery, high-availability, K-safety, troubleshooting, recovery]
 description: "Recovering a failed Vertica node — state transitions, two-phase recovery, RECOVERY pool tuning, dirty transactions, 5 scenarios."
 image: /assets/images/og/vertica-node-recovery-best-practice-en.png
+faq:
+  - q: "What are the two recovery phases?"
+    a: "Pre-Recovery (prepare and validate) and Recovery (restore missing data from buddy nodes)."
+  - q: "What affects recovery speed?"
+    a: "RECOVERY pool MAXCONCURRENCY, network, disk, buddy-node load, and data volume."
+  - q: "How are dirty transactions handled?"
+    a: "Recovery replays or rolls back dirty transactions. Monitor recovery_status, table_recoveries, and projection_recoveries, and follow the KB for exceptions."
 ---
 
 One of the worst scenarios in any database cluster is a node going **DOWN**. When a Vertica cluster node goes offline, it stops participating in any transactions committed after that point. After restart, it must recover missed data from **buddy nodes** before coming back online.

@@ -6,6 +6,13 @@ categories: vertica delete data-management best-practice
 tags: [vertica, delete, TRUNCATE, partition, delete-vectors, mergeout, purge, AHM, data-management]
 description: "Vertica 刪除資料的完整最佳實踐 — DELETE 運作原理、五種刪除方式對比 (Single Row / Bulk / Drop Partition / Truncate)、Delete Vectors 管理、PurgeMergeoutPercent 調校、以及替代 DELETE 的實戰技巧。"
 image: /assets/images/og/vertica-delete-data-best-practice-zh.png
+faq:
+  - q: "DELETE 會立刻釋放磁碟空間嗎？"
+    a: "不會。DELETE 建立 delete vector，空間要等 mergeout/purge 才會真正回收。"
+  - q: "大量刪除歷史資料建議用什麼？"
+    a: "DROP PARTITION 最快，其次 TRUNCATE；避免逐列 DELETE。"
+  - q: "Purge 政策怎麼調？"
+    a: "用 HistoryRetentionTime/HistoryRetentionEpochs 控制 AHM，PurgeMergeoutPercent 控制 purge 時機；依合規與空間需求調整。"
 ---
 
 Vertica 作為高效能欄位式分析資料庫，在刪除資料上與傳統資料庫有兩個關鍵差異：

@@ -6,6 +6,13 @@ categories: vertica performance troubleshooting
 tags: [vertica, performance, slow-database, troubleshooting, delete-vectors, epoch, AHM, locks, resource-pool]
 description: "A 13-step diagnostic checklist for Vertica slowdowns — updated to 25.x with the correct system table locations for each step."
 image: /assets/images/og/vertica-slow-performance-checklist-en.png
+faq:
+  - q: "What is the first step when Vertica slows down?"
+    a: "Check node state and resource rejections first; rule out a down node, resource-pool queuing, or a full disk."
+  - q: "Do delete vectors slow down queries?"
+    a: "Yes. Too many delete vectors increase scan and mergeout cost; purge or mergeout when appropriate."
+  - q: "What does a lagging epoch/AHM mean?"
+    a: "Mergeout is falling behind and ROS containers are accumulating. Check current_epoch/ahm_epoch in v_monitor.system and tuple-mover status."
 ---
 
 When Vertica performance slows down, a systematic diagnostic approach helps pinpoint the root cause. This 13-step checklist was originally published in 2018 — this version is **updated to Vertica 25.x** with all system table locations verified.

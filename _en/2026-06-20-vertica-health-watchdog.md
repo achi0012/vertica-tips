@@ -6,6 +6,13 @@ categories: vertica health-watchdog monitoring
 tags: [vertica, health-watchdog, cluster-monitoring, DDL, DML, performance, GCLX, mergeout]
 description: "Vertica Health Watchdog (24.4+) explained — four monitoring modules, threshold tuning, and 24 FAQ answers for early warning."
 image: /assets/images/og/vertica-health-watchdog-en.png
+faq:
+  - q: "Which four modules does Health Watchdog monitor?"
+    a: "Truncation Version Lag, GCLX Queue Bloat, Mergeout Queue Bloat, and Memory Pushback."
+  - q: "What are the default thresholds?"
+    a: "Truncation Version Lag 500, GCLX Queue 100, Mergeout Queue 100, and Memory Pushback at 90% of GlobalPool."
+  - q: "How do I investigate a Watchdog block?"
+    a: "Query v_monitor.health_watchdog_state, health_watchdog_events, and health_watchdog_blocked_transactions; remove the root cause and the Watchdog recovers automatically."
 ---
 
 Under extreme concurrent load, even Vertica can enter a degraded state. To proactively address this, Vertica **24.4** introduced the **Health Watchdog** — an intelligent monitoring component that detects early signs of stress and takes corrective action before minor issues escalate.

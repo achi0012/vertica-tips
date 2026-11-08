@@ -6,6 +6,13 @@ categories: vertica rebalancing cluster
 tags: [vertica, rebalancing, cluster-management, scalability, performance, REFRESH-pool]
 description: "Rebalancing a Vertica cluster after adding or removing nodes — four-phase process, REFRESH pool tuning, locks, batch strategies."
 image: /assets/images/og/vertica-rebalancing-best-practice-en.png
+faq:
+  - q: "What are the four rebalancing phases?"
+    a: "Lock, Copy, Separate, and Transfer."
+  - q: "What should I prepare before rebalancing?"
+    a: "Enough disk space (about 40%), LockTimeout/DMLCancelTM, an off-peak window, and REFRESH pool PLANNEDCONCURRENCY."
+  - q: "How do I handle lock conflicts?"
+    a: "Check v_monitor.locks and the rebalance_* tables, resolve ERROR 3007/5157/7121, and batch or retry if needed."
 ---
 
 When you add or remove nodes in a Vertica cluster, data must be redistributed evenly across all nodes for optimal performance. This process is called **Rebalancing**. However, rebalancing is CPU-, disk-, and network-intensive and can impact live queries if not properly planned.

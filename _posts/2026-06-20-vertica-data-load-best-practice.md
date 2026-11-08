@@ -6,6 +6,13 @@ categories: vertica data-load best-practice
 tags: [vertica, COPY, data-load, performance, tuning]
 description: "深入解析 Vertica 25.x 的 COPY 命令架構、資源池調優、配置參數最佳化，以及 8 大常見瓶頸情境的實戰排解方案。基於 Vertica 25.4.0-0 實測經驗。"
 image: /assets/images/og/vertica-data-load-best-practice-zh.png
+faq:
+  - q: "Vertica 25.x 的 COPY 有哪些載入形式？"
+    a: "文章涵蓋單檔 COPY、多檔 COPY 與 Apportioned Load；Apportioned Load 會把工作切成多個單元平行處理，是 25.x 的預設重點。"
+  - q: "COPY 變慢時先看哪裡？"
+    a: "先看 resource pool 是否排隊（PLANNEDCONCURRENCY/MAXCONCURRENCY）、網路與磁碟，再查 load_streams、query_requests 與 resource_rejections。"
+  - q: "大檔案和小檔案的瓶頸一樣嗎？"
+    a: "不一樣。大檔案偏向 parse、網路與 ROS 寫入；大量小檔案則是 per-file 開啟成本，通常要合併檔案或改用串流/UDL。"
 ---
 
 Vertica 的資料載入效率直接影響整個資料管線的吞吐量。無論是每日批次 ETL、即時串流接入，還是大量歷史資料遷移，**COPY 命令**都是最核心的工具。

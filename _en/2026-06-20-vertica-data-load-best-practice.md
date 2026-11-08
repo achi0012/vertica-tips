@@ -6,6 +6,13 @@ categories: vertica data-load best-practice
 tags: [vertica, COPY, data-load, apportioned-load, resource-pool, performance, bulk-loading]
 description: "Vertica 25.x COPY architecture, resource pool and parameter tuning, plus 8 real-world loading bottlenecks — verified on 25.4.0-0."
 image: /assets/images/og/vertica-data-load-best-practice-en.png
+faq:
+  - q: "What COPY forms does Vertica 25.x support?"
+    a: "The article covers single-file COPY, multi-file COPY, and Apportioned Load. Apportioned Load splits the work into parallel units and is a key 25.x default."
+  - q: "Where should I look first when COPY is slow?"
+    a: "Check resource-pool queuing (PLANNEDCONCURRENCY/MAXCONCURRENCY), network and disk, then load_streams, query_requests, and resource_rejections."
+  - q: "Do large files and many small files hit the same bottleneck?"
+    a: "No. Large files stress parse, network, and ROS writes; many small files pay per-file open overhead, so combine files or use streaming/UDL."
 ---
 
 The efficiency of data loading directly impacts the throughput of your entire data pipeline in Vertica. Whether it's daily batch ETL, real-time streaming ingestion, or large-scale historical data migration, the **COPY command** is the most fundamental tool.

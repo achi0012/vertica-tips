@@ -6,6 +6,13 @@ categories: vertica log-analysis troubleshooting
 tags: [vertica, log-analysis, Data-Collector, query-events, vertica-log, RCA, troubleshooting, performance]
 description: "Vertica log analysis workflow — Data Collector retention, monitoring query tuning, QUERY_EVENTS comparison, vertica.log severity analysis."
 image: /assets/images/og/vertica-log-analysis-rca-en.png
+faq:
+  - q: "Where should log analysis start?"
+    a: "Confirm the time window and Data Collector retention, then query query_requests, query_events, and vertica.log."
+  - q: "How do I compare healthy and abnormal periods?"
+    a: "Aggregate QUERY_EVENTS per minute, find error spikes, then correlate them with vertica.log severity and timestamps."
+  - q: "Can monitoring queries interfere?"
+    a: "Yes. Avoid SELECT * on large tables, add time bounds and LIMIT, and use historical query_profiles when possible."
 ---
 
 When Vertica performance issues occur during specific time windows with unknown causes, systematic log analysis is key to finding the root cause. Based on Moshe Goldberg's LinkedIn article on Vertica Log Analysis, this guide provides actionable steps updated for **Vertica 25.x**.

@@ -6,6 +6,13 @@ categories: vertica resource-pool performance
 tags: [vertica, resource-pool, workload-management, cascading-pool, MEMORYSIZE, PLANNEDCONCURRENCY, query-budget, PRIORITY]
 description: "Vertica resource pool management — five core parameters, workload classification, fastAnalytics evolution, and a tuning checklist."
 image: /assets/images/og/vertica-resource-pool-best-practice-en.png
+faq:
+  - q: "What are the five core resource-pool parameters?"
+    a: "MEMORYSIZE, MAXMEMORYSIZE, PLANNEDCONCURRENCY, MAXCONCURRENCY, and EXECUTIONPARALLELISM."
+  - q: "How is query budget calculated?"
+    a: "From pool memory, planned concurrency, and execution parallelism; the article includes the formula and examples."
+  - q: "How do cascading pools work?"
+    a: "CASCADE TO sends overflow queries to the next pool; combine it with RUNTIMECAP/RUNTIMEPRIORITY for runtime routing."
 ---
 
 Resource pools are Vertica's core resource management mechanism. Every query runs in some pool — whether it's an ETL load, a BI dashboard query, or a batch analytics job. Proper pool management ensures workloads coexist without resource starvation.

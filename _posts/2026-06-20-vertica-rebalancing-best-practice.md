@@ -6,6 +6,13 @@ categories: vertica rebalancing cluster
 tags: [vertica, rebalancing, cluster-management, scalability, performance]
 description: "Vertica 集群增減節點後的完整 Rebalancing 指南 — 從架構流程、資源池調優、四階段搬運機制，到鎖衝突處理與分批排程策略。基於 Vertica 25.4.0-0 實測經驗。"
 image: /assets/images/og/vertica-rebalancing-best-practice-zh.png
+faq:
+  - q: "Rebalancing 的四個階段是什麼？"
+    a: "Lock、Copy、Separate、Transfer。"
+  - q: "Rebalancing 前要準備什麼？"
+    a: "足夠磁碟空間（約 40%）、LockTimeout/DMLCancelTM、離峰窗口，以及 REFRESH resource pool 的 PLANNEDCONCURRENCY。"
+  - q: "遇到鎖衝突怎麼辦？"
+    a: "查 v_monitor.locks 與 rebalance_* 系統表，處理 ERROR 3007/5157/7121；必要時分批或重試。"
 ---
 
 當 Vertica 集群需要擴充或縮減時，**Rebalancing** 是確保資料均勻分佈、發揮所有節點效能的關鍵操作。然而，Rebalancing 是 CPU、磁碟、網路密集的操作，若未妥善規劃，可能嚴重影響線上查詢。
