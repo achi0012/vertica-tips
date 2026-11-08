@@ -5,6 +5,7 @@ date: 2026-06-20 10:00:00 +0800
 categories: vertica data-load best-practice
 tags: [vertica, COPY, data-load, apportioned-load, resource-pool, performance, bulk-loading]
 description: "Vertica 25.x COPY architecture, resource pool and parameter tuning, plus 8 real-world loading bottlenecks — verified on 25.4.0-0."
+image: /assets/images/og/vertica-data-load-best-practice-en.png
 ---
 
 The efficiency of data loading directly impacts the throughput of your entire data pipeline in Vertica. Whether it's daily batch ETL, real-time streaming ingestion, or large-scale historical data migration, the **COPY command** is the most fundamental tool.

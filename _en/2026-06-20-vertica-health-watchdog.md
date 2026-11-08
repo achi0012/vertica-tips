@@ -5,6 +5,7 @@ date: 2026-06-20 20:00:00 +0800
 categories: vertica health-watchdog monitoring
 tags: [vertica, health-watchdog, cluster-monitoring, DDL, DML, performance, GCLX, mergeout]
 description: "Vertica Health Watchdog (24.4+) explained — four monitoring modules, threshold tuning, and 24 FAQ answers for early warning."
+image: /assets/images/og/vertica-health-watchdog-en.png
 ---
 
 Under extreme concurrent load, even Vertica can enter a degraded state. To proactively address this, Vertica **24.4** introduced the **Health Watchdog** — an intelligent monitoring component that detects early signs of stress and takes corrective action before minor issues escalate.

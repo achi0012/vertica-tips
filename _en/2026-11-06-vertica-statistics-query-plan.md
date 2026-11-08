@@ -5,6 +5,7 @@ date: 2026-11-06 05:00:00 +0800
 categories: vertica statistics performance
 tags: [vertica, statistics, analyze-statistics, query-plan, explain, optimizer, performance]
 description: "Explain why the Vertica optimizer chooses the wrong plan when statistics are stale, benchmark EXPLAIN before and after ANALYZE_STATISTICS, compare row estimates and join order, and build a practical statistics maintenance strategy."
+image: /assets/images/og/vertica-statistics-query-plan-en.png
 ---
 
 <!--more-->

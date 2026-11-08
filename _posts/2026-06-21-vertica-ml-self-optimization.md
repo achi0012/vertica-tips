@@ -5,6 +5,7 @@ date: 2026-06-21 02:00:00 +0800
 categories: vertica machine-learning auto-tuning
 tags: [vertica, machine-learning, LINEAR_REG, SVM, KMEANS, IFOREST, auto-tuning, self-optimization, 25.4]
 description: "使用 Vertica 25.4.0-0 內建的 Machine Learning 函數（LINEAR_REG、SVM_CLASSIFIER、KMEANS、IFOREST、RF_CLASSIFIER、LOGISTIC_REG）建立智慧監控與自動調優系統，所有 SQL 皆經實際驗證。"
+image: /assets/images/og/vertica-ml-self-optimization-zh.png
 ---
 
 Vertica 25.4.0-0 內建了完整的 Machine Learning 引擎，支援迴歸、分類、聚類、異常偵測等演算法。本文示範如何用這些 ML 函數來**監控並優化 Vertica 自己**，所有 SQL 皆在 25.4.0-0 實測通過。

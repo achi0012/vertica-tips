@@ -5,6 +5,7 @@ date: 2026-06-21 07:00:00 +0800
 categories: vertica disaster-recovery ASR troubleshooting
 tags: [vertica, ASR, database-recovery, crash, epoch, AHM, abortrecovery, disaster-recovery]
 description: "Vertica won't start after a crash with ASR showing invalid dates? Unsafe Mode, epoch analysis, abortrecovery, and data salvage."
+image: /assets/images/og/vertica-asr-recovery-en.png
 ---
 
 When a power outage or filesystem issue causes Vertica catalog to reference missing or corrupted data files, the database may fail to start with ASR (Auto Synchronous Recovery) showing epoch **0** and a timestamp in **1999**.
