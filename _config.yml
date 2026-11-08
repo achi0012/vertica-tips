@@ -12,6 +12,7 @@ description_en: >-
 url: "https://achi0012.github.io"
 baseurl: "/vertica-tips"
 repository: achi0012/vertica-tips
+logo: "/assets/images/logo.png"
 
 # 多語言設定
 languages: ["zh", "en"]
@@ -27,9 +28,12 @@ plugins:
 author:
   name: "Achi"
   email: achi0012@users.noreply.github.com
+  url: "https://achi0012.github.io/vertica-tips/about/"
 
 social:
   github: achi0012
+  links:
+    - "https://github.com/achi0012"
 
 # 文章設定
 permalink: /:year/:month/:title/
@@ -47,11 +51,13 @@ defaults:
       path: "_posts"
     values:
       lang: "zh"
+      locale: "zh_TW"
       layout: "post"
   - scope:
       path: "_en"
     values:
       lang: "en"
+      locale: "en_US"
       layout: "post_en"
 
 # 語言

@@ -21,6 +21,7 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="{{ page.title | escape }}">
   {%- endif -%}
+  {%- include aeo-jsonld.html -%}
   {%- feed_meta -%}
   <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ '/feed.xml' | relative_url }}">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">

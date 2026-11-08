@@ -3,6 +3,8 @@ layout: page_en
 lang: en
 title: About Vertica Tips
 permalink: /en/about/
+locale: en_US
+image: /assets/images/og/home-en.png
 ---
 
 ## About This Blog
