@@ -79,6 +79,28 @@
 </script>
 {%- endif %}
 
+{%- if page.faq and page.faq.size > 0 %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "{{ aeo_canonical }}#faq",
+  "mainEntity": [
+    {% for item in page.faq %}
+    {
+      "@type": "Question",
+      "name": {{ item.q | jsonify }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ item.a | jsonify }}
+      }
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+}
+</script>
+{%- endif %}
+
 {%- if aeo_is_home or aeo_is_about %}
 <script type="application/ld+json">
 {

@@ -6,6 +6,13 @@ categories: vertica tuple-mover mergeout performance
 tags: [vertica, tuple-mover, moveout, mergeout, ROS, STRATA, WOS, delete-vectors, resource-pool, TM]
 description: "Vertica Tuple Mover 的完整最佳實踐指南 — 從 Moveout/Mergeout 運作原理、STRATA 演算法、TM 資源池調優、Part 1 (9.1-) 與 Part 2 (9.2+) 的版本差異，到 ROS Pushback 預防與實戰監控。"
 image: /assets/images/og/vertica-tuple-mover-best-practice-zh.png
+faq:
+  - q: "Moveout 與 Mergeout 差別是什麼？"
+    a: "Moveout 把記憶體/WOS 資料移到 ROS；Mergeout 合併 ROS 容器並清除 deleted data。25.x 已移除 WOS，主要看 Mergeout。"
+  - q: "STRATA 演算法是什麼？"
+    a: "依 ROS 容器大小分層合併，ROSPerStratum=32 控制每層容器數。"
+  - q: "Mergeout 吞吐量怎麼判斷？"
+    a: "低於 1GB/分通常需要調校；查 v_monitor.tuple_mover_operations 與 mergeout_profiles，調整 TM pool 記憶體與並發。"
 ---
 
 Tuple Mover 是 Vertica 的背景服務，負責管理資料從記憶體到磁碟的移動、ROS containers 的合併，以及已刪除資料的清除。雖然多數情況下預設配置就足夠，但特定工作負載需要調校才能達到最佳效能。

@@ -6,6 +6,13 @@ categories: vertica iceberg lakehouse
 tags: [vertica, iceberg, lakehouse, S3, Glue, Nessie, OAuth2, external-tables, Parquet]
 description: "Vertica + Apache Iceberg integration — architecture, feature matrix 12.0.4→25.4.0, and five hands-on examples (Glue, Lakekeeper, Nessie)."
 image: /assets/images/og/vertica-iceberg-lakehouse-en.png
+faq:
+  - q: "Do I need to copy data into Vertica to query Iceberg?"
+    a: "No. Vertica queries external Iceberg data through the catalog and supports ACID, schema evolution, and time travel."
+  - q: "Which catalogs does the article cover?"
+    a: "AWS Glue, file-system tables, Lakekeeper REST Catalog, Nessie OAuth2, and Nessie Bearer Token."
+  - q: "Will Iceberg replace native ROS tables?"
+    a: "No. Iceberg is best for external and shared data; frequent queries and complex joins are still faster on native ROS tables."
 ---
 
 Imagine a kitchen with a massive walk-in refrigerator (Data Lake) and a gleaming prep station (Data Warehouse), connected by an expensive ETL conveyor belt. **Apache Iceberg + Vertica** eliminates that conveyor belt entirely.

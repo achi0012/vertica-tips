@@ -6,6 +6,13 @@ categories: vertica statistics performance
 tags: [vertica, statistics, analyze-statistics, query-plan, explain, optimizer, performance]
 description: "從 stale statistics 的角度解釋 Vertica 查詢計畫為什麼選錯，實測 ANALYZE_STATISTICS 前後的 EXPLAIN、資料列估算與 join order 變化，並整理統計資訊的維護策略。"
 image: /assets/images/og/vertica-statistics-query-plan-zh.png
+faq:
+  - q: "為什麼 EXPLAIN 對 100 萬列的表只估 10,000 列？"
+    a: "CTAS 與 COPY 不會自動產生 table_statistics，優化器沒有統計時會用 10,000 列估算並標記 NO STATISTICS；執行 ANALYZE_STATISTICS 後才會更新。"
+  - q: "跑了 ANALYZE_STATISTICS 就一定準嗎？"
+    a: "不一定。低基數 varchar 等值條件實測仍估 600K、實際 50K（12 倍誤差），percent=100 重收也一樣；統計只能改善，不能保證完美。"
+  - q: "DELETE 或 TRUNCATE 之後 row_count 會更新嗎？"
+    a: "不會即時反映。DELETE 95% 後 row_count 仍是 1,000,000、is_row_count_valid 仍是 t；TRUNCATE 後顯示 1 而不是 0。需要重新收集統計。"
 ---
 
 <!--

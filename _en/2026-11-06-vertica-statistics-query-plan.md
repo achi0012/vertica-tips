@@ -6,6 +6,13 @@ categories: vertica statistics performance
 tags: [vertica, statistics, analyze-statistics, query-plan, explain, optimizer, performance]
 description: "Explain why the Vertica optimizer chooses the wrong plan when statistics are stale, benchmark EXPLAIN before and after ANALYZE_STATISTICS, compare row estimates and join order, and build a practical statistics maintenance strategy."
 image: /assets/images/og/vertica-statistics-query-plan-en.png
+faq:
+  - q: "Why does EXPLAIN estimate 10,000 rows for a 1M-row table?"
+    a: "CTAS and COPY do not create table_statistics. Without statistics the optimizer uses a 10,000-row default and marks the plan NO STATISTICS. Run ANALYZE_STATISTICS."
+  - q: "Does ANALYZE_STATISTICS always produce accurate estimates?"
+    a: "No. A low-cardinality varchar equality still estimated 600K rows against 50K actual (12x error), even with percent=100. Statistics help, but they are not perfect."
+  - q: "Do DELETE and TRUNCATE update row_count immediately?"
+    a: "No. After deleting 95% of rows, row_count still showed 1,000,000 and is_row_count_valid was still t; after TRUNCATE it showed 1, not 0. Re-analyze the table."
 ---
 
 <!--more-->

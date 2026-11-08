@@ -1,0 +1,29 @@
+---
+layout: null
+permalink: /en/feed.xml
+sitemap: false
+---
+<?xml version="1.0" encoding="utf-8"?>
+{%- assign en_posts = site.en | sort: 'date' | reverse -%}
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title type="text">Vertica Tips — English</title>
+  <subtitle type="text">Vertica Database Technical Notes &amp; Best Practices</subtitle>
+  <link href="{{ '/en/feed.xml' | absolute_url }}" rel="self" type="application/atom+xml" />
+  <link href="{{ '/en/' | absolute_url }}" rel="alternate" type="text/html" />
+  <updated>{{ en_posts.first.date | date_to_xmlschema }}</updated>
+  <id>{{ '/en/feed.xml' | absolute_url }}</id>
+  <author>
+    <name>Achi</name>
+    <email>achi0012@users.noreply.github.com</email>
+  </author>
+  {%- for post in en_posts %}
+  <entry xml:lang="en">
+    <title type="html">{{ post.title | xml_escape }}</title>
+    <link href="{{ post.url | absolute_url }}" rel="alternate" type="text/html" title="{{ post.title | xml_escape }}" />
+    <published>{{ post.date | date_to_xmlschema }}</published>
+    <updated>{{ post.date | date_to_xmlschema }}</updated>
+    <id>{{ post.url | absolute_url }}</id>
+    <summary type="html">{{ post.description | default: post.excerpt | strip_html | xml_escape }}</summary>
+  </entry>
+  {%- endfor %}
+</feed>

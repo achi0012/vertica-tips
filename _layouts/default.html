@@ -23,7 +23,9 @@
   {%- endif -%}
   {%- include aeo-jsonld.html -%}
   {%- feed_meta -%}
-  <link rel="alternate" type="application/atom+xml" title="{{ site.title }}" href="{{ '/feed.xml' | relative_url }}">
+  {%- if page.lang == 'en' or page.layout == 'home_en' or page.layout == 'post_en' -%}
+  <link rel="alternate" type="application/atom+xml" title="Vertica Tips — English" href="{{ '/en/feed.xml' | relative_url }}">
+  {%- endif -%}
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
 
   <!-- Google Analytics (GA4) -->

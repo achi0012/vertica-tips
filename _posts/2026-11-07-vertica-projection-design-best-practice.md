@@ -6,6 +6,13 @@ categories: vertica projection performance
 tags: [vertica, projection, segmentation, sort-order, encoding, ros-pushback, performance]
 description: "從 segmentation、sort order、encoding 到投影數量控管，實測 Vertica 投影設計如何影響 EXPLAIN、資料傾斜與 ROS pushback，並整理可操作的設計檢查表。"
 image: /assets/images/og/vertica-projection-design-best-practice-zh.png
+faq:
+  - q: "新建投影為什麼沒有被查詢使用？"
+    a: "新投影需要 REFRESH 才會生效，否則會看到 WARNING 4468；用 EXPLAIN 確認實際選中的 projection。"
+  - q: "低基數欄位適合當 segmentation key 嗎？"
+    a: "不適合。實測用 status 做 segmentation 時，HASH(status)%8 有 91.1% 落在同一個 bucket，8 個 bucket 有 6 個是空的。"
+  - q: "強制 encoding 一定會縮小儲存嗎？"
+    a: "不一定。強制 BLOCK_DICT 讓 payload 膨脹 52.1%、amount 膨脹 29.5%；全部強制編碼反而比 AUTO 大 75.9%。"
 ---
 
 <!--

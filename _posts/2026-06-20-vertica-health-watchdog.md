@@ -6,6 +6,13 @@ categories: vertica health-watchdog monitoring
 tags: [vertica, health-watchdog, cluster-monitoring, DDL, DML, performance, troubleshooting]
 description: "Vertica 24.4+ 引入的 Health Watchdog 功能深度解析 — 揭露四大監控模組（Truncation Version Lag、GCLX Queue、Mergeout Queue、Memory Pushback）的運作原理、閾值配置，以及 24 個常見 QA 總整理。"
 image: /assets/images/og/vertica-health-watchdog-zh.png
+faq:
+  - q: "Health Watchdog 監控哪四個模組？"
+    a: "Truncation Version Lag、GCLX Queue Bloat、Mergeout Queue Bloat、Memory Pushback。"
+  - q: "四個模組的預設閾值是多少？"
+    a: "Truncation Version Lag 500、GCLX Queue 100、Mergeout Queue 100、Memory Pushback 為 GlobalPool 90%。"
+  - q: "被 Watchdog 阻斷時怎麼查？"
+    a: "查 v_monitor.health_watchdog_state、health_watchdog_events、health_watchdog_blocked_transactions；先解除根因，Watchdog 會依條件自動恢復。"
 ---
 
 Vertica 以高效能分析著稱，但在極端高並發負載下，資料庫可能進入降級狀態，導致查詢延長、鎖 timeout、ROS pushback，甚至崩潰。為了主動應對這些問題，Vertica 從 **24.4** 版開始引入了一個強大的新功能 — **Health Watchdog**（健康守護程序）。

@@ -6,6 +6,13 @@ categories: vertica log-analysis troubleshooting
 tags: [vertica, log-analysis, data-collector, query-events, vertica-log, performance, RCA]
 description: "系統化的 Vertica 日誌分析流程 — 從 Data Collector 歷史保留、監控查詢最佳化、QUERY_EVENTS 健康/異常期比對，到 vertica.log 的嚴重程度分析與精準時段定位。"
 image: /assets/images/og/vertica-log-analysis-rca-zh.png
+faq:
+  - q: "日誌分析要從哪裡開始？"
+    a: "先確認時間範圍與 Data Collector 保留，再查 query_requests、query_events 與 vertica.log。"
+  - q: "怎麼比對健康期與異常期？"
+    a: "用 QUERY_EVENTS 聚合每分鐘事件/錯誤，找異常尖峰，再對照 vertica.log 的嚴重程度與時段。"
+  - q: "監控查詢本身會干擾嗎？"
+    a: "會。避免對大表 SELECT *，加時間範圍與 LIMIT；必要時用 query_profiles 的歷史資料。"
 ---
 
 當 Vertica 效能問題發生在特定時段但原因不明時，系統化的日誌分析是找到根因的關鍵。Moshe Goldberg 在 LinkedIn 上發表了一篇深入的 Vertica Log Analysis 文章，本文將其核心方法整理為可操作的指南，並更新至 **Vertica 25.x** 系統表結構。

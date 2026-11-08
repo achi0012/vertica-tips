@@ -6,6 +6,13 @@ categories: vertica projection performance
 tags: [vertica, projection, segmentation, sort-order, encoding, ros-pushback, performance]
 description: "From segmentation and sort order to encoding and projection count, benchmark how Vertica projection design affects EXPLAIN plans, data skew, and ROS pushback, with a practical design checklist."
 image: /assets/images/og/vertica-projection-design-best-practice-en.png
+faq:
+  - q: "Why is my new projection not used by queries?"
+    a: "A new projection must be REFRESHed before the optimizer can use it; otherwise you get WARNING 4468. Confirm the chosen projection with EXPLAIN."
+  - q: "Is a low-cardinality column a good segmentation key?"
+    a: "No. With status as the segmentation key, HASH(status)%8 put 91.1% of rows in one bucket and left 6 of 8 buckets empty."
+  - q: "Does forcing an encoding always reduce storage?"
+    a: "No. Forcing BLOCK_DICT increased payload by 52.1% and amount by 29.5%; forcing every encoding was 75.9% larger than AUTO."
 ---
 
 <!--more-->

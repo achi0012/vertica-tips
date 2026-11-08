@@ -6,6 +6,13 @@ categories: vertica OOM memory troubleshooting
 tags: [vertica, OOM, memory, Linux, kernel, catalog, resource-pool, glibc, Health-Watchdog, ROS]
 description: "Linux OOM killer in Vertica clusters — MAXMEMORYSIZE, catalog memory sizing, MemoryReport.log, glibc versions, ROS and delete vectors."
 image: /assets/images/og/vertica-oom-prevention-en.png
+faq:
+  - q: "What commonly causes Vertica OOM?"
+    a: "MAXMEMORYSIZE set too high, a large catalog, too many ROS containers/delete vectors, the glibc <2.19 bug, or competing workloads."
+  - q: "How should MAXMEMORYSIZE be set?"
+    a: "A common starting point is 85% of node memory, leaving about 15% for the OS; tune from there."
+  - q: "How do I diagnose an OOM?"
+    a: "Check MemoryReport.log, v_monitor.memory_events, memory_usage, and Health Watchdog; identify the killed process and memory at that time."
 ---
 
 Out-of-Memory (OOM) conditions in Vertica are less common on modern, up-to-date systems but can still occur with large catalogs, competing workloads, or specific query patterns. When the Linux **OOM Killer** terminates a Vertica process, a systematic investigation approach is needed.
