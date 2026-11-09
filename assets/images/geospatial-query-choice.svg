@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="442" viewBox="0 0 820 442" role="img" aria-labelledby="t2 d2">
+  <title id="t2">空間查詢的決策流程與實測成本</title>
+  <desc id="d2">三條路線：點在多邊形內用 bbox 或空間索引、距離與半徑用 GEOGRAPHY、最近鄰用 STV_NN，各自附上 Vertica 25.4.0-0 的實測毫秒數。</desc>
+  <style>
+    .bg { fill: #0d1117; }
+    .title { fill: #f0f6fc; font: 700 17px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+    .sub { fill: #8b949e; font: 12.5px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+    .box { fill: #161b22; stroke: #30363d; stroke-width: 1; }
+    .start { fill: #1f2d3d; stroke: #58a6ff; stroke-width: 1; }
+    .h { fill: #c9d1d9; font: 700 13.5px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+    .l { fill: #8b949e; font: 12.5px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+    .n { fill: #58a6ff; font: 700 12.5px 'DejaVu Sans Mono',monospace; }
+    .warn { fill: #f85149; font: 12.5px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+    .arrow { stroke: #484f58; stroke-width: 1.5; fill: none; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="820" height="442"/>
+
+  <text class="title" x="40" y="34">點資料要問什麼，決定你該用哪一個函數</text>
+  <text class="sub" x="40" y="58">粗體數字為 200,000 個點、8 個多邊形的單次實測耗時（Vertica 25.4.0-0）</text>
+
+  <rect class="start" x="250" y="76" width="320" height="44" rx="4"/>
+  <text class="h" x="410" y="103" text-anchor="middle">有 lon/lat 的點 + 多邊形</text>
+
+  <path class="arrow" d="M410 120 L190 120 L190 148"/>
+  <path class="arrow" d="M410 120 L460 120 L460 148"/>
+  <path class="arrow" d="M410 120 L680 120 L680 148"/>
+
+  <!-- column A -->
+  <rect class="box" x="40" y="148" width="300" height="40" rx="4"/>
+  <text class="h" x="56" y="173">點在哪一區</text>
+
+  <rect class="box" x="40" y="200" width="300" height="132" rx="4"/>
+  <text class="l" x="56" y="224">少數多邊形：bbox + ST_Contains</text>
+  <text class="n" x="56" y="244">450.4 ms</text>
+  <text class="l" x="56" y="268">多邊形多：建空間索引</text>
+  <text class="n" x="56" y="288">827.6 ms</text>
+  <text class="l" x="56" y="310">落地 1,994.0 ms → 聚合 15.0 ms</text>
+
+  <!-- column B -->
+  <rect class="box" x="360" y="148" width="200" height="40" rx="4"/>
+  <text class="h" x="376" y="173">距離 / 半徑</text>
+
+  <rect class="box" x="360" y="200" width="200" height="132" rx="4"/>
+  <text class="l" x="376" y="224">一律用 GEOGRAPHY</text>
+  <text class="l" x="376" y="244">STV_DWithin 500 m</text>
+  <text class="n" x="376" y="264">1,116.7 ms</text>
+  <text class="warn" x="376" y="288">0.005 度多撈 11.7%</text>
+  <text class="l" x="376" y="310">436 筆 vs 487 筆</text>
+
+  <!-- column C -->
+  <rect class="box" x="580" y="148" width="200" height="40" rx="4"/>
+  <text class="h" x="596" y="173">最近鄰</text>
+
+  <rect class="box" x="580" y="200" width="200" height="132" rx="4"/>
+  <text class="l" x="596" y="224">STV_NN k=5</text>
+  <text class="n" x="596" y="244">613.2 ms</text>
+  <text class="l" x="596" y="268">自己 ORDER BY</text>
+  <text class="n" x="596" y="288">1,432.4 ms</text>
+  <text class="l" x="596" y="312">索引不能建在點上</text>
+
+  <rect class="box" x="40" y="352" width="740" height="56" rx="4" stroke="#f85149"/>
+  <text class="warn" x="56" y="376">反例：把 bbox 寫進 join 條件（ST_XMin / ST_YMin）→ 14,842.7 ms</text>
+  <text class="l" x="56" y="396">比完全不寫 bbox 的 7,303.5 ms 慢一倍，因為 UDF 每一對列都重算一次</text>
+
+  <text class="sub" x="40" y="430">同一個 session、連續執行、已暖機；暴力 join 為 ST_Intersects（201,201 列）。</text>
+</svg>

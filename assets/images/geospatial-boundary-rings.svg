@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="412" viewBox="0 0 820 412" role="img" aria-labelledby="t d">
+  <title id="t">8 個行政區與 20 萬個點的邊界情形</title>
+  <desc id="d">4 乘 2 的行政區格線，每區的 ST_Contains 筆數，以及落在格線上因而被 ST_Contains 排除的 1,600 個點。</desc>
+  <style>
+    .bg { fill: #0d1117; }
+    .title { fill: #f0f6fc; font: 700 17px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+    .sub { fill: #8b949e; font: 12.5px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+    .cell { fill: #161b22; stroke: #30363d; stroke-width: 1; }
+    .name { fill: #c9d1d9; font: 15px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+    .num { fill: #58a6ff; font: 700 18px 'DejaVu Sans Mono',monospace; }
+    .edge { stroke: #f5a623; stroke-width: 2; stroke-dasharray: 7 5; }
+    .note { fill: #f5a623; font: 12.5px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+    .bad { fill: #f85149; font: 13px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+    .good { fill: #3fb950; font: 13px 'Noto Sans TC','Microsoft JhengHei','PingFang TC','WenQuanYi Zen Hei',sans-serif; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="820" height="412"/>
+
+  <text class="title" x="40" y="34">8 個行政區 × 200,000 個點：格線上的點不屬於任何一區</text>
+  <text class="sub" x="40" y="58">每格數字 = 該區 ST_Contains 命中的點數（Vertica 25.4.0-0 實測）</text>
+
+  <!-- row 1 -->
+  <rect class="cell" x="70" y="86" width="170" height="110"/>
+  <text class="name" x="90" y="132">中正</text>
+  <text class="num"  x="90" y="164">31,000</text>
+
+  <rect class="cell" x="240" y="86" width="170" height="110"/>
+  <text class="name" x="260" y="132">大安</text>
+  <text class="num"  x="260" y="164">31,000</text>
+
+  <rect class="cell" x="410" y="86" width="170" height="110"/>
+  <text class="name" x="430" y="132">信義</text>
+  <text class="num"  x="430" y="164">31,000</text>
+
+  <rect class="cell" x="580" y="86" width="170" height="110"/>
+  <text class="name" x="600" y="132">內湖</text>
+  <text class="num"  x="600" y="164">30,999</text>
+
+  <!-- row 2 -->
+  <rect class="cell" x="70" y="196" width="170" height="110"/>
+  <text class="name" x="90" y="242">士林</text>
+  <text class="num"  x="90" y="274">18,600</text>
+
+  <rect class="cell" x="240" y="196" width="170" height="110"/>
+  <text class="name" x="260" y="242">北投</text>
+  <text class="num"  x="260" y="274">18,600</text>
+
+  <rect class="cell" x="410" y="196" width="170" height="110"/>
+  <text class="name" x="430" y="242">中山</text>
+  <text class="num"  x="430" y="274">18,600</text>
+
+  <rect class="cell" x="580" y="196" width="170" height="110"/>
+  <text class="name" x="600" y="242">松山</text>
+  <text class="num"  x="600" y="274">18,599</text>
+
+  <!-- edges that carry points: x = 121.45, 121.50, 121.55, 121.60 -->
+  <line class="edge" x1="70"  y1="86" x2="70"  y2="306"/>
+  <line class="edge" x1="240" y1="86" x2="240" y2="306"/>
+  <line class="edge" x1="410" y1="86" x2="410" y2="306"/>
+  <line class="edge" x1="580" y1="86" x2="580" y2="306"/>
+
+  <text class="note" x="70" y="330">虛線 = 剛好落在格線上的 1,600 個點（4 條線 × 400 個）</text>
+
+  <text class="bad"  x="70" y="356">ST_Contains 加總 198,398：少 1,602 筆（1,600 + 緯度線 2）</text>
+  <text class="good" x="70" y="380">ST_Intersects 201,201：其中 1,201 個點同時屬於兩區</text>
+  <text class="sub"  x="70" y="402">同樣 200,000 個點，同一組多邊形，兩種語意差 2,803 列</text>
+</svg>
