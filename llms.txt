@@ -10,6 +10,7 @@ License: content is copyright Achi; code samples may be reused with attribution.
 
 ## Chinese (zh-TW)
 
+- [Vertica 時序分析實戰：TIMESERIES 插值、補洞與事件視窗](https://achi0012.github.io/vertica-tips/2026/11/vertica-timeseries-analysis/): Vertica 的 TIMESERIES 子句會把資料重採樣成完整時間格並插值補洞。實測 98,784 筆 5 分鐘資料產生 103,680 個 slice（多 4,896 個是補出來的），但缺口 15 天時 linear 插值會捏造出 23.89→24.00 的平滑斜坡。成本在切片與插值而非掃描：PROFILE 顯示 Scan 1,061 µs、Analytical 節點 23,446 µs。
 - [Vertica 分區表設計與 Partition Pruning 實戰](https://achi0012.github.io/vertica-tips/2026/11/vertica-partition-design-pruning/): 實測 Vertica 分區表的 PARTITION BY / GROUP BY 設計、partition pruning、v_monitor.partitions、DROP PARTITION 與 DELETE 的差異，以及 AHM 與 purge 對資料生命週期的影響。
 - [Vertica 投影設計實戰：Segmentation、Sort Order、Encoding 與 ROS Pushback](https://achi0012.github.io/vertica-tips/2026/11/vertica-projection-design-best-practice/): 從 segmentation、sort order、encoding 到投影數量控管，實測 Vertica 投影設計如何影響 EXPLAIN、資料傾斜與 ROS pushback，並整理可操作的設計檢查表。
 - [Vertica 統計資訊管理：ANALYZE_STATISTICS 與查詢計畫為什麼選錯](https://achi0012.github.io/vertica-tips/2026/11/vertica-statistics-query-plan/): 從 stale statistics 的角度解釋 Vertica 查詢計畫為什麼選錯，實測 ANALYZE_STATISTICS 前後的 EXPLAIN、資料列估算與 join order 變化，並整理統計資訊的維護策略。
@@ -33,6 +34,7 @@ License: content is copyright Achi; code samples may be reused with attribution.
 
 ## English (en)
 
+- [Vertica Time Series Analysis: TIMESERIES Interpolation, Gap Filling, and Event Windows](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-timeseries-analysis/): Vertica's TIMESERIES clause resamples data onto a fixed time grid and interpolates the holes. On 98,784 five-minute readings it produced 103,680 slices - 4,896 of them synthetic - and over a 15-day outage linear interpolation invented a smooth 23.89 to 24.00 ramp. The cost is in slicing and interpolation, not scanning: PROFILE shows Scan at 1,061 us and the Analytical node at 23,446 us.
 - [Vertica Partition Table Design and Partition Pruning in Practice](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-partition-design-pruning/): Benchmark Vertica partitioned table design with PARTITION BY and GROUP BY, partition pruning, v_monitor.partitions, DROP PARTITION versus DELETE, and how AHM and purge affect the data lifecycle.
 - [Vertica Projection Design in Practice: Segmentation, Sort Order, Encoding, and ROS Pushback](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-projection-design-best-practice/): From segmentation and sort order to encoding and projection count, benchmark how Vertica projection design affects EXPLAIN plans, data skew, and ROS pushback, with a practical design checklist.
 - [Vertica Statistics Management: Why the Optimizer Chooses the Wrong Plan](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-statistics-query-plan/): Explain why the Vertica optimizer chooses the wrong plan when statistics are stale, benchmark EXPLAIN before and after ANALYZE_STATISTICS, compare row estimates and join order, and build a practical statistics maintenance strategy.

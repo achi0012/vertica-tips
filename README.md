@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 20 篇中文文章，均有對應英文版。
+目前共 21 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -48,6 +48,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Vertica 統計資訊管理：ANALYZE_STATISTICS 與查詢計畫為什麼選錯](/_posts/2026-11-06-vertica-statistics-query-plan.md)
 - [Vertica 投影設計實戰：Segmentation、Sort Order、Encoding 與 ROS Pushback](/_posts/2026-11-07-vertica-projection-design-best-practice.md)
 - [Vertica 分區表設計與 Partition Pruning 實戰](/_posts/2026-11-08-vertica-partition-design-pruning.md)
+- [Vertica 時序分析實戰：TIMESERIES 插值、補洞與事件視窗](/_posts/2026-11-09-vertica-timeseries-analysis.md)
 
 ### English Versions
 
@@ -71,6 +72,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Vertica Statistics Management: Why the Optimizer Chooses the Wrong Plan](/_en/2026-11-06-vertica-statistics-query-plan.md)
 - [Vertica Projection Design in Practice: Segmentation, Sort Order, Encoding, and ROS Pushback](/_en/2026-11-07-vertica-projection-design-best-practice.md)
 - [Vertica Partition Table Design and Partition Pruning in Practice](/_en/2026-11-08-vertica-partition-design-pruning.md)
+- [Vertica Time Series Analysis: TIMESERIES Interpolation, Gap Filling, and Event Windows](/_en/2026-11-09-vertica-timeseries-analysis.md)
 
 ## 本機開發
 
