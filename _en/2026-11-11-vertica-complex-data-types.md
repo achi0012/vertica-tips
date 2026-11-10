@@ -104,7 +104,7 @@ Four behaviours in one query:
 
 `array_dims` returns the number of dimensions, not the length: `1` for a one-dimensional array and `2` for `ARRAY[ARRAY[1,2],ARRAY[3,4]]`. Use `array_length` or `array_count` for length; they agree on ordinary arrays.
 
-The PostgreSQL shortlist also does not apply. On 25.4.0-0, `\df array*` lists exactly: `array_cat`, `array_collation`, `array_contains`, `array_count`, `array_dims`, `array_eq`, `array_find`, `array_ge`, `array_gt`, `array_le`, `array_length`, `array_lt`, `array_neq`, `array_nullsafe`. **Missing:** `array_append`, `array_prepend`, `array_position`, `array_remove`, `array_replace`, `array_to_string`, `array_fill`, `cardinality`, `unnest`, `array_agg` - each one raises `ERROR 3457: Function ... does not exist`. Concatenation is `array_cat` only, and it propagates NULL across the whole array:
+The PostgreSQL shortlist also does not apply. On 25.4.0-0, `\df array*` lists exactly: `array_cat`, `array_collation`, `array_contains`, `array_count`, `array_dims`, `array_eq`, `array_find`, `array_ge`, `array_gt`, `array_le`, `array_length`, `array_lt`, `array_neq`, `array_nullsafe` (plus a `pg_catalog.array_upper` that raises `ERROR 3457` when actually called). **Missing:** `array_append`, `array_prepend`, `array_position`, `array_remove`, `array_replace`, `array_to_string`, `array_fill`, `cardinality`, `unnest`, `array_agg` - each one raises `ERROR 3457: Function ... does not exist`. Concatenation is `array_cat` only, and it propagates NULL across the whole array:
 
 ```
 => SELECT array_cat(ARRAY[1,2], NULL) AS cat_null;

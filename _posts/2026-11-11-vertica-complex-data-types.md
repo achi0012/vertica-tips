@@ -107,7 +107,7 @@ Vertica 的「複雜型別」很容易讓人用 PostgreSQL 的直覺去寫，然
 
 `array_dims` 回的是維度數不是長度：一維回 `1`、`ARRAY[ARRAY[1,2],ARRAY[3,4]]` 回 `2`，要長度請用 `array_length` 或 `array_count`（兩者對一般陣列同值）。
 
-還有一個 PostgreSQL 慣例在這裏不成立的清單。`\df array*` 在 25.4.0-0 只列出這些：`array_cat`、`array_collation`、`array_contains`、`array_count`、`array_dims`、`array_eq`、`array_find`、`array_ge`、`array_gt`、`array_le`、`array_length`、`array_lt`、`array_neq`、`array_nullsafe`。**沒有** `array_append`、`array_prepend`、`array_position`、`array_remove`、`array_replace`、`array_to_string`、`array_fill`、`cardinality`、`unnest`、`array_agg`——每一個都是 `ERROR 3457: Function ... does not exist`。要串接陣列只有 `array_cat`，而它遇到 NULL 會整組回 NULL：
+還有一個 PostgreSQL 慣例在這裏不成立的清單。`\df array*` 在 25.4.0-0 只列出這些：`array_cat`、`array_collation`、`array_contains`、`array_count`、`array_dims`、`array_eq`、`array_find`、`array_ge`、`array_gt`、`array_le`、`array_length`、`array_lt`、`array_neq`、`array_nullsafe`（另有一個 `pg_catalog.array_upper`，但實測呼叫回 `ERROR 3457`）。**沒有** `array_append`、`array_prepend`、`array_position`、`array_remove`、`array_replace`、`array_to_string`、`array_fill`、`cardinality`、`unnest`、`array_agg`——每一個都是 `ERROR 3457: Function ... does not exist`。要串接陣列只有 `array_cat`，而它遇到 NULL 會整組回 NULL：
 
 ```
 => SELECT array_cat(ARRAY[1,2], NULL) AS cat_null;
