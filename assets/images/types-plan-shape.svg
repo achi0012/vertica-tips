@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="352" viewBox="0 0 820 352" role="img" aria-label="ARRAY 與正規化表的計畫形狀比較：EXPLODE 變成 UserDefined 節點，成本 65K 對 764">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .panel-title { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .panel-sub { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .node { font: 400 12px "SFMono-Regular", Menlo, Consolas, monospace; fill: #1f2328; }
+    .foot { font: 600 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #2f6fed; }
+    .conn { stroke: #8a94a3; stroke-width: 1.3; fill: none; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="352" fill="#ffffff"/>
+
+  <text class="title" x="20" y="30">同一份 60 萬個 (event, tag) 配對：兩種計畫形狀</text>
+
+  <!-- 左：ARRAY + EXPLODE -->
+  <rect x="20" y="46" width="380" height="272" rx="10" fill="#fbfcfd" stroke="#d8dde3"/>
+  <text class="panel-title" x="38" y="70">ARRAY + EXPLODE</text>
+  <text class="panel-sub" x="38" y="88">每個標籤要展開，600K 列</text>
+
+  <rect x="95" y="104" width="230" height="28" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="node" x="210" y="123" text-anchor="middle">GROUPBY HASH · Cost 65K</text>
+
+  <rect x="95" y="156" width="230" height="28" rx="5" fill="#fff1e6" stroke="#e8a15c"/>
+  <text class="node" x="210" y="175" text-anchor="middle">UserDefined: Explode</text>
+
+  <rect x="95" y="208" width="230" height="28" rx="5" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="node" x="210" y="227" text-anchor="middle">ScanStep: tags</text>
+
+  <path class="conn" d="M210 132 V156"/>
+  <path class="conn" d="M210 184 V208"/>
+
+  <text class="panel-sub" x="38" y="262">EXPLODE 是 transform function：</text>
+  <text class="panel-sub" x="38" y="280">多一個節點、無法下推、逐列展開</text>
+  <text class="foot" x="38" y="302">261.5 ms / 165.6 ms（元素存取改寫）</text>
+
+  <!-- 右：正規化 -->
+  <rect x="420" y="46" width="380" height="272" rx="10" fill="#fbfcfd" stroke="#d8dde3"/>
+  <text class="panel-title" x="438" y="70">正規化子表</text>
+  <text class="panel-sub" x="438" y="88">列數本來就是 600K</text>
+
+  <rect x="495" y="104" width="230" height="28" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="node" x="610" y="123" text-anchor="middle">GROUPBY HASH · Cost 764</text>
+
+  <rect x="495" y="156" width="230" height="28" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="node" x="610" y="175" text-anchor="middle">GroupByPipe</text>
+
+  <rect x="495" y="208" width="230" height="28" rx="5" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="node" x="610" y="227" text-anchor="middle">ScanStep: tag</text>
+
+  <path class="conn" d="M610 132 V156"/>
+  <path class="conn" d="M610 184 V208"/>
+
+  <text class="panel-sub" x="438" y="262">沒有額外節點，</text>
+  <text class="panel-sub" x="438" y="280">聚合直接在掃描輸出上做</text>
+  <text class="foot" x="438" y="302">37.2 ms（快 7.0 倍）</text>
+</svg>
