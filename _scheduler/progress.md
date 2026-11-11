@@ -1,7 +1,7 @@
 # 文章產線進度
 
 > 自動產生，請勿手改。來源：`_scheduler/vertica-series.json`、`_scheduler/vertica-eon-series.json`。
-> 更新時間：2026-11-11 21:12（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`
+> 更新時間：2026-11-11 21:17（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`
 
 排程：每天 05:00 產下一篇（中英文各一），完成後 commit + push；週日 20:00 另檢查官方公告。
 
@@ -31,11 +31,11 @@
 |---|---|---|---|---|
 | 1 | EON 架構總覽：7 個 storage location 與 4 個 shard，看懂 communal storage、depot 與 segment | — | 預計 11-13 | ⬜ |
 | 2 | EON 的 shard 與 segmentation：為什麼資料分佈不是看 projection 的 segmentation | — | 預計 11-14 | ⬜ |
-| 3 | EON depot 解密：auto-data-depot 存了什麼、什麼時候 miss、miss 一次要付多少時間 | — | 預計 11-15 | ⬜ |
+| 3 | EON 三節點的資源池與記憶體實況：27 筆 resource pool 狀態怎麼讀 | — | 預計 11-15 | ⬜ |
 | 4 | EON 的 ROS 與 storage container：1,424 個 container 與十億筆資料的實際分佈 | — | 預計 11-16 | ⬜ |
 | 5 | EON 日常巡檢 12 支 SQL：shard 覆蓋、depot 命中率、communal 延遲一次看完 | — | 預計 11-17 | ⬜ |
 | 6 | 十億筆資料在 EON 上的查詢解剖：shard pruning 與 depot 命中如何決定 EXPLAIN 與實際時間 | — | 預計 11-18 | ⬜ |
 | 7 | Enterprise 轉 EON 遷移檢查表：14 個上線前必須重新檢視的設定 | — | 預計 11-19 | ⬜ |
 | 8 | EON 的連線入口與 load balancing：三個 port 到底是不是三份資料 | — | 預計 11-20 | ⬜ |
-| 9 | EON communal storage 效能解剖：S3 相容儲存上的延遲從哪裡來 | — | 預計 11-21 | ⬜ |
+| 9 | EON 資料分佈的盲點：1,424 個 container、219 個 projection，卻只有 6 個有 partition 紀錄 | — | 預計 11-21 | ⬜ |
 | 10 | EON 的 Tuple Mover 行為：什麼時候搬、搬到哪裡、跟 Enterprise 差在哪 | — | 預計 11-22 | ⬜ |
