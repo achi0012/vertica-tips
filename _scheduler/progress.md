@@ -1,16 +1,16 @@
 # 文章產線進度
 
 > 自動產生，請勿手改。來源：`_scheduler/vertica-series.json`、`_scheduler/vertica-eon-series.json`。
-> 更新時間：2026-11-11 21:17（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`
+> 更新時間：2026-11-12 05:15（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`
 
 排程：每天 05:00 產下一篇（中英文各一），完成後 commit + push；週日 20:00 另檢查官方公告。
 
-**總進度：7/18**，剩 11 篇。
+**總進度：8/18**，剩 10 篇。
 
-下一篇：**Vertica vbr 備份還原實戰：Enterprise 模式完整演練，與 EON 模式的關鍵差異**（vertica-vbr-backup-restore，預計 2026-11-12）
+下一篇：**EON 架構總覽：7 個 storage location 與 4 個 shard，看懂 communal storage、depot 與 segment**（vertica-eon-architecture-communal-depot-shard，預計 2026-11-13）
 
 
-## vertica-tips-8-articles（7/8）
+## vertica-tips-8-articles（8/8）
 
 | # | 中文標題 | English | 日期 | 狀態 |
 |---|---|---|---|---|
@@ -21,7 +21,7 @@
 | 5 | [Vertica 時序分析實戰：TIMESERIES 插值、補洞與事件視窗](https://achi0012.github.io/vertica-tips/2026/11/vertica-timeseries-analysis/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-timeseries-analysis/) | 2026-11-09 | ✅ |
 | 6 | [Vertica 空間分析實戰：Geospatial 函數與空間索引](https://achi0012.github.io/vertica-tips/2026/11/vertica-geospatial-analysis/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-geospatial-analysis/) | 2026-11-10 | ✅ |
 | 7 | [Vertica 複雜型別實戰：ARRAY、SET、ROW 與 JSON 半結構化資料](https://achi0012.github.io/vertica-tips/2026/11/vertica-complex-data-types/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-complex-data-types/) | 2026-11-11 | ✅ |
-| 8 | Vertica vbr 備份還原實戰：Enterprise 模式完整演練，與 EON 模式的關鍵差異 | — | 預計 11-12 | ⬜ |
+| 8 | [Vertica vbr 備份還原實戰：Enterprise 模式完整備份演練、還原程序與 EON 差異](https://achi0012.github.io/vertica-tips/2026/11/vertica-vbr-backup-restore/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-vbr-backup-restore/) | 2026-11-12 | ✅ |
 
 ## vertica-eon-10-articles（0/10）
 

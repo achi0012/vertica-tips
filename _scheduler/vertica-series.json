@@ -154,8 +154,8 @@
       "n": 8,
       "id": "vbr",
       "slug": "vertica-vbr-backup-restore",
-      "zh_title": "Vertica vbr 備份還原實戰：Enterprise 模式完整演練，與 EON 模式的關鍵差異",
-      "en_title": "Vertica vbr Backup and Restore in Practice: A Full Enterprise Walkthrough and How EON Differs",
+      "zh_title": "Vertica vbr 備份還原實戰：Enterprise 模式完整備份演練、還原程序與 EON 差異",
+      "en_title": "Vertica vbr Backup and Restore in Practice: A Full Enterprise Backup Walkthrough, the Restore Procedure, and How EON Differs",
       "categories": "vertica backup vbr",
       "tags": [
         "vertica",
