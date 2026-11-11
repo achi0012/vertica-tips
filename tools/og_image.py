@@ -64,6 +64,7 @@ CATEGORY_META = {
     "statistics": ("STATISTICS", "ESTIMATE · ANALYZE · PLAN"),
     "projection": ("PROJECTION", "SEGMENT · SORT · ENCODE"),
     "partition": ("PARTITION", "SCAN 1 / 24 · PRUNE"),
+    "release-notes": ("RELEASE", "PATCH · CVE · UPGRADE"),
 }
 
 
@@ -294,6 +295,24 @@ def slug_from_path(path: Path) -> str:
     return re.sub(r"^\d{4}-\d{2}-\d{2}-", "", name)
 
 
+def kicker_for(fm: dict, pill: str, default: str = "VERTICA 25.4 · MEASURED") -> str:
+    """卡片左上角的版本標籤：優先取 tags 裡的 "26.3" 這種版本，其次標題裡的版本號。"""
+    ver = None
+    for t in fm.get("tags") or []:
+        m = re.fullmatch(r"v?(\d+\.\d+)", str(t).strip())
+        if m:
+            ver = m.group(1)
+            break
+    if not ver:
+        m = re.search(r"Vertica\s+(\d+\.\d+)", str(fm.get("title", "")))
+        if m:
+            ver = m.group(1)
+    if not ver:
+        return default
+    label = "RELEASE NOTES" if pill.upper() == "RELEASE" else "MEASURED"
+    return f"VERTICA {ver} · {label}"
+
+
 def process_pair(zh: Path, en: Path, dry_run: bool = False) -> dict:
     z = parse_front_matter(zh)
     e = parse_front_matter(en)
@@ -309,7 +328,7 @@ def process_pair(zh: Path, en: Path, dry_run: bool = False) -> dict:
             title=str(z.get("title", slug)),
             subtitle=str(e.get("title", "")),
             category=pill,
-            kicker="VERTICA 25.4 · MEASURED",
+            kicker=kicker_for(z, pill),
             visual_label=visual,
             out=zh_out,
         )
@@ -317,7 +336,7 @@ def process_pair(zh: Path, en: Path, dry_run: bool = False) -> dict:
             title=str(e.get("title", slug)),
             subtitle=str(z.get("title", "")),
             category=pill,
-            kicker="VERTICA 25.4 · MEASURED",
+            kicker=kicker_for(e, pill),
             visual_label=visual,
             out=en_out,
         )
