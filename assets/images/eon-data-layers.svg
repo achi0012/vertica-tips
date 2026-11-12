@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="470" viewBox="0 0 820 470" role="img" aria-label="本機 eondb 的資料層級：1 個 communal storage、3 個節點各自的 depot 與 DATA,TEMP、總共 7 個 storage location；4 個 shard 中 3 個 segment 完整覆蓋 0 到 4294967295 的 hash 空間，replica shard 由 3 個節點各持一份">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .sub   { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .h     { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t     { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t2    { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .bar   { font: 700 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #ffffff; }
+    .barv  { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #ffffff; }
+    .note  { font: 600 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #2f6fed; }
+    .edge  { stroke: #c9ced6; stroke-width: 1.2; fill: #ffffff; }
+    .flow  { stroke: #7aa2f7; stroke-width: 1.6; fill: none; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="470" fill="#ffffff"/>
+
+  <text class="title" x="20" y="28">eondb 的資料在哪一層：7 個 storage location、4 個 shard</text>
+  <text class="sub"   x="20" y="48">v25.4.0-0 本機實查（2026-11-13）：1 個 communal、3 個 depot、3 個 DATA,TEMP</text>
+
+  <!-- communal storage -->
+  <rect x="40" y="64" width="740" height="62" rx="6" fill="#eef3ff" stroke="#7aa2f7" stroke-width="1.4"/>
+  <text class="h" x="56" y="86">communal storage｜s3://verticadb/eondb</text>
+  <text class="t" x="56" y="106">location_usage = DATA・sharing_type = COMMUNAL・has_catalog = True（catalog 的權威版本）</text>
+  <text class="note" x="764" y="86" text-anchor="end">1 / 7 locations</text>
+
+  <!-- arrows -->
+  <line class="flow" x1="150" y1="126" x2="150" y2="168"/>
+  <line class="flow" x1="410" y1="126" x2="410" y2="168"/>
+  <line class="flow" x1="670" y1="126" x2="670" y2="168"/>
+  <polygon points="150,176 145,166 155,166" fill="#7aa2f7"/>
+  <polygon points="410,176 405,166 415,166" fill="#7aa2f7"/>
+  <polygon points="670,176 665,166 675,166" fill="#7aa2f7"/>
+  <text class="t2" x="424" y="150">depot 沒命中才回 communal 抓</text>
+
+  <!-- node 1 -->
+  <rect class="edge" x="40" y="178" width="220" height="128" rx="6"/>
+  <text class="h" x="56" y="200">v_eondb_node0001</text>
+  <text class="t" x="56" y="222">DEPOT 4.01 GB・450 containers</text>
+  <text class="t" x="56" y="242">segment0001：366,727,801 筆</text>
+  <text class="t" x="56" y="262">replica：5 containers</text>
+  <text class="t2" x="56" y="282">DATA,TEMP：1 個 location</text>
+
+  <!-- node 2 -->
+  <rect class="edge" x="300" y="178" width="220" height="128" rx="6"/>
+  <text class="h" x="316" y="200">v_eondb_node0002</text>
+  <text class="t" x="316" y="222">DEPOT 4.01 GB・484 containers</text>
+  <text class="t" x="316" y="242">segment0002：366,526,739 筆</text>
+  <text class="t" x="316" y="262">replica：5 containers</text>
+  <text class="t2" x="316" y="282">DATA,TEMP：1 個 location</text>
+
+  <!-- node 3 -->
+  <rect class="edge" x="560" y="178" width="220" height="128" rx="6"/>
+  <text class="h" x="576" y="200">v_eondb_node0003</text>
+  <text class="t" x="576" y="222">DEPOT 4.01 GB・445 containers</text>
+  <text class="t" x="576" y="242">segment0003：366,396,860 筆</text>
+  <text class="t" x="576" y="262">replica：5 containers</text>
+  <text class="t2" x="576" y="282">DATA,TEMP：1 個 location</text>
+
+  <!-- hash ring -->
+  <text class="h" x="20" y="344">hash ring：3 個 segment shard 切完整個 0 – 4,294,967,295</text>
+
+  <rect x="60" y="352" width="233" height="40" fill="#7aa2f7"/>
+  <rect x="293" y="352" width="234" height="40" fill="#5b8def"/>
+  <rect x="527" y="352" width="233" height="40" fill="#7aa2f7"/>
+  <text class="bar"  x="176" y="369" text-anchor="middle">segment0001</text>
+  <text class="barv" x="176" y="385" text-anchor="middle">1,431,655,739 個 hash 值</text>
+  <text class="bar"  x="410" y="369" text-anchor="middle">segment0002</text>
+  <text class="barv" x="410" y="385" text-anchor="middle">1,431,655,739 個 hash 值</text>
+  <text class="bar"  x="643" y="369" text-anchor="middle">segment0003</text>
+  <text class="barv" x="643" y="385" text-anchor="middle">1,431,655,818 個 hash 值</text>
+
+  <text class="t2" x="60" y="410" text-anchor="start">0</text>
+  <text class="t2" x="760" y="410" text-anchor="end">4,294,967,295</text>
+  <text class="note" x="410" y="410" text-anchor="middle">三段合計 4,294,967,296 = 2^32，uncovered = 0</text>
+
+  <text class="t" x="20" y="434">replica shard 不切 hash 區間：3 個節點各持一份，5 個 unsegmented projection、每節點 100,043 筆（2.79 MB）</text>
+  <text class="t2" x="20" y="454">資料來源：v_catalog.storage_locations / shards / node_subscriptions / namespaces、v_monitor.storage_containers</text>
+</svg>
