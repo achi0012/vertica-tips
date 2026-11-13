@@ -1,13 +1,13 @@
 # 文章產線進度
 
 > 自動產生，請勿手改。來源：`_scheduler/vertica-series.json`、`_scheduler/vertica-eon-series.json`。
-> 更新時間：2026-11-13 05:10（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`
+> 更新時間：2026-11-14 05:10（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`
 
 排程：每天 05:00 產下一篇（中英文各一），完成後 commit + push；週日 20:00 另檢查官方公告。
 
-**總進度：9/18**，剩 9 篇。
+**總進度：10/18**，剩 8 篇。
 
-下一篇：**EON 的 shard 與 segmentation：為什麼資料分佈不是看 projection 的 segmentation**（vertica-eon-shards-segmentation，預計 2026-11-14）
+下一篇：**EON 三節點的資源池與記憶體實況：27 筆 resource pool 狀態怎麼讀**（vertica-eon-resource-pools-memory，預計 2026-11-15）
 
 
 ## vertica-tips-8-articles（8/8）
@@ -23,14 +23,14 @@
 | 7 | [Vertica 複雜型別實戰：ARRAY、SET、ROW 與 JSON 半結構化資料](https://achi0012.github.io/vertica-tips/2026/11/vertica-complex-data-types/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-complex-data-types/) | 2026-11-11 | ✅ |
 | 8 | [Vertica vbr 備份還原實戰：Enterprise 模式完整備份演練、還原程序與 EON 差異](https://achi0012.github.io/vertica-tips/2026/11/vertica-vbr-backup-restore/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-vbr-backup-restore/) | 2026-11-12 | ✅ |
 
-## vertica-eon-10-articles（1/10）
+## vertica-eon-10-articles（2/10）
 
 環境：`eondb` · 3 nodes · K-Safe=0 · v25.4.0-0 · **唯讀，不動叢集**
 
 | # | 中文標題 | English | 日期 | 狀態 |
 |---|---|---|---|---|
 | 1 | [EON 架構總覽：7 個 storage location 與 4 個 shard，看懂 communal storage、depot 與 segment](https://achi0012.github.io/vertica-tips/2026/11/vertica-eon-architecture-communal-depot-shard/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-eon-architecture-communal-depot-shard/) | 2026-11-13 | ✅ |
-| 2 | EON 的 shard 與 segmentation：為什麼資料分佈不是看 projection 的 segmentation | — | 預計 11-14 | ⬜ |
+| 2 | [EON 的 shard 與 segmentation：為什麼資料分佈不是看 projection 的 segmentation](https://achi0012.github.io/vertica-tips/2026/11/vertica-eon-shards-segmentation/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-eon-shards-segmentation/) | 2026-11-14 | ✅ |
 | 3 | EON 三節點的資源池與記憶體實況：27 筆 resource pool 狀態怎麼讀 | — | 預計 11-15 | ⬜ |
 | 4 | EON 的 ROS 與 storage container：1,424 個 container 與十億筆資料的實際分佈 | — | 預計 11-16 | ⬜ |
 | 5 | EON 日常巡檢 12 支 SQL：shard 覆蓋、depot 命中率、communal 延遲一次看完 | — | 預計 11-17 | ⬜ |

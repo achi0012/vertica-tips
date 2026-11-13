@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="430" viewBox="0 0 820 430" role="img" aria-label="EON 資料落點：hash 值落在哪個 shard 就落在哪個節點。三段 segment 分別覆蓋 0 到 1,431,655,738、1,431,655,739 到 2,866,311,477、2,866,311,478 到 4,294,967,295，合計 4,294,967,296 個 hash 值；每段由一個節點持有 primary，replica shard 由三個節點各持一份">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .sub   { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .h     { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t     { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t2    { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .bar   { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #ffffff; }
+    .barv  { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #ffffff; }
+    .edge  { stroke: #c9ced6; stroke-width: 1.2; fill: #ffffff; }
+    .flow  { stroke: #7aa2f7; stroke-width: 1.6; fill: none; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="430" fill="#ffffff"/>
+
+  <text class="title" x="20" y="28">EON 的資料落點：hash 值落在哪個 shard，就落在哪個節點</text>
+  <text class="sub"   x="20" y="50">eondb v25.4.0-0 實查（2026-11-14）：三段 segment 合計 4,294,967,296 = 2^32，缺口 0</text>
+
+  <!-- hash ring: three segments -->
+  <rect x="20" y="68" width="260" height="96" fill="#2f6fed"/>
+  <rect x="280" y="68" width="260" height="96" fill="#2b8a78"/>
+  <rect x="540" y="68" width="260" height="96" fill="#7a5bd6"/>
+
+  <text class="bar"  x="150" y="92"  text-anchor="middle">segment0001</text>
+  <text class="barv" x="150" y="112" text-anchor="middle">0 – 1,431,655,738</text>
+  <text class="barv" x="150" y="132" text-anchor="middle">1,431,655,739 個值</text>
+  <text class="barv" x="150" y="152" text-anchor="middle">366,727,810 筆</text>
+
+  <text class="bar"  x="410" y="92"  text-anchor="middle">segment0002</text>
+  <text class="barv" x="410" y="112" text-anchor="middle">1,431,655,739 – 2,866,311,477</text>
+  <text class="barv" x="410" y="132" text-anchor="middle">1,431,655,739 個值</text>
+  <text class="barv" x="410" y="152" text-anchor="middle">366,526,751 筆</text>
+
+  <text class="bar"  x="670" y="92"  text-anchor="middle">segment0003</text>
+  <text class="barv" x="670" y="112" text-anchor="middle">2,866,311,478 – 4,294,967,295</text>
+  <text class="barv" x="670" y="132" text-anchor="middle">1,431,655,818 個值</text>
+  <text class="barv" x="670" y="152" text-anchor="middle">366,396,866 筆</text>
+
+  <text class="t2" x="20"  y="182">hash 0</text>
+  <text class="t2" x="800" y="182" text-anchor="end">2^32 − 1 = 4,294,967,295</text>
+
+  <!-- arrows to nodes -->
+  <line class="flow" x1="150" y1="168" x2="150" y2="198"/>
+  <polygon points="150,206 145,196 155,196" fill="#7aa2f7"/>
+  <line class="flow" x1="410" y1="168" x2="410" y2="198"/>
+  <polygon points="410,206 405,196 415,196" fill="#7aa2f7"/>
+  <line class="flow" x1="670" y1="168" x2="670" y2="198"/>
+  <polygon points="670,206 665,196 675,196" fill="#7aa2f7"/>
+
+  <!-- nodes -->
+  <rect class="edge" x="28" y="206" width="244" height="86" rx="6"/>
+  <text class="h" x="44" y="230">v_eondb_node0001</text>
+  <text class="t" x="44" y="250">456 個 container</text>
+  <text class="t" x="44" y="268">366,727,810 筆 · 33.34%</text>
+  <text class="t" x="44" y="286">4,014,640,911 bytes</text>
+
+  <rect class="edge" x="288" y="206" width="244" height="86" rx="6"/>
+  <text class="h" x="304" y="230">v_eondb_node0002</text>
+  <text class="t" x="304" y="250">461 個 container</text>
+  <text class="t" x="304" y="268">366,526,751 筆 · 33.32%</text>
+  <text class="t" x="304" y="286">4,012,538,061 bytes</text>
+
+  <rect class="edge" x="548" y="206" width="244" height="86" rx="6"/>
+  <text class="h" x="564" y="230">v_eondb_node0003</text>
+  <text class="t" x="564" y="250">449 個 container</text>
+  <text class="t" x="564" y="268">366,396,866 筆 · 33.31%</text>
+  <text class="t" x="564" y="286">4,012,227,861 bytes</text>
+
+  <!-- replica shard band -->
+  <line x1="150" y1="292" x2="150" y2="312" stroke="#b8c4da" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <line x1="410" y1="292" x2="410" y2="312" stroke="#b8c4da" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <line x1="670" y1="292" x2="670" y2="312" stroke="#b8c4da" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <rect x="20" y="314" width="780" height="58" rx="6" fill="#f3f6ff" stroke="#7aa2f7" stroke-width="1.4"/>
+  <text class="h" x="36" y="336">replica shard：26 個 is_segmented = false 的投影，三個節點各一份</text>
+  <text class="t" x="36" y="356">每節點 5 個 container、100,043 筆、2,786,722 bytes（三節點數字完全相同）</text>
+
+  <!-- footer -->
+  <text class="t2" x="20" y="394">hash 區間取自 v_catalog.shards；筆數與 container 數取自 v_monitor.storage_containers。</text>
+  <text class="t2" x="20" y="412">以 hash(id) % 4294967296 分桶的結果，與三個 container 的 total_row_count 完全相符。</text>
+</svg>

@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 26 篇中文文章，均有對應英文版。
+目前共 27 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -53,6 +53,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Vertica 複雜型別實戰：ARRAY、SET、ROW 與 JSON 半結構化資料](/_posts/2026-11-11-vertica-complex-data-types.md)
 - [Vertica vbr 備份還原實戰：Enterprise 模式完整備份演練、還原程序與 EON 差異](/_posts/2026-11-12-vertica-vbr-backup-restore.md)
 - [EON 架構總覽：7 個 storage location 與 4 個 shard，看懂 communal storage、depot 與 segment](/_posts/2026-11-13-vertica-eon-architecture-communal-depot-shard.md)
+- [EON 的 shard 與 segmentation：為什麼資料分佈不是看 projection 的 segmentation](/_posts/2026-11-14-vertica-eon-shards-segmentation.md)
 
 ### English Versions
 
@@ -81,6 +82,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Vertica Complex Data Types: ARRAY, SET, ROW, and JSON](/_en/2026-11-11-vertica-complex-data-types.md)
 - [Vertica vbr Backup and Restore in Practice: A Full Enterprise Backup Walkthrough, the Restore Procedure, and How EON Differs](/_en/2026-11-12-vertica-vbr-backup-restore.md)
 - [EON Architecture Overview: Communal Storage, Depot, and Segments Through 7 Storage Locations and 4 Shards](/_en/2026-11-13-vertica-eon-architecture-communal-depot-shard.md)
+- [Shards and Segmentation in EON: Why Data Distribution Ignores Projection Segmentation](/_en/2026-11-14-vertica-eon-shards-segmentation.md)
 
 ## 本機開發
 
