@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="384" viewBox="0 0 820 384" role="img" aria-label="一台 EON 節點的記憶體怎麼分：主機 30.71 GiB 中，27.27 GiB 進入九個資源池（general 與 metadata 合計 23.27 GiB、tm 3.00 GiB、sysquery 1.00 GiB），其餘 3.44 GiB 不在池內。general 池 23.16 GiB，其中 95% 即 22.00 GiB 是可排隊上限，剛好等於 6 條查詢各 3.67 GiB 的預算，第 7 條查詢開始排隊">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .sub   { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .lbl   { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .bar   { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #ffffff; }
+    .barv  { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #ffffff; }
+    .t     { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t2    { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="384" fill="#ffffff"/>
+
+  <text class="title" x="20" y="28">一台 EON 節點的記憶體怎麼分：池 27.27 GiB，general 每查詢 3.67 GiB</text>
+  <text class="sub"   x="20" y="50">eondb v25.4.0-0 · 3 節點 · K-Safe=0 · node0001 於 2026-11-15 實查</text>
+
+  <!-- panel 1: host memory -->
+  <text class="lbl" x="20" y="78">節點記憶體 30.71 GiB（32,969,703,424 bytes）</text>
+
+  <rect x="20"  y="88" width="591" height="48" fill="#2f6fed"/>
+  <rect x="611" y="88" width="76"  height="48" fill="#2b8a78"/>
+  <rect x="687" y="88" width="25"  height="48" fill="#7a5bd6"/>
+  <rect x="712" y="88" width="88"  height="48" fill="#9aa4b2"/>
+
+  <text class="bar"  x="315" y="109" text-anchor="middle">general + metadata</text>
+  <text class="barv" x="315" y="127" text-anchor="middle">23.27 GiB（24,400,528 KB）</text>
+  <text class="bar"  x="649" y="117" text-anchor="middle">tm 3.00</text>
+  <text class="barv" x="756" y="117" text-anchor="middle">未分配 3.44</text>
+
+  <line x1="699" y1="82" x2="699" y2="86" stroke="#9aa4b2" stroke-width="1.2"/>
+  <text class="t2" x="699" y="78" text-anchor="middle">sysquery 1.00 GiB</text>
+
+  <text class="t" x="20" y="158">九個池合計 27.27 GiB（28,594,832 KB）＝主機記憶體的 88.81%，三個節點都是這個數字</text>
+  <text class="t2" x="20" y="178">tm 3.00 GiB（3,145,728 KB）· sysquery 1.00 GiB（1,048,576 KB）· metadata 0.11 GiB（119,348 KB）已併入最左段</text>
+  <text class="t2" x="20" y="198">未分配的 3.44 GiB 留給作業系統與非 Vertica 程序；把三節點的 27 列相加會得到 81.81 GiB，那是三倍</text>
+
+  <!-- panel 2: general pool -->
+  <text class="lbl" x="20" y="232">general 池 23.16 GiB（24,281,180 KB）</text>
+  <text class="t2"  x="800" y="232" text-anchor="end">排隊上限 22.00 GiB（95%）</text>
+
+  <rect x="20" y="242" width="559" height="44" fill="#2f6fed"/>
+  <rect x="579" y="242" width="29" height="44" fill="#c9ced6"/>
+  <line x1="594" y1="286" x2="594" y2="292" stroke="#9aa4b2" stroke-width="1.2"/>
+  <g stroke="#ffffff" stroke-width="1.2">
+    <line x1="113.2" y1="242" x2="113.2" y2="286"/>
+    <line x1="206.3" y1="242" x2="206.3" y2="286"/>
+    <line x1="299.5" y1="242" x2="299.5" y2="286"/>
+    <line x1="392.7" y1="242" x2="392.7" y2="286"/>
+    <line x1="485.8" y1="242" x2="485.8" y2="286"/>
+  </g>
+
+  <text class="bar"  x="299" y="261" text-anchor="middle">6 條查詢的預算</text>
+  <text class="barv" x="299" y="279" text-anchor="middle">每條 3.67 GiB（3,844,520 KB）</text>
+  <text class="t2"   x="594" y="305" text-anchor="middle">5% 緩衝 1.16 GiB</text>
+
+  <text class="t" x="20" y="330">3,844,520 KB × 6 = 23,067,120 KB，剛好等於 queueing_threshold_kb：第 7 條查詢進來就開始排隊</text>
+  <text class="t2" x="20" y="352">實測一條掃 10 億筆的聚合查詢，general 峰值 3,844,519 KB（差預算 1 KB）；兩條並行 7,688,856 KB，剛好兩倍</text>
+  <text class="t2" x="20" y="372">比例：780 px = 30.71 GiB（25.4 px / GiB）；藍色區塊內的白線為 6 等分刻度</text>
+</svg>
