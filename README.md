@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 29 篇中文文章，均有對應英文版。
+目前共 30 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -56,6 +56,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [EON 的 shard 與 segmentation：為什麼資料分佈不是看 projection 的 segmentation](/_posts/2026-11-14-vertica-eon-shards-segmentation.md)
 - [EON 三節點的資源池與記憶體實況：27 筆 resource pool 狀態怎麼讀](/_posts/2026-11-15-vertica-eon-resource-pools-memory.md)
 - [EON 的 ROS 與 storage container：1,428 個 container 與十億筆資料的實際分佈](/_posts/2026-11-16-vertica-eon-ros-storage-containers.md)
+- [EON 日常巡檢 12 支 SQL：shard 覆蓋、depot 命中率、communal 延遲一次看完](/_posts/2026-11-17-vertica-eon-monitoring-sql.md)
 
 ### English Versions
 
@@ -87,6 +88,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Shards and Segmentation in EON: Why Data Distribution Ignores Projection Segmentation](/_en/2026-11-14-vertica-eon-shards-segmentation.md)
 - [Resource Pools and Memory Across Three EON Nodes: Reading 27 Rows of Pool Status](/_en/2026-11-15-vertica-eon-resource-pools-memory.md)
 - [ROS and Storage Containers in EON: 1,428 Containers Across a Billion Rows](/_en/2026-11-16-vertica-eon-ros-storage-containers.md)
+- [Twelve SQL Queries That Keep an EON Cluster Honest: Shard Coverage, Depot Hit Rate, and Communal Latency](/_en/2026-11-17-vertica-eon-monitoring-sql.md)
 
 ## 本機開發
 

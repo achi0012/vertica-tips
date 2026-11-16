@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="560" viewBox="0 0 820 560" role="img" aria-labelledby="t d">
+  <title id="t">EON 巡檢的決策流程：從症狀到哪一支 SQL</title>
+  <desc id="d">五種常見症狀各自對應的第一支查詢與第二支查詢，最後列出例行必跑的三支查詢。所有查詢皆為唯讀，於本機 3 節點 eondb（Vertica v25.4.0-0）實跑。</desc>
+  <style>
+    .title { fill: #1b2631; font: 700 17px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .sub { fill: #5d6d7e; font: 12.5px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .col { fill: #7f8c8d; font: 700 12px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; letter-spacing: 1px; }
+    .sym { fill: #1b2631; font: 700 14px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .syms { fill: #5d6d7e; font: 12px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .q { fill: #1b4f72; font: 700 14px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .q2 { fill: #145a32; font: 700 14px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .tbl { fill: #34495e; font: 12px 'DejaVu Sans Mono','Menlo',monospace; }
+    .foot { fill: #5d6d7e; font: 12px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .arrow { stroke: #95a5a6; stroke-width: 1.4; fill: none; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="560" fill="#ffffff"/>
+
+  <text class="title" x="24" y="32">症狀決定你該先跑哪一支：12 支巡檢 SQL 的入口</text>
+  <text class="sub" x="24" y="54">本機 eondb · Vertica v25.4.0-0 · 3 節點 · 4 shard · 全部唯讀</text>
+
+  <text class="col" x="24" y="82">症狀</text>
+  <text class="col" x="276" y="82">先查這支</text>
+  <text class="col" x="566" y="82">再查這支</text>
+
+  <!-- row 1 -->
+  <rect x="24" y="92" width="210" height="64" rx="3" fill="#f4f6f7" stroke="#d5dbdb"/>
+  <text class="sym" x="40" y="118">查詢變慢</text>
+  <text class="syms" x="40" y="140">掃描筆數與記憶體異常</text>
+  <rect x="276" y="92" width="250" height="64" rx="3" fill="#eaf2f8" stroke="#aed6f1"/>
+  <text class="q" x="292" y="118">#9 長跑查詢</text>
+  <text class="tbl" x="292" y="140">query_requests</text>
+  <rect x="566" y="92" width="230" height="64" rx="3" fill="#e9f7ef" stroke="#a9dfbf"/>
+  <text class="q2" x="582" y="118">#7 ROS 分佈</text>
+  <text class="tbl" x="582" y="140">storage_containers</text>
+
+  <!-- row 2 -->
+  <rect x="24" y="174" width="210" height="64" rx="3" fill="#f4f6f7" stroke="#d5dbdb"/>
+  <text class="sym" x="40" y="200">節點掉線</text>
+  <text class="syms" x="40" y="222">連不上或狀態不是 UP</text>
+  <rect x="276" y="174" width="250" height="64" rx="3" fill="#eaf2f8" stroke="#aed6f1"/>
+  <text class="q" x="292" y="200">#1 節點狀態</text>
+  <text class="tbl" x="292" y="222">nodes × system</text>
+  <rect x="566" y="174" width="230" height="64" rx="3" fill="#e9f7ef" stroke="#a9dfbf"/>
+  <text class="q2" x="582" y="200">#3 subscription</text>
+  <text class="tbl" x="582" y="222">node_subscriptions</text>
+
+  <!-- row 3 -->
+  <rect x="24" y="256" width="210" height="64" rx="3" fill="#f4f6f7" stroke="#d5dbdb"/>
+  <text class="sym" x="40" y="282">載入少資料</text>
+  <text class="syms" x="40" y="304">筆數對不上或載入中斷</text>
+  <rect x="276" y="256" width="250" height="64" rx="3" fill="#eaf2f8" stroke="#aed6f1"/>
+  <text class="q" x="292" y="282">#10 失敗載入</text>
+  <text class="tbl" x="292" y="304">load_streams</text>
+  <rect x="566" y="256" width="230" height="64" rx="3" fill="#e9f7ef" stroke="#a9dfbf"/>
+  <text class="q2" x="582" y="282">#2 shard 覆蓋</text>
+  <text class="tbl" x="582" y="304">shards</text>
+
+  <!-- row 4 -->
+  <rect x="24" y="338" width="210" height="64" rx="3" fill="#f4f6f7" stroke="#d5dbdb"/>
+  <text class="sym" x="40" y="364">磁碟水位告警</text>
+  <text class="syms" x="40" y="386">free 只剩 23%</text>
+  <rect x="276" y="338" width="250" height="64" rx="3" fill="#eaf2f8" stroke="#aed6f1"/>
+  <text class="q" x="292" y="364">#11 磁碟水位</text>
+  <text class="tbl" x="292" y="386">disk_storage</text>
+  <rect x="566" y="338" width="230" height="64" rx="3" fill="#e9f7ef" stroke="#a9dfbf"/>
+  <text class="q2" x="582" y="364">#4 depot 使用率</text>
+  <text class="tbl" x="582" y="386">MaxDepotSizePercent</text>
+
+  <!-- row 5 -->
+  <rect x="24" y="420" width="210" height="64" rx="3" fill="#f4f6f7" stroke="#d5dbdb"/>
+  <text class="sym" x="40" y="446">不確定查什麼</text>
+  <text class="syms" x="40" y="468">例行巡檢、交接前檢查</text>
+  <rect x="276" y="420" width="250" height="64" rx="3" fill="#eaf2f8" stroke="#aed6f1"/>
+  <text class="q" x="292" y="446">#2 shard 覆蓋</text>
+  <text class="tbl" x="292" y="468">shards + hash bound</text>
+  <rect x="566" y="420" width="230" height="64" rx="3" fill="#e9f7ef" stroke="#a9dfbf"/>
+  <text class="q2" x="582" y="446">#6 communal 可用性</text>
+  <text class="tbl" x="582" y="468">storage_locations</text>
+
+  <!-- arrows -->
+  <path class="arrow" d="M234 124 L276 124" marker-end="url(#a)"/>
+  <path class="arrow" d="M526 124 L566 124" marker-end="url(#a)"/>
+  <path class="arrow" d="M234 206 L276 206" marker-end="url(#a)"/>
+  <path class="arrow" d="M526 206 L566 206" marker-end="url(#a)"/>
+  <path class="arrow" d="M234 288 L276 288" marker-end="url(#a)"/>
+  <path class="arrow" d="M526 288 L566 288" marker-end="url(#a)"/>
+  <path class="arrow" d="M234 370 L276 370" marker-end="url(#a)"/>
+  <path class="arrow" d="M526 370 L566 370" marker-end="url(#a)"/>
+  <path class="arrow" d="M234 452 L276 452" marker-end="url(#a)"/>
+  <path class="arrow" d="M526 452 L566 452" marker-end="url(#a)"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#95a5a6"/>
+    </marker>
+  </defs>
+
+  <text class="foot" x="24" y="516">例行三支（每次巡檢都跑）：#5 depot fetch · #8 資源池記憶體 · #12 三個入口的版本一致</text>
+  <text class="foot" x="24" y="538">11 支 SQL 在單一 session 內合計 284.6 ms；最慢的是 load_streams 的 137.7 ms。</text>
+</svg>
