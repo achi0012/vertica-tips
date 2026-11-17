@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="500" viewBox="0 0 820 500" role="img" aria-labelledby="t d">
+  <title id="t">同一張 10 億列表的七種問法：實測秒數（對數刻度）</title>
+  <desc id="d">本機 3 節點 eondb（Vertica v25.4.0-0）實測 mtk.partition_columns（1,007,772,484 筆）：count(*) 0.42 秒、sum(row_count) 4.76 秒、count+sum 7.84 秒、count+sum+min/max 12.05 秒、filter column_name 5.81 秒、filter partition_key 4.16 秒、join 90.88 秒。</desc>
+  <style>
+    .title { fill: #1b2631; font: 700 17px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .sub { fill: #5d6d7e; font: 12.5px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .ql { fill: #34495e; font: 11px 'DejaVu Sans Mono','Menlo',monospace; }
+    .qlc { fill: #34495e; font: 11.5px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .val { fill: #1b2631; font: 700 11.5px 'DejaVu Sans Mono','Menlo',monospace; }
+    .valw { fill: #ffffff; font: 700 11.5px 'DejaVu Sans Mono','Menlo',monospace; }
+    .tick { fill: #7f8c8d; font: 11px 'DejaVu Sans Mono','Menlo',monospace; }
+    .note { fill: #5d6d7e; font: 12px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="500" fill="#ffffff"/>
+
+  <text class="title" x="24" y="30">同一張 10 億列表，七種問法的實測時間</text>
+  <text class="sub" x="24" y="52">mtk.partition_columns · 1,007,772,484 筆 · eondb 3 節點 · 第一次執行 · 對數刻度</text>
+
+  <!-- grid -->
+  <line x1="240" y1="96" x2="240" y2="436" stroke="#e5e8e8"/>
+  <line x1="420" y1="96" x2="420" y2="436" stroke="#e5e8e8"/>
+  <line x1="600" y1="96" x2="600" y2="436" stroke="#e5e8e8"/>
+  <line x1="780" y1="96" x2="780" y2="436" stroke="#e5e8e8"/>
+
+  <!-- row 1: count(*) 0.42 s -->
+  <text class="ql" x="24" y="127">count(*)</text>
+  <rect x="240" y="108" width="112" height="30" rx="2" fill="#aed6f1"/>
+  <text class="val" x="360" y="128">0.42 s</text>
+
+  <!-- row 2: sum(row_count) 4.76 s -->
+  <text class="ql" x="24" y="175">sum(row_count)</text>
+  <rect x="240" y="156" width="302" height="30" rx="2" fill="#5dade2"/>
+  <text class="val" x="550" y="176">4.76 s</text>
+
+  <!-- row 3: count + sum 7.84 s -->
+  <text class="ql" x="24" y="223">count + sum</text>
+  <rect x="240" y="204" width="341" height="30" rx="2" fill="#5dade2"/>
+  <text class="val" x="589" y="224">7.84 s</text>
+
+  <!-- row 4: count + sum + min/max 12.05 s -->
+  <text class="ql" x="24" y="271">count + sum + min/max</text>
+  <rect x="240" y="252" width="375" height="30" rx="2" fill="#2e86c1"/>
+  <text class="val" x="623" y="272">12.05 s</text>
+
+  <!-- row 5: filter column_name 5.81 s -->
+  <text class="ql" x="24" y="319">filter column_name</text>
+  <rect x="240" y="300" width="318" height="30" rx="2" fill="#48c9b0"/>
+  <text class="val" x="566" y="320">5.81 s</text>
+
+  <!-- row 6: filter partition_key 4.16 s -->
+  <text class="ql" x="24" y="367">filter partition_key</text>
+  <rect x="240" y="348" width="291" height="30" rx="2" fill="#48c9b0"/>
+  <text class="val" x="539" y="368">4.16 s</text>
+
+  <!-- row 7: join 90.88 s -->
+  <text class="qlc" x="24" y="415">join 10 億 × 293 萬</text>
+  <rect x="240" y="396" width="533" height="30" rx="2" fill="#e59866"/>
+  <text class="valw" x="764" y="416" text-anchor="end">90.88 s</text>
+
+  <!-- axis -->
+  <line x1="240" y1="436" x2="780" y2="436" stroke="#b3b6b7"/>
+  <text class="tick" x="240" y="454" text-anchor="middle">0.1 s</text>
+  <text class="tick" x="420" y="454" text-anchor="middle">1 s</text>
+  <text class="tick" x="600" y="454" text-anchor="middle">10 s</text>
+  <text class="tick" x="780" y="454" text-anchor="middle">100 s</text>
+
+  <text class="note" x="24" y="482">每格 10 倍：join 的 90.88 秒是 count(*) 的 216 倍，而兩者的資料列數完全相同。</text>
+</svg>

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="430" viewBox="0 0 820 430" role="img" aria-labelledby="t d">
+  <title id="t">EON 查詢解剖：一份 EXPLAIN 送到三個節點，各自的 ScanStep 只讀自己 shard 上的 container</title>
+  <desc id="d">本機 3 節點 eondb 實測：partition_columns_super 有三個 container，分別在 segment0001 到 segment0003，各 336,125,677、335,881,586、335,765,221 筆。EXPLAIN LOCAL 顯示三個節點都有 ScanStep，沒有計畫層級的 shard pruning。</desc>
+  <style>
+    .title { fill: #1b2631; font: 700 17px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .sub { fill: #5d6d7e; font: 12.5px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .lbl { fill: #7f8c8d; font: 700 11px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; letter-spacing: 1px; }
+    .node { fill: #1a5276; font: 700 13px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .mono { fill: #34495e; font: 10.5px 'DejaVu Sans Mono','Menlo',monospace; }
+    .small { fill: #5d6d7e; font: 12px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .note { fill: #7d6608; font: 12px 'Noto Sans CJK TC','Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif; }
+    .arrow { stroke: #95a5a6; stroke-width: 1.4; fill: none; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="430" fill="#ffffff"/>
+
+  <text class="title" x="24" y="30">EON 查詢解剖：一份 EXPLAIN，送到三個節點</text>
+  <text class="sub" x="24" y="52">本機 eondb · Vertica v25.4.0-0 · 3 節點 · 4 shard · K-Safe=0</text>
+
+  <!-- logical plan -->
+  <rect x="24" y="68" width="772" height="58" rx="3" fill="#f4f6f7" stroke="#d5dbdb"/>
+  <text class="lbl" x="38" y="88">邏輯計畫（EXPLAIN）</text>
+  <text class="mono" x="38" y="108">GROUPBY NOTHING → STORAGE ACCESS for partition_columns · Cost: 722K · Execute on: All Nodes</text>
+
+  <!-- arrows to nodes -->
+  <path class="arrow" d="M120 126 L120 146"/>
+  <path class="arrow" d="M410 126 L410 146"/>
+  <path class="arrow" d="M700 126 L700 146"/>
+
+  <!-- node 1 -->
+  <rect x="24" y="146" width="246" height="150" rx="3" fill="#eaf2f8" stroke="#aed6f1"/>
+  <text class="node" x="37" y="168">v_eondb_node0001</text>
+  <text class="mono" x="37" y="188">segment0001</text>
+  <text class="mono" x="37" y="206">hash 0–1,431,655,738</text>
+  <text class="mono" x="37" y="228">ScanStep: partition_columns_super</text>
+  <line x1="37" y1="238" x2="257" y2="238" stroke="#aed6f1"/>
+  <text class="mono" x="37" y="258">container 336,125,677 筆</text>
+  <text class="mono" x="37" y="276">2.95 GB · 8.79 bytes/row</text>
+
+  <!-- node 2 -->
+  <rect x="287" y="146" width="246" height="150" rx="3" fill="#eaf2f8" stroke="#aed6f1"/>
+  <text class="node" x="300" y="168">v_eondb_node0002</text>
+  <text class="mono" x="300" y="188">segment0002</text>
+  <text class="mono" x="300" y="206">hash 1,431,655,739–2,863,311,477</text>
+  <text class="mono" x="300" y="228">ScanStep: partition_columns_super</text>
+  <line x1="300" y1="238" x2="520" y2="238" stroke="#aed6f1"/>
+  <text class="mono" x="300" y="258">container 335,881,586 筆</text>
+  <text class="mono" x="300" y="276">2.95 GB · 8.79 bytes/row</text>
+
+  <!-- node 3 -->
+  <rect x="550" y="146" width="246" height="150" rx="3" fill="#eaf2f8" stroke="#aed6f1"/>
+  <text class="node" x="563" y="168">v_eondb_node0003</text>
+  <text class="mono" x="563" y="188">segment0003</text>
+  <text class="mono" x="563" y="206">hash 2,863,311,478–4,294,967,295</text>
+  <text class="mono" x="563" y="228">ScanStep: partition_columns_super</text>
+  <line x1="563" y1="238" x2="783" y2="238" stroke="#aed6f1"/>
+  <text class="mono" x="563" y="258">container 335,765,221 筆</text>
+  <text class="mono" x="563" y="276">2.95 GB · 8.79 bytes/row</text>
+
+  <!-- counter-example -->
+  <text class="lbl" x="24" y="336">反例：只有一個 container 的小表</text>
+  <rect x="24" y="346" width="772" height="46" rx="3" fill="#fef9e7" stroke="#f7dc6f"/>
+  <text class="mono" x="38" y="366">public.ujtest · ujtest_super · 3,826 筆 · 全部在 node0003 的 segment0003</text>
+  <text class="mono" x="38" y="384">EXPLAIN LOCAL 仍然三個節點都有 ScanStep，另外兩台掃到 0 列</text>
+
+  <text class="note" x="24" y="414">結論：沒有計畫層級的 shard pruning。資料在哪一台，只有 v_monitor.storage_containers 知道。</text>
+</svg>

@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 30 篇中文文章，均有對應英文版。
+目前共 31 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -57,6 +57,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [EON 三節點的資源池與記憶體實況：27 筆 resource pool 狀態怎麼讀](/_posts/2026-11-15-vertica-eon-resource-pools-memory.md)
 - [EON 的 ROS 與 storage container：1,428 個 container 與十億筆資料的實際分佈](/_posts/2026-11-16-vertica-eon-ros-storage-containers.md)
 - [EON 日常巡檢 12 支 SQL：shard 覆蓋、depot 命中率、communal 延遲一次看完](/_posts/2026-11-17-vertica-eon-monitoring-sql.md)
+- [十億筆資料在 EON 上的查詢解剖：shard pruning 與 depot 命中如何決定 EXPLAIN 與實際時間](/_posts/2026-11-18-vertica-eon-billion-row-query-anatomy.md)
 
 ### English Versions
 
@@ -89,6 +90,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Resource Pools and Memory Across Three EON Nodes: Reading 27 Rows of Pool Status](/_en/2026-11-15-vertica-eon-resource-pools-memory.md)
 - [ROS and Storage Containers in EON: 1,428 Containers Across a Billion Rows](/_en/2026-11-16-vertica-eon-ros-storage-containers.md)
 - [Twelve SQL Queries That Keep an EON Cluster Honest: Shard Coverage, Depot Hit Rate, and Communal Latency](/_en/2026-11-17-vertica-eon-monitoring-sql.md)
+- [Anatomy of a Billion-Row Query on EON: How Shard Pruning and Depot Hits Shape EXPLAIN and Wall-Clock Time](/_en/2026-11-18-vertica-eon-billion-row-query-anatomy.md)
 
 ## 本機開發
 
