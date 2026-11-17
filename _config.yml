@@ -24,6 +24,11 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
+# jekyll-feed 預設只收 10 篇；放寬到全部，讓 feed.xml 也能當 GSC 的 sitemap 提交，
+# 並在 sitemap.xml 抓取異常時提供第二條發現管道。
+feed:
+  posts_limit: 100
+
 # 作者
 author:
   name: "Achi"
