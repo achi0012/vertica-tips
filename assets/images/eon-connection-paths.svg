@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="560" viewBox="0 0 820 560" role="img" aria-label="本機 eondb 的三個連線入口 1533、2533、3533 各自對應一個節點容器 10.89.10.11 到 10.89.10.13 的 5433，三個入口共用同一份 catalog 與 4 個 shard；關閉 client load balancing 時 30 次連線全部落在 node0001，開啟後 30 次連線平均分成 10/10/10">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .sub   { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .h     { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t     { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t2    { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .bar   { font: 700 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #ffffff; }
+    .note  { font: 600 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #2f6fed; }
+    .edge  { stroke: #c9ced6; stroke-width: 1.2; fill: #ffffff; }
+    .flow  { stroke: #7aa2f7; stroke-width: 1.6; fill: none; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="560" fill="#ffffff"/>
+
+  <text class="title" x="20" y="28">三個 port 不是三份資料：入口對應節點，資料只有一份</text>
+  <text class="sub"   x="20" y="48">v25.4.0-0 本機 eondb 實測（2026-11-20）：3 節點、K-Safe=0、4 個 shard</text>
+
+  <!-- client -->
+  <rect class="edge" x="20" y="68" width="210" height="96" rx="6"/>
+  <text class="h"  x="34" y="90">client｜192.168.100.9</text>
+  <text class="t"  x="34" y="110">三個入口都聽在同一台 host</text>
+  <text class="t2" x="34" y="128">ss：1533 / 2533 / 3533 三個 LISTEN</text>
+  <text class="t2" x="34" y="146">同一個 DB：eondb</text>
+
+  <!-- trunk -->
+  <path class="flow" d="M 230 116 L 250 116 M 250 97 L 250 241"/>
+  <path class="flow" d="M 250 97 L 268 97"/>
+  <path class="flow" d="M 250 169 L 268 169"/>
+  <path class="flow" d="M 250 241 L 268 241"/>
+  <polygon points="270,97 260,92 260,102" fill="#7aa2f7"/>
+  <polygon points="270,169 260,164 260,174" fill="#7aa2f7"/>
+  <polygon points="270,241 260,236 260,246" fill="#7aa2f7"/>
+
+  <!-- entry ports -->
+  <rect class="edge" x="270" y="68" width="170" height="58" rx="6"/>
+  <text class="h" x="284" y="90">host:1533</text>
+  <text class="t" x="284" y="110">→ vnode01 容器</text>
+
+  <rect class="edge" x="270" y="140" width="170" height="58" rx="6"/>
+  <text class="h" x="284" y="162">host:2533</text>
+  <text class="t" x="284" y="182">→ vnode02 容器</text>
+
+  <rect class="edge" x="270" y="212" width="170" height="58" rx="6"/>
+  <text class="h" x="284" y="234">host:3533</text>
+  <text class="t" x="284" y="254">→ vnode03 容器</text>
+
+  <path class="flow" d="M 440 97 L 468 97"/>
+  <path class="flow" d="M 440 169 L 468 169"/>
+  <path class="flow" d="M 440 241 L 468 241"/>
+  <polygon points="470,97 460,92 460,102" fill="#7aa2f7"/>
+  <polygon points="470,169 460,164 460,174" fill="#7aa2f7"/>
+  <polygon points="470,241 460,236 460,246" fill="#7aa2f7"/>
+
+  <!-- nodes -->
+  <rect class="edge" x="470" y="68" width="330" height="58" rx="6"/>
+  <text class="h" x="484" y="90">v_eondb_node0001</text>
+  <text class="t" x="484" y="110">10.89.10.11:5433（export_address）</text>
+
+  <rect class="edge" x="470" y="140" width="330" height="58" rx="6"/>
+  <text class="h" x="484" y="162">v_eondb_node0002</text>
+  <text class="t" x="484" y="182">10.89.10.12:5433（export_address）</text>
+
+  <rect class="edge" x="470" y="212" width="330" height="58" rx="6"/>
+  <text class="h" x="484" y="234">v_eondb_node0003</text>
+  <text class="t" x="484" y="254">10.89.10.13:5433（export_address）</text>
+
+  <!-- shared layer -->
+  <rect x="20" y="292" width="780" height="88" rx="6" fill="#eef3ff" stroke="#7aa2f7" stroke-width="1.4"/>
+  <text class="h" x="34" y="314">同一份 catalog、同一組 shard、同一批數字</text>
+  <text class="t"  x="34" y="338">database_id 45035996273704986</text>
+  <text class="t"  x="300" y="338">4 個 shard・合計 2³² 無缺口</text>
+  <text class="t"  x="560" y="338">online_sales_fact 5,000,000 筆</text>
+  <text class="t2" x="34" y="362">start_time 2026-11-13 23:00:33；sum(sales_quantity) 27,511,381、customer_key 50,000，三個入口完全一致</text>
+
+  <!-- load balancing panel -->
+  <text class="h" x="20" y="408">各 30 次連線落在哪個節點（client 端 CLB 開／關）</text>
+
+  <text class="t2" x="20" y="445">CLB off</text>
+  <rect x="110" y="428" width="690" height="26" rx="3" fill="#7aa2f7"/>
+  <text class="bar" x="455" y="446" text-anchor="middle">30 / 30 → v_eondb_node0001</text>
+
+  <text class="t2" x="20" y="487">CLB on</text>
+  <rect x="110" y="470" width="230" height="26" rx="3" fill="#7aa2f7"/>
+  <rect x="340" y="470" width="230" height="26" rx="3" fill="#5b8def"/>
+  <rect x="570" y="470" width="230" height="26" rx="3" fill="#8fb4ff"/>
+  <text class="bar" x="225" y="488" text-anchor="middle">node0001：10</text>
+  <text class="bar" x="455" y="488" text-anchor="middle">node0002：10</text>
+  <text class="bar" x="685" y="488" text-anchor="middle">node0003：10</text>
+
+  <text class="note" x="20" y="522">重導目標是 export_address 10.89.10.11–13:5433，不是入口 1533／2533／3533</text>
+  <text class="t2"   x="20" y="542">連線成本：1.8 ms → 2.6 ms（15 次平均）；資料來源：v_monitor.current_session、DESCRIBE_LOAD_BALANCE_DECISION</text>
+</svg>

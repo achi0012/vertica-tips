@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 32 篇中文文章，均有對應英文版。
+目前共 33 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -59,6 +59,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [EON 日常巡檢 12 支 SQL：shard 覆蓋、depot 命中率、communal 延遲一次看完](/_posts/2026-11-17-vertica-eon-monitoring-sql.md)
 - [十億筆資料在 EON 上的查詢解剖：shard pruning 與 depot 命中如何決定 EXPLAIN 與實際時間](/_posts/2026-11-18-vertica-eon-billion-row-query-anatomy.md)
 - [Enterprise 轉 EON 遷移檢查表：14 個上線前必須重新檢視的設定](/_posts/2026-11-19-vertica-eon-migration-checklist.md)
+- [EON 的連線入口與 load balancing：三個 port 到底是不是三份資料](/_posts/2026-11-20-vertica-eon-connection-load-balancing.md)
 
 ### English Versions
 
@@ -93,6 +94,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Twelve SQL Queries That Keep an EON Cluster Honest: Shard Coverage, Depot Hit Rate, and Communal Latency](/_en/2026-11-17-vertica-eon-monitoring-sql.md)
 - [Anatomy of a Billion-Row Query on EON: How Shard Pruning and Depot Hits Shape EXPLAIN and Wall-Clock Time](/_en/2026-11-18-vertica-eon-billion-row-query-anatomy.md)
 - [Enterprise to EON Migration Checklist: Fourteen Settings to Re-examine Before Go-Live](/_en/2026-11-19-vertica-eon-migration-checklist.md)
+- [EON Connection Endpoints and Load Balancing: Are Three Ports Three Copies of Data?](/_en/2026-11-20-vertica-eon-connection-load-balancing.md)
 
 ## 本機開發
 
