@@ -1,13 +1,13 @@
 # 文章產線進度
 
 > 自動產生，請勿手改。來源：`_scheduler/vertica-series.json`、`_scheduler/vertica-eon-series.json`。
-> 更新時間：2026-11-20 05:10（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`
+> 更新時間：2026-11-21 05:08（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`
 
 排程：每天 05:00 產下一篇（中英文各一），完成後 commit + push；週日 20:00 另檢查官方公告。
 
-**總進度：16/18**，剩 2 篇。
+**總進度：17/18**，剩 1 篇。
 
-下一篇：**EON 資料分佈的盲點：1,424 個 container、219 個 projection，卻只有 6 個有 partition 紀錄**（vertica-eon-container-partition-audit，預計 2026-11-21）
+下一篇：**EON 的 Tuple Mover 行為：什麼時候搬、搬到哪裡、跟 Enterprise 差在哪**（vertica-eon-tuple-mover，預計 2026-11-22）
 
 
 ## vertica-tips-8-articles（8/8）
@@ -23,7 +23,7 @@
 | 7 | [Vertica 複雜型別實戰：ARRAY、SET、ROW 與 JSON 半結構化資料](https://achi0012.github.io/vertica-tips/2026/11/vertica-complex-data-types/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-complex-data-types/) | 2026-11-11 | ✅ |
 | 8 | [Vertica vbr 備份還原實戰：Enterprise 模式完整備份演練、還原程序與 EON 差異](https://achi0012.github.io/vertica-tips/2026/11/vertica-vbr-backup-restore/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-vbr-backup-restore/) | 2026-11-12 | ✅ |
 
-## vertica-eon-10-articles（8/10）
+## vertica-eon-10-articles（9/10）
 
 環境：`eondb` · 3 nodes · K-Safe=0 · v25.4.0-0 · **唯讀，不動叢集**
 
@@ -37,5 +37,5 @@
 | 6 | [十億筆資料在 EON 上的查詢解剖：shard pruning 與 depot 命中如何決定 EXPLAIN 與實際時間](https://achi0012.github.io/vertica-tips/2026/11/vertica-eon-billion-row-query-anatomy/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-eon-billion-row-query-anatomy/) | 2026-11-18 | ✅ |
 | 7 | [Enterprise 轉 EON 遷移檢查表：14 個上線前必須重新檢視的設定](https://achi0012.github.io/vertica-tips/2026/11/vertica-eon-migration-checklist/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-eon-migration-checklist/) | 2026-11-19 | ✅ |
 | 8 | [EON 的連線入口與 load balancing：三個 port 到底是不是三份資料](https://achi0012.github.io/vertica-tips/2026/11/vertica-eon-connection-load-balancing/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-eon-connection-load-balancing/) | 2026-11-20 | ✅ |
-| 9 | EON 資料分佈的盲點：1,424 個 container、219 個 projection，卻只有 6 個有 partition 紀錄 | — | 預計 11-21 | ⬜ |
+| 9 | [EON 資料分佈的盲點：1,424 個 container、219 個 projection，卻只有 6 個有 partition 紀錄](https://achi0012.github.io/vertica-tips/2026/11/vertica-eon-container-partition-audit/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-eon-container-partition-audit/) | 2026-11-21 | ✅ |
 | 10 | EON 的 Tuple Mover 行為：什麼時候搬、搬到哪裡、跟 Enterprise 差在哪 | — | 預計 11-22 | ⬜ |

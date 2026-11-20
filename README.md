@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 33 篇中文文章，均有對應英文版。
+目前共 34 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -60,6 +60,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [十億筆資料在 EON 上的查詢解剖：shard pruning 與 depot 命中如何決定 EXPLAIN 與實際時間](/_posts/2026-11-18-vertica-eon-billion-row-query-anatomy.md)
 - [Enterprise 轉 EON 遷移檢查表：14 個上線前必須重新檢視的設定](/_posts/2026-11-19-vertica-eon-migration-checklist.md)
 - [EON 的連線入口與 load balancing：三個 port 到底是不是三份資料](/_posts/2026-11-20-vertica-eon-connection-load-balancing.md)
+- [EON 資料分佈的盲點：1,435 個 container、221 個 projection，卻只有 6 個有 partition 紀錄](/_posts/2026-11-21-vertica-eon-container-partition-audit.md)
 
 ### English Versions
 
@@ -95,6 +96,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Anatomy of a Billion-Row Query on EON: How Shard Pruning and Depot Hits Shape EXPLAIN and Wall-Clock Time](/_en/2026-11-18-vertica-eon-billion-row-query-anatomy.md)
 - [Enterprise to EON Migration Checklist: Fourteen Settings to Re-examine Before Go-Live](/_en/2026-11-19-vertica-eon-migration-checklist.md)
 - [EON Connection Endpoints and Load Balancing: Are Three Ports Three Copies of Data?](/_en/2026-11-20-vertica-eon-connection-load-balancing.md)
+- [A Blind Spot in EON Data Distribution: 1,435 Containers, 221 Projections, and Only Six With Partition Records](/_en/2026-11-21-vertica-eon-container-partition-audit.md)
 
 ## 本機開發
 

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420" role="img" aria-labelledby="t d">
+<title id="t">1,435 個 container 對上 819 列 partition 的母體對照</title>
+<desc id="d">四層篩選：catalog 434 個投影、221 個有 container、35 個位於分區表、6 個有 partition 紀錄，說明兩個視圖的母體不同</desc>
+<rect width="800" height="420" fill="#ffffff"/>
+<text x="24" y="30" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="16" font-weight="700" fill="#1b2631">1,435 個 container 對上 819 列 partition（eondb · v25.4.0-0）</text>
+<text x="24" y="50" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12" fill="#5d6d7e">四層母體逐層收窄：每層剩下的投影數，以及該層對應的 container 數</text>
+
+<text x="44" y="88" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12.5" fill="#1b2631">① v_catalog.projections：434 個 projection_id（486 列，含 per-node 重複）</text>
+<rect x="44" y="96" width="560" height="30" rx="3" fill="#2c3e50"/>
+<text x="324" y="116" text-anchor="middle" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12" font-weight="600" fill="#ffffff">434</text>
+
+<text x="44" y="148" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12.5" fill="#1b2631">② 有 ROS container：221 個投影（1,435 個 container、11.99 GB）</text>
+<rect x="44" y="156" width="285" height="30" rx="3" fill="#1e8449"/>
+<text x="186" y="176" text-anchor="middle" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12" font-weight="600" fill="#ffffff">221</text>
+
+<text x="44" y="208" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12.5" fill="#1b2631">③ 其中位於分區表：35 個（29 個是 0 筆的空表）</text>
+<rect x="44" y="216" width="45" height="30" rx="3" fill="#d4ac0d"/>
+<text x="99" y="236" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12" font-weight="600" fill="#1b2631">35</text>
+
+<text x="44" y="268" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12.5" fill="#1b2631">④ 在 v_monitor.partitions 有紀錄：6 個投影（819 列 · 151 MB · 1.26% 位元組）</text>
+<rect x="44" y="276" width="24" height="30" rx="3" fill="#b03a2e"/>
+<text x="78" y="296" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12" font-weight="600" fill="#1b2631">6</text>
+
+<rect x="24" y="322" width="752" height="76" rx="4" fill="#f4f6f7" stroke="#d5dbdb" stroke-width="1"/>
+<text x="40" y="344" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12" fill="#1b2631">215 個投影有 container 卻沒有 partition 列：它們的表沒有 partition_expression。</text>
+<text x="40" y="364" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12" fill="#1b2631">兩個視圖的母體不同，數字對不起來是定義，不是漏資料。</text>
+<text x="40" y="384" font-family="Noto Sans CJK TC, Source Han Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="12" fill="#5d6d7e">819 = 258 個 partition × 3 節點 + 6 個 × 2 節點 + 3 個 × 1 節點</text>
+</svg>
