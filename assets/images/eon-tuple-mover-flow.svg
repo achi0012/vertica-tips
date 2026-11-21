@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="370" viewBox="0 0 820 370" role="img" aria-label="EON 寫入路徑與 Tuple Mover：載入先進 depot 的 1,395 個 ROS container，mergeout 10 天 8 次，再上傳 communal storage 2,394 次共 77.0 GB，同時 evict 501 筆 65.0 GB">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .box-title { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .body { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #3d4652; }
+    .mono { font: 400 11.5px "SFMono-Regular", Menlo, Consolas, monospace; fill: #3d4652; }
+    .foot { font: 600 11.5px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #2f6fed; }
+    .note { font: 400 11.5px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .conn { stroke: #8a94a3; stroke-width: 1.4; fill: none; }
+    .arrow { stroke: #8a94a3; stroke-width: 1.4; fill: #8a94a3; }
+    .dash { stroke: #c2762a; stroke-width: 1.2; fill: none; stroke-dasharray: 4 3; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="370" fill="#ffffff"/>
+  <text class="title" x="16" y="28">EON 寫入路徑：資料先進 depot，再由 Tuple Mover 推上 communal</text>
+
+  <!-- 1. load -->
+  <rect x="16" y="48" width="176" height="108" rx="9" fill="#fbfcfd" stroke="#d8dde3"/>
+  <text class="box-title" x="30" y="72">① 載入</text>
+  <text class="mono" x="30" y="94">COPY / INSERT</text>
+  <text class="body" x="30" y="116">直寫本機 depot</text>
+  <text class="body" x="30" y="134">UseDepotForWrites=1</text>
+  <text class="note" x="30" y="150">不經 WOS</text>
+
+  <!-- 2. depot nodes -->
+  <rect x="216" y="48" width="176" height="108" rx="9" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="box-title" x="230" y="72">② depot ROS</text>
+  <text class="mono" x="230" y="94">1,395 container</text>
+  <text class="body" x="230" y="116">3 節點 · 3.72 GiB/台</text>
+  <text class="body" x="230" y="134">epoch 10–405</text>
+  <text class="note" x="230" y="150">221 個 projection</text>
+
+  <!-- 3. mergeout -->
+  <rect x="416" y="48" width="176" height="108" rx="9" fill="#fff1e6" stroke="#e8a15c"/>
+  <text class="box-title" x="430" y="72">③ mergeout</text>
+  <text class="mono" x="430" y="94">10 天 8 次</text>
+  <text class="body" x="430" y="116">平均 34.4 個 ROS</text>
+  <text class="body" x="430" y="134">耗時 93–514 ms</text>
+  <text class="note" x="430" y="150">planner = executor</text>
+
+  <!-- 4. communal -->
+  <rect x="616" y="48" width="188" height="108" rx="9" fill="#eef7ee" stroke="#7fb87f"/>
+  <text class="box-title" x="630" y="72">④ 上傳 communal</text>
+  <text class="mono" x="630" y="94">2,394 次 / 77.0 GB</text>
+  <text class="body" x="630" y="116">385 個 plan</text>
+  <text class="body" x="630" y="134">全部 COMPLETED</text>
+  <text class="note" x="630" y="150">s3://verticadb/eondb</text>
+
+  <!-- arrows -->
+  <path class="conn" d="M192 102 H216"/>
+  <path class="arrow" d="M210 98 L216 102 L210 106 Z"/>
+  <path class="conn" d="M392 102 H416"/>
+  <path class="arrow" d="M410 98 L416 102 L410 106 Z"/>
+  <path class="conn" d="M592 102 H616"/>
+  <path class="arrow" d="M610 98 L616 102 L610 106 Z"/>
+
+  <!-- ledger panel -->
+  <rect x="16" y="180" width="788" height="140" rx="9" fill="#fbfcfd" stroke="#d8dde3"/>
+  <text class="box-title" x="32" y="204">實測帳本（v_monitor，2026-11-09 07:31Z ~ 11-21 18:40Z）</text>
+
+  <text class="mono" x="32" y="230">depot_uploads</text>
+  <text class="body" x="32" y="250">2,394 筆 · 77.0 GB · 385 plan</text>
+  <text class="body" x="32" y="270">平均 13.0 秒，最大 58.8 分鐘</text>
+  <text class="body" x="32" y="290">175 筆 ≥10 MB 佔 97.5% 位元組</text>
+  <text class="note" x="32" y="310">68% 的上傳小於 1 MB</text>
+
+  <text class="mono" x="300" y="230">depot_evictions</text>
+  <text class="body" x="300" y="250">501 筆 · 65.0 GB</text>
+  <text class="body" x="300" y="270">100% reason = DROP OBJECT</text>
+  <text class="body" x="300" y="290">等於上傳量的 84.4%</text>
+  <text class="note" x="300" y="310">DelayForDeletes=0</text>
+
+  <text class="mono" x="560" y="230">tuple_mover_operations</text>
+  <text class="body" x="560" y="250">16 列 = 8 次 mergeout</text>
+  <text class="body" x="560" y="270">全部 license_consumption_metrics</text>
+  <text class="body" x="560" y="290">ROS 32→41，收斂回 30 個</text>
+  <text class="note" x="560" y="310">無 DVMergeout、無 Analyze</text>
+
+  <path class="dash" d="M304 156 V180"/>
+  <text class="note" x="316" y="172">evict / drop</text>
+
+  <text class="note" x="16" y="344">三個節點各 475／470／450 個 container，行數 366.8M／366.6M／366.5M——分佈誤差小於 0.1%。</text>
+  <text class="note" x="16" y="362">資料來源：本機 eondb（v25.4.0-0、3 節點、K-Safe=0、4 shard）2026-11-22 唯讀實測。</text>
+</svg>
