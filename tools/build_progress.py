@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHED = ROOT / "_scheduler"
-SERIES_FILES = ["vertica-series.json", "vertica-eon-series.json"]
+SERIES_FILES = ["vertica-series.json", "vertica-eon-series.json", "vertica-series-3.json"]
 BASE_URL = "https://achi0012.github.io/vertica-tips"
 
 
@@ -57,7 +57,9 @@ def main() -> int:
     out = [
         "# 文章產線進度",
         "",
-        f"> 自動產生，請勿手改。來源：`_scheduler/vertica-series.json`、`_scheduler/vertica-eon-series.json`。",
+        "> 自動產生，請勿手改。來源："
+        + "、".join(f"`_scheduler/{n}`" for n in SERIES_FILES)
+        + "。",
         f"> 更新時間：{now:%Y-%m-%d %H:%M}（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`",
         "",
         "排程：每天 05:00 產下一篇（中英文各一），完成後 commit + push；週日 20:00 另檢查官方公告。",
