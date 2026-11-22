@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="430" viewBox="0 0 820 430" role="img" aria-label="Vertica 權限的兩道門：三層角色繼承鏈只決定身分，schema USAGE 與表 SELECT 各自把關；缺 USAGE 回 ERROR 3580，缺表權限回 ERROR 4367">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .box-title { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .body { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #3d4652; }
+    .mono { font: 400 11.5px "SFMono-Regular", Menlo, Consolas, monospace; fill: #3d4652; }
+    .note { font: 400 11.5px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .foot { font: 600 11.5px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #2f6fed; }
+    .conn { stroke: #8a94a3; stroke-width: 1.4; fill: none; }
+    .arrow { stroke: #8a94a3; stroke-width: 1.4; fill: #8a94a3; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="430" fill="#ffffff"/>
+  <text class="title" x="16" y="28">角色鏈只決定「你是誰」，兩道門各自決定「能不能讀」</text>
+
+  <rect x="16" y="48" width="180" height="68" rx="9" fill="#f2f4f7" stroke="#c9d0d8"/>
+  <text class="box-title" x="30" y="72">使用者</text>
+  <text class="mono" x="30" y="92">LAB_USER_REPORT</text>
+  <text class="note" x="30" y="108">default_roles 可為空</text>
+
+  <rect x="220" y="48" width="180" height="68" rx="9" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="box-title" x="234" y="72">角色 1</text>
+  <text class="mono" x="234" y="92">LAB_ROLE_REPORT</text>
+  <text class="note" x="234" y="108">直接授予使用者</text>
+
+  <rect x="424" y="48" width="180" height="68" rx="9" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="box-title" x="438" y="72">角色 2</text>
+  <text class="mono" x="438" y="92">LAB_ROLE_ANALYST</text>
+  <text class="note" x="438" y="108">繼承角色 1</text>
+
+  <rect x="628" y="48" width="176" height="68" rx="9" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="box-title" x="642" y="72">角色 3</text>
+  <text class="mono" x="642" y="92">LAB_ROLE_READ</text>
+  <text class="note" x="642" y="108">持有 USAGE + SELECT</text>
+
+  <path class="conn" d="M196 82 L214 82"/>
+  <path class="arrow" d="M220 82 l-8 -4 l0 8 z"/>
+  <path class="conn" d="M400 82 L418 82"/>
+  <path class="arrow" d="M424 82 l-8 -4 l0 8 z"/>
+  <path class="conn" d="M604 82 L622 82"/>
+  <path class="arrow" d="M628 82 l-8 -4 l0 8 z"/>
+
+  <path class="conn" d="M716 116 L716 144 L206 144 L206 162"/>
+  <path class="arrow" d="M206 170 l-4 -8 l8 0 z"/>
+  <path class="conn" d="M716 116 L716 144 L616 144 L616 162"/>
+  <path class="arrow" d="M616 170 l-4 -8 l8 0 z"/>
+
+  <rect x="16" y="170" width="380" height="86" rx="9" fill="#fff1e6" stroke="#e8a15c"/>
+  <text class="box-title" x="30" y="194">第一道門：schema USAGE</text>
+  <text class="body" x="30" y="216">看得到 schema，不代表讀得到裡面的表</text>
+  <text class="note" x="30" y="238">缺 → ERROR 3580：USAGE on SCHEMA not granted</text>
+
+  <rect x="424" y="170" width="380" height="86" rx="9" fill="#eaf7ee" stroke="#6fb98a"/>
+  <text class="box-title" x="438" y="194">第二道門：表權限</text>
+  <text class="body" x="438" y="216">SELECT / INSERT / ALTER 逐表、逐動作授予</text>
+  <text class="note" x="438" y="238">缺 → ERROR 4367：Permission denied for relation</text>
+
+  <rect x="424" y="292" width="380" height="76" rx="9" fill="#fbfcfd" stroke="#d8dde3"/>
+  <text class="box-title" x="438" y="316">結果：lab_orders 5 列</text>
+  <text class="body" x="438" y="338">east 1 · north 2 · south 2</text>
+  <text class="note" x="438" y="356">兩道門都過，SELECT 才回資料</text>
+
+  <rect x="16" y="292" width="380" height="76" rx="9" fill="#fdf3f3" stroke="#d99a9a"/>
+  <text class="box-title" x="30" y="316">SET ROLE NONE 之後</text>
+  <text class="body" x="30" y="338">角色仍在 all_roles，但本次連線未啟用</text>
+  <text class="note" x="30" y="356">訊息同樣報 USAGE，容易誤判成授權沒生效</text>
+
+  <path class="conn" d="M614 256 L614 284"/>
+  <path class="arrow" d="M614 292 l-4 -8 l8 0 z"/>
+
+  <text class="foot" x="16" y="396">本機 testdb v25.4.0-0 實測：3 層角色鏈、2 個測試使用者、5 列測試表</text>
+  <text class="note" x="16" y="416">清理後 v_catalog.roles 13 個、users 9 個、grants 2,486 筆，與實驗前一致</text>
+</svg>
