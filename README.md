@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 36 篇中文文章，均有對應英文版。
+目前共 37 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -63,6 +63,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [EON 資料分佈的盲點：1,435 個 container、221 個 projection，卻只有 6 個有 partition 紀錄](/_posts/2026-11-21-vertica-eon-container-partition-audit.md)
 - [EON 的 Tuple Mover 行為：什麼時候搬、搬到哪裡、跟 Enterprise 差在哪](/_posts/2026-11-22-vertica-eon-tuple-mover.md)
 - [Vertica 權限與角色實戰：GRANT、角色繼承、schema 層級與稽核](/_posts/2026-11-23-vertica-roles-privileges-grant.md)
+- [Vertica 查詢剖析實戰：從 EXPLAIN 到 PROFILE，逐節點找出慢在哪](/_posts/2026-11-24-vertica-query-profiling-deep-dive.md)
 
 ### English Versions
 
@@ -101,6 +102,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [A Blind Spot in EON Data Distribution: 1,435 Containers, 221 Projections, and Only Six With Partition Records](/_en/2026-11-21-vertica-eon-container-partition-audit.md)
 - [Tuple Mover Behaviour in EON: When It Moves Data, Where It Moves It, and How It Differs from Enterprise](/_en/2026-11-22-vertica-eon-tuple-mover.md)
 - [Vertica Privileges and Roles in Practice: GRANT, Role Inheritance, and Schema-Level Rights](/_en/2026-11-23-vertica-roles-privileges-grant.md)
+- [Vertica Query Profiling in Depth: From EXPLAIN to PROFILE, Node by Node](/_en/2026-11-24-vertica-query-profiling-deep-dive.md)
 
 ## 本機開發
 
