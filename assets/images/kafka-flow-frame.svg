@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="340" viewBox="0 0 820 340" role="img" aria-label="Kafka 到 Vertica 的微批次資料流：11 則訊息、998 bytes 經 scheduler 每幀每 partition 一次 COPY，平均 0.567 秒，寫入 events_mb 11 列">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .panel-title { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .body { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .mono { font: 400 12px "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .num { font: 700 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #2f6fed; }
+    .conn { stroke: #8a94a3; stroke-width: 1.3; fill: none; }
+    .arrow { fill: #8a94a3; }
+    .dash { stroke: #b9a06a; stroke-width: 1.2; fill: none; stroke-dasharray: 4 3; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="340" fill="#ffffff"/>
+  <text class="title" x="20" y="30">微批次資料流：11 則訊息、16 幀、32 次 COPY</text>
+
+  <!-- broker -->
+  <rect x="20" y="50" width="190" height="180" rx="10" fill="#fbfcfd" stroke="#d8dde3"/>
+  <text class="panel-title" x="36" y="74">Kafka broker</text>
+  <text class="body" x="36" y="94">redpanda · 192.168.100.9:9092</text>
+  <rect x="36" y="108" width="158" height="24" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="mono" x="46" y="124">article_lab_mb</text>
+  <text class="body" x="36" y="152">partition 0：0 則</text>
+  <text class="body" x="36" y="172">partition 1：11 則</text>
+  <text class="body" x="36" y="196">payload 合計</text>
+  <text class="num" x="36" y="214">998 bytes</text>
+
+  <!-- scheduler -->
+  <rect x="240" y="50" width="330" height="180" rx="10" fill="#fbfcfd" stroke="#d8dde3"/>
+  <text class="panel-title" x="256" y="74">scheduler（DB 外的 Java 程序）</text>
+  <text class="body" x="256" y="96">frame = </text>
+  <text class="num" x="316" y="96">10 秒</text>
+  <text class="body" x="360" y="96">，每幀每 partition 一次 COPY</text>
+
+  <rect x="256" y="110" width="140" height="30" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="mono" x="266" y="130">buffer</text>
+  <rect x="416" y="110" width="138" height="30" rx="5" fill="#eaf1ff" stroke="#7aa2f7"/>
+  <text class="mono" x="426" y="130">COPY ×2</text>
+
+  <text class="body" x="256" y="164">每條 COPY 平均 0.567 秒</text>
+  <text class="body" x="256" y="184">範圍 0.503–1.504 秒</text>
+  <text class="body" x="256" y="210">16 幀 × 2 = 32 次，合計 18.15 秒</text>
+  <text class="body" x="256" y="226">空 partition 每幀仍跑一次</text>
+
+  <!-- target -->
+  <rect x="600" y="50" width="200" height="180" rx="10" fill="#fbfcfd" stroke="#d8dde3"/>
+  <text class="panel-title" x="616" y="74">目標表</text>
+  <rect x="616" y="86" width="168" height="24" rx="5" fill="#eef0f3" stroke="#c9ced6"/>
+  <text class="mono" x="626" y="102">events_mb</text>
+  <text class="body" x="616" y="132">載入列數</text>
+  <text class="num" x="616" y="152">11 列</text>
+  <text class="body" x="616" y="180">kafka_offset / kafka_ts</text>
+  <text class="body" x="616" y="198">全部 NULL（未自動填）</text>
+
+  <!-- config schema -->
+  <rect x="240" y="262" width="330" height="58" rx="10" fill="#fdfaf2" stroke="#e3d5b3"/>
+  <text class="panel-title" x="256" y="284">config schema：article_lab_kafka_cfg</text>
+  <text class="body" x="256" y="306">offset 在批次結束後才寫回 stream_sources</text>
+
+  <!-- connectors -->
+  <path class="conn" d="M210 140 H240"/>
+  <path class="arrow" d="M240 140 l-7 -4 v8 z"/>
+  <text class="body" x="214" y="132">拉取</text>
+
+  <path class="conn" d="M570 140 H600"/>
+  <path class="arrow" d="M600 140 l-7 -4 v8 z"/>
+
+  <path class="dash" d="M405 230 V262"/>
+  <path class="arrow" d="M405 262 l-4 -7 h8 z"/>
+  <text class="body" x="416" y="252">寫回 offset</text>
+</svg>
