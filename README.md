@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 40 篇中文文章，均有對應英文版。
+目前共 41 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -65,6 +65,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Vertica 權限與角色實戰：GRANT、角色繼承、schema 層級與稽核](/_posts/2026-11-23-vertica-roles-privileges-grant.md)
 - [Vertica 查詢剖析實戰：從 EXPLAIN 到 PROFILE，逐節點找出慢在哪](/_posts/2026-11-24-vertica-query-profiling-deep-dive.md)
 - [Vertica × Kafka 整合：vkafka、scheduler 與微批次載入的實際行為](/_posts/2026-11-25-vertica-kafka-integration-scheduler.md)
+- [Vertica Python UDx 實戰：Scalar、Transform 與 Aggregate 三種函數](/_posts/2026-11-26-vertica-python-udx-development.md)
 
 ### English Versions
 
@@ -105,6 +106,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Vertica Privileges and Roles in Practice: GRANT, Role Inheritance, and Schema-Level Rights](/_en/2026-11-23-vertica-roles-privileges-grant.md)
 - [Vertica Query Profiling in Depth: From EXPLAIN to PROFILE, Node by Node](/_en/2026-11-24-vertica-query-profiling-deep-dive.md)
 - [Vertica and Kafka Integration: vKafka, the Scheduler, and Micro-batch Loading](/_en/2026-11-25-vertica-kafka-integration-scheduler.md)
+- [Python UDx in Practice: Scalar, Transform, and Aggregate Functions](/_en/2026-11-26-vertica-python-udx-development.md)
 
 ## 本機開發
 

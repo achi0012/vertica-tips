@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420" role="img" aria-label="Vertica 25.4 的三種 UDx：Scalar 與 Transform 可以用 Python 並且跑在 fenced 程序，Aggregate 只有 C++ 且預設 unfenced；實測 20 萬列時 Scalar 220 毫秒對 SQL 288 毫秒，Transform 191 對 206，Aggregate 31.2 對 6.3，單列查詢 15.0 對 2.8 毫秒">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .sub   { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .h     { font: 700 14px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t     { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t2    { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .num   { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .badge { font: 600 11px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; }
+    .warn  { font: 700 13px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #8a5300; }
+    .card  { fill: #ffffff; stroke: #c9ced6; stroke-width: 1.2; }
+    .in    { fill: #eef2f8; stroke: #b9c4d4; stroke-width: 1; }
+    .out   { fill: #e8f1ff; stroke: #7aa2f7; stroke-width: 1; }
+    .arrow { stroke: #7aa2f7; stroke-width: 1.6; fill: none; }
+    .py    { fill: #e7f7ee; stroke: #4aa96c; }
+    .nopy  { fill: #fdecec; stroke: #d9534f; }
+    .fen   { fill: #eef2f8; stroke: #8a97a8; }
+    .unf   { fill: #fff3e0; stroke: #e08a00; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="420" fill="#ffffff"/>
+
+  <text class="title" x="20" y="30">三種 UDx：Python 只給兩種，第三種只能換 C++</text>
+  <text class="sub"   x="20" y="50">Vertica v25.4.0-0 單節點 · 200,000 列 / 800,087 個 tag · 時間為三次中位數</text>
+
+  <!-- Card 1: scalar -->
+  <rect class="card" x="20" y="66" width="250" height="170" rx="8"/>
+  <text class="h"  x="34" y="90">Scalar（UDSF）</text>
+  <text class="t2" x="34" y="108">逐列處理，一列進、一值出</text>
+  <rect class="in"  x="34" y="120" width="66" height="26" rx="4"/>
+  <text class="t"   x="48" y="138">1 列</text>
+  <path class="arrow" d="M 104 133 L 136 133"/>
+  <polygon points="140,133 130,128 130,138" fill="#7aa2f7"/>
+  <rect class="out" x="144" y="120" width="66" height="26" rx="4"/>
+  <text class="t"   x="158" y="138">1 值</text>
+
+  <rect class="py"  x="34" y="160" width="80" height="22" rx="11"/>
+  <text class="badge" x="46" y="175" fill="#1f7a45">Python ✓</text>
+  <rect class="fen" x="122" y="160" width="70" height="22" rx="11"/>
+  <text class="badge" x="136" y="175" fill="#4a5563">fenced</text>
+
+  <text class="num" x="34" y="208">220 ms</text>
+  <text class="t2"  x="92" y="208">／ SQL 288 ms</text>
+  <text class="t2"  x="34" y="226">快 23.6%，掃描型工作</text>
+
+  <!-- Card 2: transform -->
+  <rect class="card" x="285" y="66" width="250" height="170" rx="8"/>
+  <text class="h"  x="299" y="90">Transform（UDTF）</text>
+  <text class="t2" x="299" y="108">一對多，一個 partition 展開</text>
+  <rect class="in"  x="299" y="120" width="56" height="26" rx="4"/>
+  <text class="t"   x="311" y="138">1 列</text>
+  <path class="arrow" d="M 359 133 L 385 133"/>
+  <polygon points="389,133 379,128 379,138" fill="#7aa2f7"/>
+  <rect class="out" x="393" y="112" width="62" height="14" rx="3"/>
+  <rect class="out" x="393" y="132" width="62" height="14" rx="3"/>
+  <rect class="out" x="393" y="152" width="62" height="14" rx="3"/>
+  <text class="t"   x="461" y="123">3–5 列</text>
+  <text class="t2"  x="461" y="140">共 80 萬列</text>
+
+  <rect class="py"  x="299" y="176" width="80" height="22" rx="11"/>
+  <text class="badge" x="311" y="191" fill="#1f7a45">Python ✓</text>
+  <rect class="fen" x="387" y="176" width="70" height="22" rx="11"/>
+  <text class="badge" x="401" y="191" fill="#4a5563">fenced</text>
+
+  <text class="num" x="299" y="216">191 ms</text>
+  <text class="t2"  x="357" y="216">／ SQL 206 ms</text>
+
+  <!-- Card 3: aggregate -->
+  <rect class="card" x="550" y="66" width="250" height="170" rx="8"/>
+  <text class="h"  x="564" y="90">Aggregate（UDAF）</text>
+  <text class="t2" x="564" y="108">整欄聚合，多列進、一值出</text>
+  <rect class="in" x="564" y="120" width="16" height="14" rx="2"/>
+  <rect class="in" x="564" y="138" width="16" height="14" rx="2"/>
+  <rect class="in" x="564" y="156" width="16" height="14" rx="2"/>
+  <text class="t2" x="586" y="168">整欄</text>
+  <path class="arrow" d="M 614 145 L 640 145"/>
+  <polygon points="644,145 634,140 634,150" fill="#7aa2f7"/>
+  <rect class="out" x="648" y="132" width="60" height="26" rx="4"/>
+  <text class="t"   x="660" y="150">1 值</text>
+
+  <rect class="nopy" x="564" y="182" width="82" height="22" rx="11"/>
+  <text class="badge" x="574" y="197" fill="#a12b28">Python ✗</text>
+  <rect class="unf" x="652" y="182" width="76" height="22" rx="11"/>
+  <text class="badge" x="663" y="197" fill="#9a5b00">unfenced</text>
+
+  <text class="num" x="564" y="226">31.2 ms</text>
+  <text class="t2"  x="626" y="226">／ SQL 6.3 ms</text>
+
+  <!-- warning strip -->
+  <rect x="20" y="250" width="780" height="66" rx="6" fill="#fff8e8" stroke="#f0c36d" stroke-width="1.2"/>
+  <text class="warn" x="34" y="275">同一份 UDTF 邏輯，只換迴圈寫法：800,087 → 800,064 列</text>
+  <text class="t2"   x="34" y="297">少 23 列、零錯誤；分區改成 PARTITION BY event_id 時回 0 列。請照官方 while True 結構寫。</text>
+
+  <!-- numbers row -->
+  <line x1="20" y1="332" x2="800" y2="332" stroke="#e1e5ea" stroke-width="1"/>
+
+  <text class="t2"  x="20" y="354">Scalar · 20 萬列</text>
+  <text class="num" x="20" y="374">220 / 288 ms</text>
+
+  <text class="t2"  x="220" y="354">Transform · 80 萬列輸出</text>
+  <text class="num" x="220" y="374">191 / 206 ms</text>
+
+  <text class="t2"  x="420" y="354">Aggregate · 20 萬列</text>
+  <text class="num" x="420" y="374">31.2 / 6.3 ms</text>
+
+  <text class="t2"  x="620" y="354">單列查詢</text>
+  <text class="num" x="620" y="374">15.0 / 2.8 ms</text>
+
+  <text class="t2" x="20" y="404">每組為 UDx / 原生 SQL；資料來源：article_lab_udx，200,000 列，v25.4.0-0。</text>
+</svg>
