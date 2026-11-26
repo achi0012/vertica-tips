@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="420" viewBox="0 0 820 420" role="img" aria-label="EON 備份邊界：communal storage 持有 catalog 與 12.05 GB 的 ROS 物件，三個 depot 只是快取不備份；vbr 備份把 catalog 快照與 ROS 物件複製到另一個雲端路徑，in-db restore point 只存 metadata 且不複製資料。本機實查 0 份備份、0 個 archive。">
+  <style>
+    .title { font: 700 17px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .sub   { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .h     { font: 700 14px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t     { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .t2    { font: 400 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #5b6673; }
+    .n     { font: 700 12px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; fill: #1f2328; }
+    .badge { font: 600 11px "Noto Sans CJK TC", "PingFang TC", "Microsoft JhengHei", sans-serif; }
+    .card  { fill: #ffffff; stroke: #c9ced6; stroke-width: 1.2; }
+    .comm  { fill: #e8f1ff; stroke: #7aa2f7; stroke-width: 1.2; }
+    .dep   { fill: #eef2f8; stroke: #b9c4d4; stroke-width: 1; }
+    .rp    { fill: #e7f7ee; stroke: #4aa96c; stroke-width: 1.2; }
+    .bk    { fill: #fff3e0; stroke: #e08a00; stroke-width: 1.2; }
+    .arrow { stroke: #7aa2f7; stroke-width: 1.6; fill: none; }
+    .zero  { fill: #fdecec; stroke: #d9534f; stroke-width: 1; }
+  </style>
+
+  <rect x="0" y="0" width="820" height="420" fill="#ffffff"/>
+
+  <text class="title" x="20" y="30">備份邊界：vbr 複製的是 ROS 物件，restore point 只存 metadata</text>
+  <text class="sub"   x="20" y="50">eondb · v25.4.0-0 · 3 節點 · K-Safe=0 · 實查 1,410 個 container / 12.05 GB / 0 份備份</text>
+
+  <!-- database boundary -->
+  <rect x="20" y="66" width="486" height="300" rx="10" fill="#fbfcfd" stroke="#8a97a8" stroke-width="1.2" stroke-dasharray="6 4"/>
+  <text class="h" x="34" y="86">eondb（資料庫邊界）</text>
+
+  <!-- communal -->
+  <rect class="comm" x="38" y="96" width="450" height="94" rx="8"/>
+  <text class="h" x="52" y="116">communal storage · s3://verticadb/eondb</text>
+  <text class="t" x="52" y="136">catalog 的權威版本（has_catalog = True）</text>
+  <text class="t" x="52" y="154">ROS 物件 12.05 GB</text>
+  <text class="t2" x="52" y="172">1,410 個 container · 221 個有資料的 projection</text>
+
+  <!-- depots -->
+  <rect class="dep" x="38" y="204" width="142" height="52" rx="6"/>
+  <text class="t" x="50" y="224">depot · node0001</text>
+  <text class="t2" x="50" y="242">3.74 GiB 快取</text>
+
+  <rect class="dep" x="192" y="204" width="142" height="52" rx="6"/>
+  <text class="t" x="204" y="224">depot · node0002</text>
+  <text class="t2" x="204" y="242">3.74 GiB 快取</text>
+
+  <rect class="dep" x="346" y="204" width="142" height="52" rx="6"/>
+  <text class="t" x="358" y="224">depot · node0003</text>
+  <text class="t2" x="358" y="242">3.74 GiB 快取</text>
+
+  <text class="t2" x="38" y="276">depot 不備份：重建成本是時間，不是資料</text>
+
+  <!-- in-db restore point -->
+  <rect class="rp" x="38" y="290" width="450" height="60" rx="8"/>
+  <text class="h" x="52" y="310">in-db restore point（ARCHIVE）</text>
+  <text class="t" x="52" y="330">只存 metadata、不複製資料；communal 沒了它也消失</text>
+  <rect class="zero" x="392" y="298" width="84" height="20" rx="10"/>
+  <text class="badge" x="404" y="312" fill="#9b2c2c">實查 0 個</text>
+
+  <!-- backup path -->
+  <rect class="bk" x="580" y="96" width="220" height="150" rx="8"/>
+  <text class="h" x="594" y="116">備份路徑 [CloudStorage]</text>
+  <text class="t" x="594" y="136">s3://backup-bucket/…</text>
+  <text class="t" x="594" y="156">catalog 快照</text>
+  <text class="t" x="594" y="174">＋ ROS 物件</text>
+  <text class="t2" x="594" y="196">第一次約 12.05 GB</text>
+  <rect class="zero" x="594" y="210" width="120" height="20" rx="10"/>
+  <text class="badge" x="606" y="224" fill="#9b2c2c">實查 0 份備份</text>
+
+  <!-- arrow -->
+  <path class="arrow" d="M 490 150 L 572 150"/>
+  <polygon points="578,150 566,144 566,156" fill="#7aa2f7"/>
+  <text class="t2" x="486" y="176">vbr 複製</text>
+  <text class="t2" x="486" y="190">storage_id 去重</text>
+
+  <!-- bottom notes -->
+  <text class="t2" x="580" y="272">第二次起只複製新物件；</text>
+  <text class="t2" x="580" y="288">保留 N 份是聯集，不是乘法</text>
+
+  <text class="t2" x="20" y="394">資料來源：v_catalog.storage_locations、v_monitor.storage_containers、v_monitor.database_snapshots、ARCHIVES、vbr.py 流程</text>
+</svg>
