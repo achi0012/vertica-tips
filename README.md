@@ -9,7 +9,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 
 ## 文章列表
 
-目前共 42 篇中文文章，均有對應英文版。
+目前共 43 篇中文文章，均有對應英文版。
 
 ### 資料載入與外部表
 
@@ -67,6 +67,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Vertica × Kafka 整合：vkafka、scheduler 與微批次載入的實際行為](/_posts/2026-11-25-vertica-kafka-integration-scheduler.md)
 - [Vertica Python UDx 實戰：Scalar、Transform 與 Aggregate 三種函數](/_posts/2026-11-26-vertica-python-udx-development.md)
 - [EON 備份的真相：vbr 還是會複製資料，真正免拷貝的是 in-db restore point](/_posts/2026-11-27-vertica-eon-vbr-backup-communal.md)
+- [Vertica 安全連線與認證：TLS、LDAP、Kerberos 怎麼選、怎麼組合](/_posts/2026-11-28-vertica-tls-ldap-kerberos-auth.md)
 
 ### English Versions
 
@@ -109,6 +110,7 @@ Vertica 資料庫技術筆記與最佳實踐。
 - [Vertica and Kafka Integration: vKafka, the Scheduler, and Micro-batch Loading](/_en/2026-11-25-vertica-kafka-integration-scheduler.md)
 - [Python UDx in Practice: Scalar, Transform, and Aggregate Functions](/_en/2026-11-26-vertica-python-udx-development.md)
 - [EON Backups in Practice: vbr Still Copies Data, and the Copy-Free Option Is the In-DB Restore Point](/_en/2026-11-27-vertica-eon-vbr-backup-communal.md)
+- [Vertica Secure Connections and Authentication: Choosing and Combining TLS, LDAP, and Kerberos](/_en/2026-11-28-vertica-tls-ldap-kerberos-auth.md)
 
 ## 本機開發
 

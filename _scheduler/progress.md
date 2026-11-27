@@ -1,13 +1,13 @@
 # 文章產線進度
 
 > 自動產生，請勿手改。來源：`_scheduler/vertica-series.json`、`_scheduler/vertica-eon-series.json`、`_scheduler/vertica-series-3.json`。
-> 更新時間：2026-11-27 05:13（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`
+> 更新時間：2026-11-28 05:08（Asia/Taipei）· 產生指令：`/usr/bin/python3 tools/build_progress.py`
 
 排程：每天 05:00 產下一篇（中英文各一），完成後 commit + push；週日 20:00 另檢查官方公告。
 
-**總進度：23/28**，剩 5 篇。
+**總進度：24/28**，剩 4 篇。
 
-下一篇：**Vertica 安全連線與認證：TLS、LDAP、Kerberos 怎麼選、怎麼組合**（vertica-tls-ldap-kerberos-auth，預計 2026-11-28）
+下一篇：**Vertica 資源池進階：cascade、execution-time routing 與優先級排程**（vertica-resource-pool-advanced-routing，預計 2026-11-29）
 
 
 ## vertica-tips-8-articles（8/8）
@@ -40,7 +40,7 @@
 | 9 | [EON 資料分佈的盲點：1,424 個 container、219 個 projection，卻只有 6 個有 partition 紀錄](https://achi0012.github.io/vertica-tips/2026/11/vertica-eon-container-partition-audit/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-eon-container-partition-audit/) | 2026-11-21 | ✅ |
 | 10 | [EON 的 Tuple Mover 行為：什麼時候搬、搬到哪裡、跟 Enterprise 差在哪](https://achi0012.github.io/vertica-tips/2026/11/vertica-eon-tuple-mover/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-eon-tuple-mover/) | 2026-11-22 | ✅ |
 
-## vertica-series-3（5/10）
+## vertica-series-3（6/10）
 
 | # | 中文標題 | English | 日期 | 狀態 |
 |---|---|---|---|---|
@@ -49,7 +49,7 @@
 | 3 | [Vertica × Kafka 整合：vkafka、scheduler 與微批次載入的實際行為](https://achi0012.github.io/vertica-tips/2026/11/vertica-kafka-integration-scheduler/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-kafka-integration-scheduler/) | 2026-11-25 | ✅ |
 | 4 | [Vertica Python UDx 實戰：Scalar、Transform 與 Aggregate 三種函數](https://achi0012.github.io/vertica-tips/2026/11/vertica-python-udx-development/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-python-udx-development/) | 2026-11-26 | ✅ |
 | 5 | [EON 的備份策略：vbr 備的是 catalog，資料在 communal storage](https://achi0012.github.io/vertica-tips/2026/11/vertica-eon-vbr-backup-communal/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-eon-vbr-backup-communal/) | 2026-11-27 | ✅ |
-| 6 | Vertica 安全連線與認證：TLS、LDAP、Kerberos 怎麼選、怎麼組合 | — | 預計 11-28 | ⬜ |
+| 6 | [Vertica 安全連線與認證：TLS、LDAP、Kerberos 怎麼選、怎麼組合](https://achi0012.github.io/vertica-tips/2026/11/vertica-tls-ldap-kerberos-auth/) | [EN](https://achi0012.github.io/vertica-tips/en/2026/11/vertica-tls-ldap-kerberos-auth/) | 2026-11-28 | ✅ |
 | 7 | Vertica 資源池進階：cascade、execution-time routing 與優先級排程 | — | 預計 11-29 | ⬜ |
 | 8 | Vertica Workload Analyzer 解讀：它給的三類建議該不該照做 | — | 預計 11-30 | ⬜ |
 | 9 | Vertica 25.4 → 26.x 升級 SOP：前置檢查、執行順序與回滾條件 | — | 預計 12-01 | ⬜ |
